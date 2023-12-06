@@ -1,12 +1,9 @@
 package com.example.playlistmaker
 
-import android.R.attr.name
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
-import androidx.annotation.ContentView
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -27,9 +24,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         // Кнопка Медиа
         val media = findViewById<Button>(R.id.media)
-        media.setOnClickListener({
+        media.setOnClickListener{
             startActivity(Intent(this, MediaActivity::class.java))
-        })
+        }
 
         // Кнопка Настройка
         val settings = findViewById<Button>(R.id.settings)
