@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_padding">4dp</dimen>
+    <dimen name="title_image_width">22dp</dimen>
+    <dimen name="title_image_height">22dp</dimen>
+    <dimen name="title_image_margin">12dp</dimen>
+    <dimen name="title_text_margin_start">12dp</dimen>
+    <dimen name="title_text_margin_top">10dp</dimen>
+    <dimen name="title_text_margin_bottom">12dp</dimen>
+    <dimen name="title_text_size">26sp</dimen>
+    <dimen name="body_margin_horizontal">16dp</dimen>
+    <dimen name="body_margin_vertical">20dp</dimen>
+    <dimen name="body_padding_vertical">20dp</dimen>
+    <dimen name="body_padding_horizontal">16dp</dimen>
+    <dimen name="settings_text_size">16sp</dimen>
+    <dimen name="button_text_size">26sp</dimen>
+    <dimen name="button_radius">16dp</dimen>
+    <dimen name="icon_padding">8dp</dimen>
+    <dimen name="settings_icon_size">24dp</dimen>
+</resources>
