@@ -22,8 +22,8 @@
                 android:layout_height="@dimen/title_image_height"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/title_image_margin"
-                android:src="@drawable/icon_back"
                 android:foreground="?attr/selectableItemBackground"
+                android:src="@drawable/icon_back"
                 app:iconGravity="textStart"
                 app:iconTint="@color/black" />
 
@@ -39,11 +39,6 @@
                 android:textSize="@dimen/title_text_size" />
         </LinearLayout>
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:visibility="invisible" />
     </LinearLayout>
 
     <LinearLayout
