@@ -29,7 +29,7 @@
             <EditText
                 android:id="@+id/inputEditText"
                 style="@style/SearchInputText"
-                android:hint="@string/activity_search"></EditText>
+                android:hint="@string/activity_search" />
 
             <!-- При переносе значения "10dp" в ресурс "размеры" не сжимается иконка(атрибут android:padding="10dp") -->
             <ImageView
@@ -42,7 +42,8 @@
                 android:id="@+id/clearIcon"
                 style="@style/SearchInputIconEnd"
                 android:padding="10dp"
-                android:src="@drawable/icon_close" />
+                android:src="@drawable/icon_close"
+                android:visibility="gone"/>
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>

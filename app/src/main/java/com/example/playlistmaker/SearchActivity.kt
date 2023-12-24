@@ -64,6 +64,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        // Сохраняется значение переменной searhEditText с текстом поискового запроса
         outState.putString(SEARCH_EDIT_TEXT, searhEditText)
     }
 
@@ -72,7 +73,8 @@ class SearchActivity : AppCompatActivity() {
 
         // Сохраненный текст
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
-        inputEditText.setText(savedInstanceState.getString(SEARCH_EDIT_TEXT, SEARCH_EDIT_TEXT_VAL))
+        searhEditText = savedInstanceState.getString(SEARCH_EDIT_TEXT, SEARCH_EDIT_TEXT_VAL)
+        inputEditText.setText(searhEditText)
 
         // Перемещение курсора в конец текста
         inputEditText.setSelection(inputEditText.length())
