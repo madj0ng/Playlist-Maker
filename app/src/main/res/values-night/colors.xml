@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_main">#1A1B22</color>
+    <color name="background_setting">#1A1B22</color>
+    <color name="background_search">#1A1B22</color>
+    <color name="text_color">#FFFFFF</color>
+    <color name="icon_color">#FFFFFF</color>
+    <color name="seach_background">#FFFFFF</color>
+    <color name="search_help_text">#1A1B22</color>
+    <color name="search_help_icon">#1A1B22</color>
+</resources>

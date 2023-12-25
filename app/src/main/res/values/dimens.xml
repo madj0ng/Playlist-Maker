@@ -7,14 +7,23 @@
     <dimen name="title_text_margin_start">12dp</dimen>
     <dimen name="title_text_margin_top">10dp</dimen>
     <dimen name="title_text_margin_bottom">12dp</dimen>
-    <dimen name="title_text_size">26sp</dimen>
+    <dimen name="title_text_size">22sp</dimen>
     <dimen name="body_margin_horizontal">16dp</dimen>
-    <dimen name="body_margin_vertical">20dp</dimen>
+    <dimen name="body_margin_vertical">16dp</dimen>
     <dimen name="body_padding_vertical">20dp</dimen>
     <dimen name="body_padding_horizontal">16dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
-    <dimen name="button_text_size">26sp</dimen>
+    <dimen name="button_text_size">22sp</dimen>
     <dimen name="button_radius">16dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
     <dimen name="settings_icon_size">24dp</dimen>
+    <dimen name="search_input_padding">12dp</dimen>
+    <dimen name="search_input_text_size">16sp</dimen>
+    <dimen name="search_input_text_start">36dp</dimen>
+    <dimen name="search_input_icon_start">2dp</dimen>
+    <dimen name="search_input_icon_padding">10dp</dimen>
+    <dimen name="search_input_icon_width">36dp</dimen>
+    <dimen name="search_input_icon_height">36dp</dimen>
+    <dimen name="switch_compat_icon_height">40dp</dimen>
+    <dimen name="switch_compat_icon_width">56dp</dimen>
 </resources>

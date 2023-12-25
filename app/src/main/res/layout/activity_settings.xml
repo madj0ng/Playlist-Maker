@@ -1,140 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_setting"
-    android:orientation="vertical">
+    style="@style/SettingsBackground">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/title_padding">
+    <LinearLayout style="@style/TitleLine">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="7">
+        <ImageView
+            android:id="@+id/back"
+            style="@style/TitleImage"
+            android:src="@drawable/icon_back" />
 
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="@dimen/title_image_width"
-                android:layout_height="@dimen/title_image_height"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="@dimen/title_image_margin"
-                android:foreground="?attr/selectableItemBackground"
-                android:src="@drawable/icon_back"
-                app:iconGravity="textStart"
-                app:iconTint="@color/black" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/title_text_margin_start"
-                android:layout_marginTop="@dimen/title_text_margin_top"
-                android:layout_marginBottom="@dimen/title_text_margin_bottom"
-                android:text="@string/settings_title"
-                android:textColor="@color/black"
-                android:textSize="@dimen/title_text_size" />
-        </LinearLayout>
-
+        <TextView
+            style="@style/TitleText"
+            android:text="@string/settings_title" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        style="@style/BodyLine"
+        android:layout_height="wrap_content">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/body_padding_horizontal"
-            android:paddingTop="@dimen/body_padding_vertical"
-            android:paddingEnd="@dimen/body_padding_horizontal"
-            android:paddingBottom="@dimen/body_padding_vertical">
+        <FrameLayout style="@style/SettingsMenuLine">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/settings_theme"
-                android:textColor="@color/black"
-                android:textSize="@dimen/settings_text_size" />
+                style="@style/SettingsMenuText"
+                android:text="@string/settings_theme" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:layout_width="56dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end"
+                android:id="@+id/dayNight"
+                style="@style/SettingsMenuIcon"
+                android:layout_width="@dimen/switch_compat_icon_width"
+                android:layout_height="@dimen/switch_compat_icon_height"
                 android:checked="false" />
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/body_padding_horizontal"
-            android:paddingTop="@dimen/body_padding_vertical"
-            android:paddingEnd="@dimen/body_padding_horizontal"
-            android:paddingBottom="@dimen/body_padding_vertical">
+        <FrameLayout style="@style/SettingsMenuLine">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/settings_output"
-                android:textColor="@color/black"
-                android:textSize="@dimen/settings_text_size" />
+                style="@style/SettingsMenuText"
+                android:text="@string/settings_output" />
 
             <ImageView
-                android:layout_width="@dimen/settings_icon_size"
-                android:layout_height="@dimen/settings_icon_size"
-                android:layout_gravity="end"
+                android:id="@+id/social"
+                style="@style/SettingsMenuIcon"
+                android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/icon_output" />
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/body_padding_horizontal"
-            android:paddingTop="@dimen/body_padding_vertical"
-            android:paddingEnd="@dimen/body_padding_horizontal"
-            android:paddingBottom="@dimen/body_padding_vertical">
+        <FrameLayout style="@style/SettingsMenuLine">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/settings_helper"
-                android:textColor="@color/black"
-                android:textSize="@dimen/settings_text_size" />
+                style="@style/SettingsMenuText"
+                android:text="@string/settings_helper" />
 
             <ImageView
-                android:layout_width="@dimen/settings_icon_size"
-                android:layout_height="@dimen/settings_icon_size"
-                android:layout_gravity="end"
+                android:id="@+id/sendHelp"
+                style="@style/SettingsMenuIcon"
+                android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/icon_helper" />
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/body_padding_horizontal"
-            android:paddingTop="@dimen/body_padding_vertical"
-            android:paddingEnd="@dimen/body_padding_horizontal"
-            android:paddingBottom="@dimen/body_padding_vertical">
+        <FrameLayout style="@style/SettingsMenuLine">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/settings_agreement"
-                android:textColor="@color/black"
-                android:textSize="@dimen/settings_text_size" />
+                style="@style/SettingsMenuText"
+                android:text="@string/settings_agreement" />
 
             <ImageView
-                android:layout_width="@dimen/settings_icon_size"
-                android:layout_height="@dimen/settings_icon_size"
-                android:layout_gravity="end"
+                android:id="@+id/agreement"
+                style="@style/SettingsMenuIcon"
+                android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/icon_agreement" />
         </FrameLayout>
     </LinearLayout>
