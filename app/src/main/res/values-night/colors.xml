@@ -8,4 +8,6 @@
     <color name="seach_background">#FFFFFF</color>
     <color name="search_help_text">#1A1B22</color>
     <color name="search_help_icon">#1A1B22</color>
+    <color name="search_list_text_up">#FFFFFF</color>
+    <color name="search_list_text_down">#FFFFFF</color>
 </resources>

@@ -1,7 +1,6 @@
 package com.example.playlistmaker
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
@@ -27,9 +26,7 @@ class SettingsActivity : AppCompatActivity() {
             val urlIntent = Intent(Intent.ACTION_VIEW, url)
 
             // Вывод сообщения об ошибке в случае "ActivityNotFoundException"
-            if (checkPackageCount(urlIntent)) {
-                startActivity(urlIntent)
-            }
+            startIntent(urlIntent)
         }
 
         // Нажатие иконки Написать в поддержку
@@ -48,9 +45,7 @@ class SettingsActivity : AppCompatActivity() {
             mailtoIntent.putExtra(Intent.EXTRA_TEXT, message)
 
             // Вывод сообщения об ошибке в случае "ActivityNotFoundException"
-            if (checkPackageCount(mailtoIntent)) {
-                startActivity(mailtoIntent)
-            }
+            startIntent(mailtoIntent)
         }
 
         // Нажатие иконки Поделиться приложением
@@ -64,21 +59,15 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             // Вывод сообщения об ошибке в случае "ActivityNotFoundException"
-            if (checkPackageCount(shareIntent)) {
-                startActivity(Intent.createChooser(shareIntent, null))
-            }
+            startIntent(shareIntent)
         }
     }
 
-    private fun checkPackageCount(intent: Intent): Boolean {
-        return if (this.getPackageManager()
-                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size > 0
-        ) {
-            true
-        } else {
+    private fun startIntent(intent: Intent) {
+        try {
+            startActivity(intent)
+        } catch (err: Exception) {
             Toast.makeText(this, getString(R.string.error_find), Toast.LENGTH_SHORT).show()
-            false
         }
-
     }
 }

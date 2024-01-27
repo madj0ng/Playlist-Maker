@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Background">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -153,6 +154,94 @@
     <style name="SearchInputIconEnd" parent="SearchInputIcon">
         <item name="android:layout_gravity">center_vertical|end</item>
         <item name="android:layout_marginEnd">@dimen/search_input_icon_start</item>
+    </style>
+
+    <style name="SearchTrackList">
+        <item name="android:layout_marginStart">@dimen/body_margin_horizontal</item>
+        <item name="android:layout_marginEnd">@dimen/body_margin_horizontal</item>
+        <item name="android:layout_marginBottom">@dimen/body_margin_vertical</item>
+    </style>
+
+    <style name="SearchTrackLine">
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="SearchTrackImage">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_gravity">center_vertical|start</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="SearchTrackLineTexts">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="SearchTrackLineTextsUp">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/search_list_text_up</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="SearchTrackLineTextsDown">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="SearchTextDown">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/search_list_text_down</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="SearchArtistName" parent="SearchTextDown">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="SearchTrackTime" parent="SearchTextDown">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0</item>
+    </style>
+
+    <style name="SearchTextSeparator">
+        <item name="android:layout_width">13dp</item>
+        <item name="android:layout_height">13dp</item>
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:iconTint">@color/search_list_text_down</item>
+        <item name="tint">@color/search_list_text_down</item>
+    </style>
+
+    <style name="SearchTrackDetail">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_gravity">center_vertical|end</item>
+        <item name="android:iconTint">@color/search_list_text_down</item>
+        <item name="tint">@color/search_list_text_down</item>
     </style>
 
 </resources>

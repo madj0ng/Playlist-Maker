@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SearchTrackLine"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/trackImage"
+        style="@style/SearchTrackImage"
+        tools:src="@drawable/ic_placeholder" />
+
+    <LinearLayout style="@style/SearchTrackLineTexts">
+
+        <TextView
+            android:id="@+id/trackName"
+            style="@style/SearchTrackLineTextsUp"
+            tools:text="Название композиции:Название композиции:Название композиции:"></TextView>
+
+        <LinearLayout style="@style/SearchTrackLineTextsDown">
+
+            <TextView
+                android:id="@+id/artistName"
+                style="@style/SearchArtistName"
+                tools:text="Имя исполнителя:Имя исполнителя::Имя исполнителя:" />
+
+            <ImageView
+                style="@style/SearchTextSeparator"
+                android:src="@drawable/ic_circle_separator" />
+
+            <TextView
+                android:id="@+id/trackTime"
+                style="@style/SearchTrackTime"
+                tools:text="102:12" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/trackDetails"
+        style="@style/SearchTrackDetail"
+        android:src="@drawable/icon_agreement" />
+
+</LinearLayout>

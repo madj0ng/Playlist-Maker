@@ -26,4 +26,5 @@
     <dimen name="search_input_icon_height">36dp</dimen>
     <dimen name="switch_compat_icon_height">40dp</dimen>
     <dimen name="switch_compat_icon_width">56dp</dimen>
+    <dimen name="image_track_radius">2dp</dimen>
 </resources>
