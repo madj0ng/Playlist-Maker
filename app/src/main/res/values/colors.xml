@@ -15,4 +15,6 @@
     <color name="search_text">#1A1B22</color>
     <color name="search_help_text">#AEAFB4</color>
     <color name="search_help_icon">#AEAFB4</color>
+    <color name="search_list_text_up">#000000</color>
+    <color name="search_list_text_down">#AEAFB4</color>
 </resources>

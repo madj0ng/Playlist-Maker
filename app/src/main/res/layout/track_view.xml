@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SearchTrackLine"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/trackImage"
+        style="@style/SearchTrackImage"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical|start"
+        tools:src="@drawable/ic_placeholder" />
+
+    <LinearLayout
+        style="@style/SearchTrackLineTexts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/trackName"
+            style="@style/SearchTrackLineTextsUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="Название композиции:Название композиции:Название композиции:" />
+
+        <LinearLayout
+            style="@style/SearchTrackLineTextsDown"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/artistName"
+                style="@style/SearchTextDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Имя исполнителя:Имя исполнителя::Имя исполнителя:" />
+
+            <ImageView
+                style="@style/SearchTextSeparator"
+                android:src="@drawable/ic_circle_separator" />
+
+            <TextView
+                android:id="@+id/trackTime"
+                style="@style/SearchTextDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                tools:text="102:12" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/trackDetails"
+        style="@style/SearchTrackDetail"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical|end"
+        android:src="@drawable/icon_agreement" />
+
+</LinearLayout>
