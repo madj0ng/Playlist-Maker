@@ -34,6 +34,8 @@ class SearchActivity : AppCompatActivity() {
         val SEARCH_MESSAGE_OBJ_VAL: SearchMessageCode = SearchMessageCode.SUCCESS
 
         const val SEARCH_TRACK_LIST = "SEARCH_TRACK_LIST"
+
+        const val BASE_SEARCH_URL = "https://itunes.apple.com"
     }
 
     // Строка поиска
@@ -47,7 +49,7 @@ class SearchActivity : AppCompatActivity() {
     private var searchMessage: SearchMessageCode = SearchMessageCode.SUCCESS
 
     // Сервис поиска треков
-    private val itunesSearchBaseUrl = "https://itunes.apple.com"
+    private val itunesSearchBaseUrl = BASE_SEARCH_URL
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesSearchBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
