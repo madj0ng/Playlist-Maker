@@ -9,15 +9,19 @@
     <ImageView
         android:id="@+id/trackImage"
         style="@style/SearchTrackImage"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/search_track_image_size"
+        android:layout_height="@dimen/search_track_image_size"
         android:layout_gravity="center_vertical|start"
+        android:layout_marginTop="@dimen/search_track_line_margin"
+        android:layout_marginEnd="@dimen/search_track_line_margin"
+        android:layout_marginBottom="@dimen/search_track_line_margin"
         tools:src="@drawable/ic_placeholder" />
 
     <LinearLayout
         style="@style/SearchTrackLineTexts"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/search_track_line_margin"
         android:layout_weight="1">
 
         <TextView
@@ -31,7 +35,7 @@
         <LinearLayout
             style="@style/SearchTrackLineTextsDown"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/artistName"
@@ -43,6 +47,8 @@
 
             <ImageView
                 style="@style/SearchTextSeparator"
+                android:layout_width="@dimen/search_track_separator_size"
+                android:layout_height="@dimen/search_track_separator_size"
                 android:src="@drawable/ic_circle_separator" />
 
             <TextView
@@ -58,8 +64,8 @@
     <ImageView
         android:id="@+id/trackDetails"
         style="@style/SearchTrackDetail"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/search_track_arrow_right_size"
+        android:layout_height="@dimen/search_track_arrow_right_size"
         android:layout_gravity="center_vertical|end"
         android:src="@drawable/icon_agreement" />
 

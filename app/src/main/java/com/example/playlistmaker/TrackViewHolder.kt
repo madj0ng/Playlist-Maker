@@ -1,20 +1,24 @@
 package com.example.playlistmaker
 
-import android.content.Context
-import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.utils.FormatUtils
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    companion object {
+        // Округление в пикселях
+        const val IMG_RADIUS_PX = 2F
+    }
+
     // Значение закругления риснука в dp
     //1 вариант(после тестов, получил, что значение соответствует варианту из спринта 10)
-    private val imgRadius = itemView.context.resources.getDimension(R.dimen.image_track_radius).toInt()
+    //private val imgRadius = itemView.context.resources.getDimension(R.dimen.image_track_radius).toInt()
     //2 вариант из спринта 10
-    //private val imgRadius = dpToPx(roundImg, itemView.context)
+    private val imgRadius = FormatUtils.dpToPx(IMG_RADIUS_PX, itemView.context)
 
     private val trackName = itemView.findViewById<TextView>(R.id.trackName)
     private val artistName = itemView.findViewById<TextView>(R.id.artistName)
@@ -32,12 +36,5 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .centerCrop()
             .transform(RoundedCorners(imgRadius))
             .into(trackImage)
-    }
-
-    private fun dpToPx(dp: Float, context: Context): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            context.resources.displayMetrics).toInt()
     }
 }

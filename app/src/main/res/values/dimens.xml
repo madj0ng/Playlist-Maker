@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="main_button_margin_vertical">8dp</dimen>
     <dimen name="title_padding">4dp</dimen>
     <dimen name="title_image_width">22dp</dimen>
     <dimen name="title_image_height">22dp</dimen>
@@ -24,7 +25,20 @@
     <dimen name="search_input_icon_padding">10dp</dimen>
     <dimen name="search_input_icon_width">36dp</dimen>
     <dimen name="search_input_icon_height">36dp</dimen>
+    <dimen name="search_track_line_margin">8dp</dimen>
+    <dimen name="search_track_up_txtsize">16sp</dimen>
+    <dimen name="search_track_down_txtsize">11sp</dimen>
+    <dimen name="search_track_image_size">45dp</dimen>
+    <dimen name="search_track_separator_size">13dp</dimen>
+    <dimen name="search_track_arrow_right_size">24dp</dimen>
+    <dimen name="search_err_image_size">120dp</dimen>
+    <dimen name="search_err_button_radius">54dp</dimen>
+    <dimen name="search_err_button_txtsize">14sp</dimen>
+    <dimen name="search_err_text_txtsize">19sp</dimen>
+    <dimen name="search_err_margin_horizontal">24dp</dimen>
+    <dimen name="search_err_margin_vertical">16dp</dimen>
     <dimen name="switch_compat_icon_height">40dp</dimen>
     <dimen name="switch_compat_icon_width">56dp</dimen>
     <dimen name="image_track_radius">2dp</dimen>
+    <dimen name="button_inset">0dp</dimen>
 </resources>
