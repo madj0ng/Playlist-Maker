@@ -6,19 +6,23 @@
     <color name="color_blue_light">#BED1F7</color>
     <color name="color_black">#1A1B22</color>
     <color name="color_black_light">#E6E8EB</color>
+    <color name="seach_background">#E6E8EB</color>
     <color name="background_main">#3772E7</color>
     <color name="background_setting">#FFFFFF</color>
     <color name="background_search">#FFFFFF</color>
     <color name="text_color">#1A1B22</color>
     <color name="icon_color">#1A1B22</color>
-    <color name="seach_background">#E6E8EB</color>
+    <color name="settings_thumb_checked">#3772E7</color>
+    <color name="settings_thumb_unchecked">#AEAFB4</color>
+    <color name="settings_track_checked">#BED1F7</color>
+    <color name="settings_track_unchecked">#E6E8EB</color>
     <color name="search_text">#1A1B22</color>
-    <color name="search_update_button">#FFFFFF</color>
     <color name="search_help_text">#AEAFB4</color>
     <color name="search_help_icon">#AEAFB4</color>
     <color name="search_list_text_up">#000000</color>
     <color name="search_list_text_down">#AEAFB4</color>
     <color name="search_err_text">#1A1B22</color>
     <color name="search_err_icon">#1A1B22</color>
-    <color name="search_err_button_bgrnd">#1A1B22</color>
+    <color name="button_black_bgrnd">#1A1B22</color>
+    <color name="button_black_text_color">#FFFFFF</color>
 </resources>

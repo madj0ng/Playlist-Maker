@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.content.Intent
 import android.net.Uri
@@ -6,21 +6,40 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.R
+import com.example.playlistmaker.presentation.settings.SettingTheme
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // Нажатие иконки назад экрана Настройки
         val back = findViewById<ImageView>(R.id.back)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        val agreement = findViewById<ImageView>(R.id.agreement)
+        val sendHelp = findViewById<ImageView>(R.id.sendHelp)
+        val social = findViewById<ImageView>(R.id.social)
+
+        val settingTheme = SettingTheme(getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE))
+
+        // Установка переключатея в соответствии с сохраненным параметром или темой устройства
+        themeSwitcher.isChecked =
+            settingTheme.read(resources.configuration.uiMode == AppCompatDelegate.MODE_NIGHT_YES)
+
+        // Нажатие иконки назад экрана Настройки
         back.setOnClickListener {
             super.finish()
         }
 
+        // Нажатие кнопки выбора темы
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+            settingTheme.write(checked)  // Сохранение параметра
+        }
+
         // Нажатие иконки Пользовательское соглашение
-        val agreement = findViewById<ImageView>(R.id.agreement)
         agreement.setOnClickListener {
             val url = Uri.parse(getString(R.string.url_offer))
             val urlIntent = Intent(Intent.ACTION_VIEW, url)
@@ -30,7 +49,6 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // Нажатие иконки Написать в поддержку
-        val sendHelp = findViewById<ImageView>(R.id.sendHelp)
         sendHelp.setOnClickListener {
             val message =
                 getString(R.string.mail_text)     //"Спасибо разработчикам и разработчицам за крутое приложение!"
@@ -49,7 +67,6 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // Нажатие иконки Поделиться приложением
-        val social = findViewById<ImageView>(R.id.social)
         social.setOnClickListener {
             val message = getString(R.string.sharing_text)
             val type = getString(R.string.sharing_type)
