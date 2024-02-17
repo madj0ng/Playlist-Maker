@@ -70,10 +70,10 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/color_black</item>
         <item name="android:textSize">@dimen/button_text_size</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:insetTop">@dimen/button_inset</item>
+        <item name="android:insetBottom">@dimen/button_inset</item>
+        <item name="android:layout_marginTop">@dimen/main_button_margin_vertical</item>
+        <item name="android:layout_marginBottom">@dimen/main_button_margin_vertical</item>
         <item name="cornerRadius">@dimen/button_radius</item>
         <item name="iconPadding">@dimen/icon_padding</item>
         <item name="iconTint">@color/color_black</item>
@@ -121,12 +121,6 @@
     </style>
 
     <style name="SearchInputText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingBottom">@dimen/search_input_padding</item>
-        <item name="android:paddingTop">@dimen/search_input_padding</item>
-        <item name="android:paddingLeft">@dimen/search_input_padding</item>
-        <item name="android:paddingRight">@dimen/search_input_padding</item>
         <item name="android:textSize">@dimen/search_input_text_size</item>
         <item name="android:textColorHint">@color/search_help_text</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
@@ -163,20 +157,15 @@
     </style>
 
     <style name="SearchTrackLine">
-
         <item name="android:orientation">horizontal</item>
     </style>
 
     <style name="SearchTrackImage">
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
         <item name="android:scaleType">fitCenter</item>
     </style>
 
     <style name="SearchTrackLineTexts">
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginEnd">8dp</item>
         <item name="android:orientation">vertical</item>
     </style>
 
@@ -185,7 +174,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/search_list_text_up</item>
         <item name="android:textFontWeight">400</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/search_track_up_txtsize</item>
     </style>
 
     <style name="SearchTrackLineTextsDown">
@@ -199,12 +188,10 @@
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/search_list_text_down</item>
         <item name="android:textFontWeight">400</item>
-        <item name="android:textSize">11sp</item>
+        <item name="android:textSize">@dimen/search_track_down_txtsize</item>
     </style>
 
     <style name="SearchTextSeparator">
-        <item name="android:layout_width">13dp</item>
-        <item name="android:layout_height">13dp</item>
         <item name="android:backgroundTint">@color/black</item>
         <item name="android:iconTint">@color/search_list_text_down</item>
         <item name="tint">@color/search_list_text_down</item>
@@ -213,6 +200,26 @@
     <style name="SearchTrackDetail">
         <item name="android:iconTint">@color/search_list_text_down</item>
         <item name="tint">@color/search_list_text_down</item>
+    </style>
+
+    <style name="SearchErrText">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/search_err_text</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/search_err_text_txtsize</item>
+    </style>
+
+    <style name="SearchErrButtom">
+        <item name="android:inset">@dimen/button_inset</item>
+        <item name="android:backgroundTint">@color/search_err_button_bgrnd</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:text">@string/sharing_update</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/search_update_button</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">@dimen/search_err_button_txtsize</item>
     </style>
 
 </resources>

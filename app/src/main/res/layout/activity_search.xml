@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_setting"
@@ -28,7 +30,15 @@
             <EditText
                 android:id="@+id/inputEditText"
                 style="@style/SearchInputText"
-                android:hint="@string/activity_search" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/activity_search"
+                android:imeOptions="actionDone"
+                android:paddingLeft="@dimen/search_input_padding"
+                android:paddingTop="@dimen/search_input_padding"
+                android:paddingRight="@dimen/search_input_padding"
+                android:paddingBottom="@dimen/search_input_padding"
+                android:singleLine="true" />
 
             <!-- При переносе значения "10dp" в ресурс "размеры" не сжимается иконка(атрибут android:padding="10dp") -->
             <ImageView
@@ -42,14 +52,54 @@
                 style="@style/SearchInputIconEnd"
                 android:padding="10dp"
                 android:src="@drawable/icon_close"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </FrameLayout>
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trackList"
-        style="@style/SearchTrackList"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trackList"
+            style="@style/SearchTrackList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/placeholderMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/messageImg"
+                android:layout_width="@dimen/search_err_image_size"
+                android:layout_height="@dimen/search_err_image_size"
+                android:layout_gravity="center"
+                android:src="@drawable/error_find" />
+
+            <TextView
+                android:id="@+id/messageText"
+                style="@style/SearchErrText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/search_err_margin_horizontal"
+                android:layout_marginTop="@dimen/search_err_margin_vertical"
+                android:layout_marginEnd="@dimen/search_err_margin_horizontal"
+                tools:text="Ошибка Ошибка Ошибка Ошибка Ошибка Ошибка Ошибка Ошибка Ошибка Ошибка Ошибка Ошибка Ошибка " />
+
+            <Button
+                android:id="@+id/messageButton"
+                style="@style/SearchErrButtom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/search_err_margin_vertical"
+                app:cornerRadius="@dimen/search_err_button_radius" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

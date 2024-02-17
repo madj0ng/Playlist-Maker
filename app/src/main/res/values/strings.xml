@@ -17,8 +17,12 @@
 
     <string name="sharing_text">https://practicum.yandex.ru/android-developer/</string>
     <string name="sharing_type">text/plain</string>
+    <string name="sharing_update">Обновить</string>
 
     <string name="url_offer">https://yandex.ru/legal/practicum_offer/</string>
 
+    <string name="error_text">Произошла ошибка</string>
     <string name="error_find">Не найдено подходящее приложение!</string>
+    <string name="error_search_find">Ничего не нашлось</string>
+    <string name="error_connect_find">Проблема со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
 </resources>
