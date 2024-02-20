@@ -75,7 +75,7 @@
                 style="@style/SearchHistoryTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_18dp"
+                android:layout_marginTop="@dimen/margin_16dp"
                 android:layout_marginBottom="@dimen/margin_12dp"
                 android:text="@string/history_title"
                 android:visibility="gone" />

@@ -43,15 +43,14 @@
     <dimen name="switch_compat_icon_height">40dp</dimen>
     <dimen name="switch_compat_icon_width">56dp</dimen>
     <dimen name="button_inset">0dp</dimen>
-    <dimen name="margin_56dp">56dp</dimen>
-    <dimen name="margin_16dp">16dp</dimen>
-    <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_4dp">4dp</dimen>
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="margin_12dp">12dp</dimen>
-    <dimen name="margin_18dp">18dp</dimen>
-    <dimen name="margin_30dp">30dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
-    <dimen name="margin_4dp">4dp</dimen>
-    <dimen name="size_51dp">51dp</dimen>
+    <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_28dp">28dp</dimen>
+    <dimen name="size_52dp">52dp</dimen>
+    <dimen name="margin_56dp">56dp</dimen>
     <dimen name="size_100dp">100dp</dimen>
 </resources>

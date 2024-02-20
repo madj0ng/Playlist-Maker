@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
@@ -151,8 +153,6 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(SEARCH_EDIT_TEXT, searhText)
         // Сохраняется значение searchViewGroup состояние отображения
         outState.putString(SEARCH_VIEW_GROUP, searchViewGroup)
-        // Сохраняется список найденных треков
-//        outState.putSerializable(SEARCH_TRACK_LIST, trackAdapter.tracks)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -167,11 +167,6 @@ class SearchActivity : AppCompatActivity() {
         // Сохраняем состояние viewGroup
         searchViewGroup = savedInstanceState.getString(SEARCH_VIEW_GROUP, SEARCH_VIEW_GROUP_VAL)
         showViewGroup(searchViewGroup)
-
-        // Сохраняем состояние списка
-//        trackAdapter.tracks.clear()
-//        trackAdapter.tracks.addAll(savedInstanceState.getSerializable(SEARCH_TRACK_LIST) as ArrayList<Track>)
-//        trackAdapter.notifyDataSetChanged()
     }
 
     override fun onStop() {
@@ -181,29 +176,18 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onEditTextChanged() {
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
+        inputEditText.doOnTextChanged { text, start, before, count ->
+            clearButton.isVisible = !text.isNullOrEmpty()
+            searhText = text.toString()
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
-                searhText = s.toString()
-
-                // Отображение истории при улосвии фокуса и пустого поля поиска
-                if (inputEditText.hasFocus() && s?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) {
-                    showViewGroup(SearchViewGroup.HISTORY)
-                } else {
-                    showViewGroup(SearchViewGroup.FIND)
-                }
-                trackRecycler.adapter = getAdapter()
+            // Отображение истории при улосвии фокуса и пустого поля поиска
+            if (inputEditText.hasFocus() && text?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) {
+                showViewGroup(SearchViewGroup.HISTORY)
+            } else {
+                showViewGroup(SearchViewGroup.FIND)
             }
-
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
+            trackRecycler.adapter = getAdapter()
         }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
     }
 
     private fun itunesSeach(text: String) {
