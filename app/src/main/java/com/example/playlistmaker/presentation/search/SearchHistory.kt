@@ -59,7 +59,6 @@ class SearchHistory(
             // Удаляем трек, если он уже есть в истории и его индекс больше 9
             if (i > maxSize || historyAdapter.tracks[i].trackId == track.trackId) {
                 historyAdapter.tracks.removeAt(i)
-                //historyAdapter.tracks.remove(historyAdapter.tracks[i])
                 historyAdapter.notifyItemRemoved(i)
                 historyAdapter.notifyItemRangeChanged(i, historyAdapter.tracks.size)
                 i--

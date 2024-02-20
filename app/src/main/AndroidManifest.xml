@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission
-        android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:name="com.example.playlistmaker.presentation.App"
+        android:name=".presentation.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,14 +16,15 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.PlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.MediaActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".presentation.SearchActivity"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible">
-        </activity>
+            android:windowSoftInputMode="stateVisible"></activity>
         <activity
             android:name=".presentation.SettingsActivity"
             android:exported="false" />

@@ -8,6 +8,9 @@
         <ImageView
             android:id="@+id/back"
             style="@style/TitleImage"
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_margin="@dimen/title_image_margin"
             android:src="@drawable/icon_back" />
 
         <TextView

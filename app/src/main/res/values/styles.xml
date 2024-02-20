@@ -14,23 +14,36 @@
     </style>
 
     <style name="TitleImage">
-        <item name="android:layout_width">@dimen/title_image_width</item>
-        <item name="android:layout_height">@dimen/title_image_height</item>
-        <item name="android:layout_margin">@dimen/title_image_margin</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="iconGravity">textStart</item>
+        <item name="android:background">@null</item>
+        <item name="android:backgroundTint">@color/background_player</item>
         <item name="iconTint">@color/icon_color</item>
         <item name="tint">@color/icon_color</item>
     </style>
 
-    <style name="Title">
+    <style name="FontDisplayMediumBlack">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
         <item name="android:textColor">@color/text_color</item>
+        <item name="android:layout_gravity">center_vertical</item>
     </style>
 
-    <style name="TitleText" parent="Title">
+    <style name="FontDisplayRegularGray">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">@color/text_color_gray</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="FontDisplayRegularBlack">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="TitleText" parent="FontDisplayMediumBlack">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/title_text_size</item>
@@ -164,7 +177,7 @@
         <item name="android:layout_marginEnd">@dimen/search_input_icon_start</item>
     </style>
 
-    <style name="SearchHistoryTitle" parent="Title">
+    <style name="SearchHistoryTitle" parent="FontDisplayMediumBlack">
         <item name="android:textSize">@dimen/search_history_title_txtsize</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:textAlignment">center</item>
@@ -228,6 +241,68 @@
         <item name="android:textColor">@color/search_err_text</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textSize">@dimen/search_err_text_txtsize</item>
+    </style>
+
+    <!--Стили плеера-->
+    <style name="PlayerTrackImage">
+        <item name="android:background">@null</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="layout_constraintDimensionRatio">h,1:1</item>
+    </style>
+
+    <style name="PlayerTrackName" parent="FontDisplayMediumBlack">
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="layout_constrainedWidth">true</item>
+    </style>
+
+    <style name="PlayerArtistName" parent="FontDisplayMediumBlack">
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="layout_constrainedWidth">true</item>
+    </style>
+
+    <style name="PlayerPlayTime" parent="FontDisplayMediumBlack">
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="layout_constrainedWidth">true</item>
+    </style>
+
+    <style name="PlayerTrackProperties" parent="FontDisplayRegularGray">
+        <item name="android:textSize">@dimen/text_size_13sp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_marginTop">@dimen/margin_16dp</item>
+        <item name="layout_constrainedWidth">true</item>
+    </style>
+
+    <style name="PlayerTrackPropertiesValue" parent="FontDisplayRegularBlack">
+        <item name="android:textSize">@dimen/text_size_13sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_marginStart">@dimen/margin_8dp</item>
+        <item name="layout_constrainedWidth">true</item>
+    </style>
+
+    <style name="PlayerTrackActionButton">
+        <item name="android:backgroundTint">@color/background_player</item>
+    </style>
+
+    <style name="PlayerMessage" parent="FontDisplayRegularBlack">
+        <item name="android:background">@color/button_black_bgrnd</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:textColor">@color/player_message_color</item>
+        <item name="android:paddingBottom">@dimen/margin_16dp</item>
+        <item name="android:paddingTop">@dimen/margin_16dp</item>
+        <item name="android:paddingStart">@dimen/margin_8dp</item>
+        <item name="android:paddingEnd">@dimen/margin_8dp</item>
     </style>
 
 </resources>

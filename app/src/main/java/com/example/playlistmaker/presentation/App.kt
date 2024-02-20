@@ -8,22 +8,22 @@ const val APP_PREFERENCES = "app_preferences"
 const val SEARCH_PREFERENCES = "search_preferences"
 
 class App : Application() {
-    private var darkTheme = false
+    private var isDarkTheme = false
 
     override fun onCreate() {
         super.onCreate()
 
-        darkTheme = SettingTheme(
+        isDarkTheme = SettingTheme(
             getSharedPreferences(
                 APP_PREFERENCES,
                 MODE_PRIVATE
             )
         ).read(resources.configuration.uiMode == AppCompatDelegate.MODE_NIGHT_YES)
-        switchTheme(darkTheme)
+        switchTheme(isDarkTheme)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
+        isDarkTheme = darkThemeEnabled
 
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
