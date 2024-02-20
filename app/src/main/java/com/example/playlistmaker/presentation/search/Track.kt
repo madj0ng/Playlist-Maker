@@ -1,6 +1,7 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.search
 
 data class Track(
+    val trackId: Int,      // Название композиции
     val trackName: String,      // Название композиции
     val artistName: String,     // Имя исполнителя
     var trackTime: String,      // Продолжительность трека в формате mm:ss

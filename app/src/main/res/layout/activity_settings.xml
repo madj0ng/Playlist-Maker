@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/SettingsBackground">
 
     <LinearLayout style="@style/TitleLine">
@@ -24,12 +25,14 @@
                 style="@style/SettingsMenuText"
                 android:text="@string/settings_theme" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/dayNight"
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/themeSwitcher"
                 style="@style/SettingsMenuIcon"
                 android:layout_width="@dimen/switch_compat_icon_width"
                 android:layout_height="@dimen/switch_compat_icon_height"
-                android:checked="false" />
+                android:checked="false"
+                app:thumbTint="@drawable/settings_theme_thumb"
+                app:trackTint="@drawable/settings_theme_track" />
         </FrameLayout>
 
         <FrameLayout style="@style/SettingsMenuLine">

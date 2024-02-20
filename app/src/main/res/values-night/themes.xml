@@ -1,10 +1,12 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Primary color -->
         <item name="colorPrimary">@color/color_black</item>
         <item name="colorPrimaryVariant">@color/color_black_light</item>
+        <!-- Secondary color -->
         <item name="colorAccent">@color/color_blue</item>
         <item name="colorControlActivated">@color/color_blue</item>
         <item name="android:statusBarColor">@color/color_black</item>

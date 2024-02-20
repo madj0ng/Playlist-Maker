@@ -12,7 +12,6 @@
     <dimen name="body_margin_horizontal">16dp</dimen>
     <dimen name="body_margin_vertical">16dp</dimen>
     <dimen name="body_padding_vertical">20dp</dimen>
-    <dimen name="body_padding_horizontal">16dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
     <dimen name="button_text_size">22sp</dimen>
     <dimen name="button_radius">16dp</dimen>
@@ -22,7 +21,6 @@
     <dimen name="search_input_text_size">16sp</dimen>
     <dimen name="search_input_text_start">36dp</dimen>
     <dimen name="search_input_icon_start">2dp</dimen>
-    <dimen name="search_input_icon_padding">10dp</dimen>
     <dimen name="search_input_icon_width">36dp</dimen>
     <dimen name="search_input_icon_height">36dp</dimen>
     <dimen name="search_track_line_margin">8dp</dimen>
@@ -33,12 +31,14 @@
     <dimen name="search_track_arrow_right_size">24dp</dimen>
     <dimen name="search_err_image_size">120dp</dimen>
     <dimen name="search_err_button_radius">54dp</dimen>
-    <dimen name="search_err_button_txtsize">14sp</dimen>
+    <dimen name="button_black_radius">54dp</dimen>
+    <dimen name="button_black_txtsize">14sp</dimen>
+    <dimen name="button_black_letterSpacing">.03</dimen>
     <dimen name="search_err_text_txtsize">19sp</dimen>
     <dimen name="search_err_margin_horizontal">24dp</dimen>
     <dimen name="search_err_margin_vertical">16dp</dimen>
+    <dimen name="search_history_title_txtsize">19sp</dimen>
     <dimen name="switch_compat_icon_height">40dp</dimen>
     <dimen name="switch_compat_icon_width">56dp</dimen>
-    <dimen name="image_track_radius">2dp</dimen>
     <dimen name="button_inset">0dp</dimen>
 </resources>

@@ -1,20 +1,23 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-
+import com.example.playlistmaker.R
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Кнопка поиск
         val search = findViewById<Button>(R.id.search)
+        val media = findViewById<Button>(R.id.media)
+        val settings = findViewById<Button>(R.id.settings)
         val intent = Intent(this, SearchActivity::class.java)
+
+        // Кнопка поиск
         val searchClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
                 startActivity(intent)
@@ -23,13 +26,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         search.setOnClickListener(searchClickListener)
 
         // Кнопка Медиа
-        val media = findViewById<Button>(R.id.media)
-        media.setOnClickListener{
+        media.setOnClickListener {
             startActivity(Intent(this, MediaActivity::class.java))
         }
 
         // Кнопка Настройка
-        val settings = findViewById<Button>(R.id.settings)
         settings.setOnClickListener(this@MainActivity)
     }
 

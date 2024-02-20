@@ -21,8 +21,10 @@
 
     <string name="url_offer">https://yandex.ru/legal/practicum_offer/</string>
 
-    <string name="error_text">Произошла ошибка</string>
     <string name="error_find">Не найдено подходящее приложение!</string>
     <string name="error_search_find">Ничего не нашлось</string>
     <string name="error_connect_find">Проблема со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+
+    <string name="history_title">Вы искали</string>
+    <string name="history_clear_button">Очистить историю</string>
 </resources>
