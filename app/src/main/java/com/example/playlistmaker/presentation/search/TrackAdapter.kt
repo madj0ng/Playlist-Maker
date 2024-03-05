@@ -2,16 +2,20 @@ package com.example.playlistmaker.presentation.search
 
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.presentation.PlayerActivity
+import com.example.playlistmaker.utils.HandlerUtils
 import com.google.gson.Gson
 
 class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>(), Observable {
     var tracks = ArrayList<Track>()
     private val subscriber = mutableListOf<Observer>()
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         return TrackViewHolder(
@@ -30,7 +34,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>(), Observable {
         }
     }
 
-    override fun addSubscriber(observer: Observer){
+    override fun addSubscriber(observer: Observer) {
         subscriber.add(observer)
     }
 
@@ -40,9 +44,11 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>(), Observable {
         }
     }
 
-    private fun startPlayerActivity(context: Context, track: Track){
-        val player = Intent(context, PlayerActivity::class.java)
-        player.putExtra(PlayerActivity.TRACK_KEY, Gson().toJson(track) )
-        context.startActivity(player)
+    private fun startPlayerActivity(context: Context, track: Track) {
+        if (HandlerUtils.clickDebounce(handler)) {
+            val player = Intent(context, PlayerActivity::class.java)
+            player.putExtra(PlayerActivity.TRACK_KEY, Gson().toJson(track))
+            context.startActivity(player)
+        }
     }
 }

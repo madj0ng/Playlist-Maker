@@ -26,13 +26,13 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackTime = itemView.findViewById<TextView>(R.id.trackTime)
     private val trackImage = itemView.findViewById<ImageView>(R.id.trackImage)
 
-    fun bind(item: Track) {
-        trackName.text = item.trackName
-        artistName.text = item.artistName
-        trackTime.text = FormatUtils.formatLongToTrakTime(item.trackTimeMillis)
+    fun bind(track: Track) {
+        trackName.text = track.trackName
+        artistName.text = track.artistName
+        trackTime.text = FormatUtils.formatLongToTrakTime(track.trackTimeMillis)
 
         Glide.with(itemView)
-            .load(item.artworkUrl100)
+            .load(track.artworkUrl100)
             .placeholder(R.drawable.ic_placeholder)
             .centerCrop()
             .transform(RoundedCorners(imgRadius))

@@ -123,7 +123,7 @@
         app:srcCompat="@drawable/ic_in_playlist" />
 
     <ImageButton
-        android:id="@+id/play"
+        android:id="@+id/ibPlay"
         style="@style/PlayerTrackActionButton"
         android:layout_width="@dimen/size_100dp"
         android:layout_height="@dimen/size_100dp"
@@ -135,20 +135,6 @@
         app:layout_constraintStart_toEndOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/artistName"
         app:srcCompat="@drawable/ic_play" />
-
-    <ImageButton
-        android:id="@+id/stop"
-        style="@style/PlayerTrackActionButton"
-        android:layout_width="@dimen/size_100dp"
-        android:layout_height="@dimen/size_100dp"
-        android:layout_marginTop="@dimen/margin_28dp"
-        android:padding="@dimen/margin_8dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/playTime"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintStart_toEndOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/artistName"
-        app:srcCompat="@drawable/ic_stop" />
 
     <ImageButton
         android:id="@+id/likedAdd"
@@ -185,7 +171,7 @@
         android:text="@string/player_primary_time"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/play" />
+        app:layout_constraintTop_toBottomOf="@+id/ibPlay" />
 
     <TextView
         android:id="@+id/trackTime"

@@ -53,4 +53,5 @@
     <dimen name="size_52dp">52dp</dimen>
     <dimen name="margin_56dp">56dp</dimen>
     <dimen name="size_100dp">100dp</dimen>
+    <dimen name="size_44dp">44dp</dimen>
 </resources>

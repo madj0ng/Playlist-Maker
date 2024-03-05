@@ -4,6 +4,7 @@ package com.example.playlistmaker.presentation.search
 enum class SearchViewGroup {
     FIND,
     HISTORY,
+    PROGRESS,
     ERROR,
     FAILURE;
 }
