@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
@@ -20,9 +22,7 @@ import com.example.playlistmaker.api.itunessearch.ItunesSearchApi
 import com.example.playlistmaker.api.itunessearch.ItunesSearchResponse
 import com.example.playlistmaker.presentation.search.SearchHistory
 import com.example.playlistmaker.presentation.search.SearchViewGroup
-import com.example.playlistmaker.presentation.search.Track
 import com.example.playlistmaker.presentation.search.TrackAdapter
-import com.example.playlistmaker.utils.FormatUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +37,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_VIEW_GROUP = "SEARCH_MESSAGE"
         const val SEARCH_VIEW_GROUP_VAL = "FIND"
 
-        const val SEARCH_TRACK_LIST = "SEARCH_TRACK_LIST"
+//        const val SEARCH_TRACK_LIST = "SEARCH_TRACK_LIST"
 
         const val BASE_SEARCH_URL = "https://itunes.apple.com"
     }
@@ -116,29 +116,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // События изменения поля EditText
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
-                searhText = s.toString()
-
-                // Отображение истории при улосвии фокуса и пустого поля поиска
-                if (inputEditText.hasFocus() && s?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) {
-                    showViewGroup(SearchViewGroup.HISTORY)
-                } else {
-                    showViewGroup(SearchViewGroup.FIND)
-                }
-                trackRecycler.adapter = getAdapter()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
-        }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
+        onEditTextChanged()
         trackRecycler.adapter = getAdapter()
 
         // Событие нажатия "DONE"
@@ -175,8 +153,6 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(SEARCH_EDIT_TEXT, searhText)
         // Сохраняется значение searchViewGroup состояние отображения
         outState.putString(SEARCH_VIEW_GROUP, searchViewGroup)
-        // Сохраняется список найденных треков
-        outState.putSerializable(SEARCH_TRACK_LIST, trackAdapter.tracks)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -191,17 +167,27 @@ class SearchActivity : AppCompatActivity() {
         // Сохраняем состояние viewGroup
         searchViewGroup = savedInstanceState.getString(SEARCH_VIEW_GROUP, SEARCH_VIEW_GROUP_VAL)
         showViewGroup(searchViewGroup)
-
-        // Сохраняем состояние списка
-        trackAdapter.tracks.clear()
-        trackAdapter.tracks.addAll(savedInstanceState.getSerializable(SEARCH_TRACK_LIST) as ArrayList<Track>)
-        trackAdapter.notifyDataSetChanged()
     }
 
     override fun onStop() {
         super.onStop()
 
         history.saveHistory()
+    }
+
+    private fun onEditTextChanged() {
+        inputEditText.doOnTextChanged { text, start, before, count ->
+            clearButton.isVisible = !text.isNullOrEmpty()
+            searhText = text.toString()
+
+            // Отображение истории при улосвии фокуса и пустого поля поиска
+            if (inputEditText.hasFocus() && text?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) {
+                showViewGroup(SearchViewGroup.HISTORY)
+            } else {
+                showViewGroup(SearchViewGroup.FIND)
+            }
+            trackRecycler.adapter = getAdapter()
+        }
     }
 
     private fun itunesSeach(text: String) {
@@ -218,9 +204,7 @@ class SearchActivity : AppCompatActivity() {
                         when {
                             response.isSuccessful && !response.body()?.results.isNullOrEmpty() -> {
                                 for (trak in response.body()?.results!!) {
-                                    trak.trackTime =
-                                        FormatUtils.formatLongToTrakTime(trak.trackTimeMillis)
-                                    trackAdapter.tracks.add(trak)
+                                    trackAdapter.tracks.addAll(response.body()?.results!!)
                                 }
                                 viewGroupCls = SearchViewGroup.FIND
                             }
@@ -324,57 +308,4 @@ class SearchActivity : AppCompatActivity() {
         // Обновляем отображение всего списка
         adapter.notifyDataSetChanged()
     }
-
-    /*private fun buildMock(): ArrayList<Track> {
-        return arrayListOf(
-            Track(
-                1,
-                "Smells Like Teen SpiritSmells Like Teen SpiritSmells Like Teen SpiritSmells Like Teen SpiritSmells Like Teen Spirit",
-                "NirvanaNirvanaNirvanaNirvanaNirvanaNirvanaNirvana",
-                "5:01",
-                1000,
-                "https://1111is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-            ),
-            Track(
-                2,
-                "Smells Like Teen Spirit",
-                "Nirvana",
-                "5:01",
-                1000,
-                "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-            ),
-            Track(
-                3,
-                "Billie Jean",
-                "Michael Jackson",
-                "4:35",
-                1000,
-                "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-            ),
-            Track(
-                4,
-                "Stayin' Alive",
-                "Bee Gees",
-                "4:10",
-                1000,
-                "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-            ),
-            Track(
-                5,
-                "Whole Lotta Love",
-                "Led Zeppelin",
-                "5:33",
-                1000,
-                "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-            ),
-            Track(
-                6,
-                "Sweet Child O'Mine",
-                "Guns N' Roses",
-                "5:03",
-                1000,
-                "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-            )
-        )
-    }*/
 }

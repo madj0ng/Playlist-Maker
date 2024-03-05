@@ -3,6 +3,7 @@
     <color name="background_main">#1A1B22</color>
     <color name="background_setting">#1A1B22</color>
     <color name="background_search">#1A1B22</color>
+    <color name="background_player">#1A1B22</color>
     <color name="text_color">#FFFFFF</color>
     <color name="icon_color">#FFFFFF</color>
     <color name="seach_background">#FFFFFF</color>
@@ -14,4 +15,6 @@
     <color name="search_err_icon">#FFFFFF</color>
     <color name="button_black_bgrnd">#FFFFFF</color>
     <color name="button_black_text_color">#1A1B22</color>
+    <color name="player_icon_track_menu">#FFFFFF</color>
+    <color name="player_message_color">#1A1B22</color>
 </resources>

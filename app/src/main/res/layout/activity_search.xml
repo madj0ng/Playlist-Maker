@@ -11,6 +11,9 @@
         <ImageView
             android:id="@+id/back"
             style="@style/TitleImage"
+            android:layout_width="@dimen/title_image_width"
+            android:layout_height="@dimen/title_image_height"
+            android:layout_margin="@dimen/title_image_margin"
             android:src="@drawable/icon_back" />
 
         <TextView
@@ -29,6 +32,7 @@
             <EditText
                 android:id="@+id/inputEditText"
                 style="@style/SearchInputText"
+                android:autofillHints="no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/activity_search"
@@ -71,8 +75,8 @@
                 style="@style/SearchHistoryTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="@dimen/margin_16dp"
+                android:layout_marginBottom="@dimen/margin_12dp"
                 android:text="@string/history_title"
                 android:visibility="gone" />
 
