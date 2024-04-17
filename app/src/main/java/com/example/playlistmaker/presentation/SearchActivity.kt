@@ -2,8 +2,8 @@ package com.example.playlistmaker.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -23,6 +24,7 @@ import com.example.playlistmaker.api.itunessearch.ItunesSearchResponse
 import com.example.playlistmaker.presentation.search.SearchHistory
 import com.example.playlistmaker.presentation.search.SearchViewGroup
 import com.example.playlistmaker.presentation.search.TrackAdapter
+import com.example.playlistmaker.utils.HandlerUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,8 +38,6 @@ class SearchActivity : AppCompatActivity() {
 
         const val SEARCH_VIEW_GROUP = "SEARCH_MESSAGE"
         const val SEARCH_VIEW_GROUP_VAL = "FIND"
-
-//        const val SEARCH_TRACK_LIST = "SEARCH_TRACK_LIST"
 
         const val BASE_SEARCH_URL = "https://itunes.apple.com"
     }
@@ -74,8 +74,15 @@ class SearchActivity : AppCompatActivity() {
     // Данные в случае ошибок
     private val errorFoundGroup: LinearLayout by lazy { findViewById(R.id.errorFoundGroup) }
     private val errorConnectGroup: LinearLayout by lazy { findViewById(R.id.errorConnectGroup) }
-    private val errorConnectButton: Button by lazy { findViewById(R.id.errConnectButton) }
+    private val errorConnectButton: Button by lazy { findViewById(R.id.errorConnectButton) }
 
+    //
+    private val back: ImageView by lazy { findViewById(R.id.back) }
+    private val progressBar: ProgressBar by lazy { findViewById(R.id.progressBar) }
+
+    // Отложенная очередь задач
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { itunesSeach() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +105,6 @@ class SearchActivity : AppCompatActivity() {
         history.setHistory()
 
         // Нажатие иконки назад экрана Настройки
-        val back = findViewById<ImageView>(R.id.back)
         back.setOnClickListener {
             super.finish()
         }
@@ -122,8 +128,7 @@ class SearchActivity : AppCompatActivity() {
         // Событие нажатия "DONE"
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // ВЫПОЛНЯЙТЕ ПОИСКОВЫЙ ЗАПРОС ЗДЕСЬ
-                itunesSeach(searhText)
+                clickTrack()
                 true
             }
             false
@@ -143,7 +148,7 @@ class SearchActivity : AppCompatActivity() {
 
         // Событие нажатия "Обновить"
         errorConnectButton.setOnClickListener {
-            itunesSeach(searhText)
+            clickTrack()
         }
     }
 
@@ -176,7 +181,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onEditTextChanged() {
+
         inputEditText.doOnTextChanged { text, start, before, count ->
+            // Скрытие или отображение кнопки удаления
             clearButton.isVisible = !text.isNullOrEmpty()
             searhText = text.toString()
 
@@ -185,15 +192,30 @@ class SearchActivity : AppCompatActivity() {
                 showViewGroup(SearchViewGroup.HISTORY)
             } else {
                 showViewGroup(SearchViewGroup.FIND)
+                // Поиск трека
+                searchTrack()
             }
             trackRecycler.adapter = getAdapter()
         }
     }
 
-    private fun itunesSeach(text: String) {
-        if (text.isNotEmpty()) {
+    private fun searchTrack() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, HandlerUtils.SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun clickTrack() {
+        if (HandlerUtils.clickDebounce(handler)) {
+            handler.removeCallbacks(searchRunnable)
+            itunesSeach()
+        }
+    }
+
+    private fun itunesSeach() {
+        if (searhText.isNotEmpty()) {
+            showViewGroup(SearchViewGroup.PROGRESS)
             itunesSearchService
-                .getTracks(text)
+                .getTracks(searhText)
                 .enqueue(object : Callback<ItunesSearchResponse> {
                     override fun onResponse(
                         call: Call<ItunesSearchResponse>,
@@ -243,6 +265,7 @@ class SearchActivity : AppCompatActivity() {
                 SearchViewGroup.HISTORY.toString() -> SearchViewGroup.HISTORY
                 SearchViewGroup.ERROR.toString() -> SearchViewGroup.ERROR
                 SearchViewGroup.FAILURE.toString() -> SearchViewGroup.FAILURE
+                SearchViewGroup.PROGRESS.toString() -> SearchViewGroup.PROGRESS
                 else -> SearchViewGroup.FIND
             }
         )
@@ -257,6 +280,16 @@ class SearchActivity : AppCompatActivity() {
                 trackRecycler.visibility = View.VISIBLE
                 errorConnectGroup.visibility = View.GONE
                 errorFoundGroup.visibility = View.GONE
+                progressBar.visibility = View.GONE
+            }
+
+            SearchViewGroup.PROGRESS ->{
+                historyGroupTitle.visibility = View.GONE
+                historyGroupButton.visibility = View.GONE
+                trackRecycler.visibility = View.GONE
+                errorConnectGroup.visibility = View.GONE
+                errorFoundGroup.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
             }
 
             SearchViewGroup.HISTORY -> {
@@ -265,6 +298,7 @@ class SearchActivity : AppCompatActivity() {
                 trackRecycler.visibility = View.VISIBLE
                 errorConnectGroup.visibility = View.GONE
                 errorFoundGroup.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
 
             SearchViewGroup.ERROR -> {
@@ -273,6 +307,7 @@ class SearchActivity : AppCompatActivity() {
                 trackRecycler.visibility = View.GONE
                 errorConnectGroup.visibility = View.GONE
                 errorFoundGroup.visibility = View.VISIBLE
+                progressBar.visibility = View.GONE
             }
 
             SearchViewGroup.FAILURE -> {
@@ -281,15 +316,8 @@ class SearchActivity : AppCompatActivity() {
                 trackRecycler.visibility = View.GONE
                 errorConnectGroup.visibility = View.VISIBLE
                 errorFoundGroup.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
-        }
-    }
-
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
         }
     }
 

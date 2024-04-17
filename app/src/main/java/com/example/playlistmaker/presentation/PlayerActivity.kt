@@ -1,16 +1,19 @@
 package com.example.playlistmaker.presentation
 
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.Group
+import android.os.Handler
+import android.os.Looper
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.presentation.player.PlayerState
 import com.example.playlistmaker.presentation.search.Track
 import com.example.playlistmaker.utils.FormatUtils
+import com.example.playlistmaker.utils.HandlerUtils
 import com.google.gson.Gson
 
 class PlayerActivity : AppCompatActivity() {
@@ -20,36 +23,127 @@ class PlayerActivity : AppCompatActivity() {
         const val TRACK_KEY = "track_key"
     }
 
-    private val back: ImageView by lazy { findViewById(R.id.back) }
-    private val albumImage: ImageView by lazy { findViewById(R.id.albumImage) }
-    private val trackName: TextView by lazy { findViewById(R.id.trackName) }
-    private val artistName: TextView by lazy { findViewById(R.id.artistName) }
-    private val collectionName: TextView by lazy { findViewById(R.id.collectionNameValue) }
-    private val releaseDate: TextView by lazy { findViewById(R.id.releaseDateValue) }
-    private val primaryGenreName: TextView by lazy { findViewById(R.id.primaryGenreNameValue) }
-    private val country: TextView by lazy { findViewById(R.id.countryValue) }
-    private val trackTime: TextView by lazy { findViewById(R.id.trackTimeValue) }
-    private val collectionNameGroup: Group by lazy { findViewById(R.id.collectionNameGroup) }
+    private lateinit var binding: ActivityPlayerBinding
+
+    // Плеер
+    private var mediaPlayer = MediaPlayer()
+    private var playerState = PlayerState.DEFAULT
+
+    // Отложенная очередь задач
+    private var handler: Handler? = null
+    private var trackRunnable = updateTrackTime()
+
+    private lateinit var track: Track
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        handler = Handler(Looper.getMainLooper())
 
         // Нажатие иконки назад экрана Настройки
-        back.setOnClickListener {
+        binding.back.setOnClickListener {
             super.finish()
         }
 
         // Распаковываем переданный класс
         val json = intent.getStringExtra(TRACK_KEY)
         if (json != null) {
-            fillPlayer(Gson().fromJson(json, Track::class.java))
+            track = Gson().fromJson(json, Track::class.java)
+            fillPlayer(track)
+        }
+
+        // Подготовка плеера
+        preparePlayer()
+
+        // Действие при нажатии на ibPlay
+        binding.ibPlay.setOnClickListener {
+            controlPlayerState()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        // Пауза
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Очистить очередь отложенных задач
+        handler?.removeCallbacksAndMessages(null)
+
+        // Освобождаем память от плеера
+        mediaPlayer.release()
+    }
+
+    private fun preparePlayer() {
+        if (track.previewUrl != null) {
+            mediaPlayer.setDataSource(track.previewUrl)
+            mediaPlayer.prepareAsync()
+        }
+        mediaPlayer.setOnPreparedListener {
+            showPlayerState(PlayerState.PREPARED)
+        }
+        mediaPlayer.setOnCompletionListener {
+            showPlayerState(PlayerState.PREPARED)
+            setCurrentTrackTime(0L)
+            handler?.removeCallbacks(trackRunnable)
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        handler?.post(trackRunnable)
+        showPlayerState(PlayerState.PLAYING)
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        handler?.removeCallbacks(trackRunnable)
+        showPlayerState(PlayerState.PAUSED)
+    }
+
+    private fun updateTrackTime(): Runnable {
+        return object : Runnable {
+            override fun run() {
+                // Обновляем время
+
+                setCurrentTrackTime(mediaPlayer.currentPosition.toLong())
+                // И снова планируем то же действие через 0.3 секунд
+                handler?.postDelayed(
+                    this,
+                    HandlerUtils.TIME_DEBOUNCE_DELAY,
+                )
+            }
+        }
+    }
+
+    private fun setCurrentTrackTime(time: Long) {
+        binding.playTime.text = FormatUtils.formatLongToTrakTime(time)
+    }
+
+    private fun controlPlayerState() {
+        when (playerState) {
+            PlayerState.DEFAULT -> {}
+
+            PlayerState.PAUSED, PlayerState.PREPARED -> {
+                startPlayer()
+            }
+
+            PlayerState.PLAYING -> {
+                pausePlayer()
+            }
         }
     }
 
     private fun fillPlayer(track: Track) {
         // Заполнение
-        Glide.with(albumImage)
+        Glide.with(binding.albumImage)
             .load(track.getCoverArtwork())
             .placeholder(R.drawable.ic_placeholder)
             .centerCrop()
@@ -57,20 +151,33 @@ class PlayerActivity : AppCompatActivity() {
                 RoundedCorners(
                     FormatUtils.dpToPx(
                         IMG_RADIUS_PX,
-                        albumImage.context
+                        binding.albumImage.context
                     )
                 )
             )
-            .into(albumImage)
-        trackName.text = track.trackName
-        artistName.text = track.artistName
-        collectionName.text = track.collectionName
-        releaseDate.text = FormatUtils.formatIsoToYear(track.releaseDate)
-        primaryGenreName.text = track.primaryGenreName
-        country.text = track.country
-        trackTime.text = FormatUtils.formatLongToTrakTime(track.trackTimeMillis)
+            .into(binding.albumImage)
+        binding.trackName.text = track.trackName
+        binding.artistName.text = track.artistName
+        binding.collectionNameValue.text = track.collectionName
+        binding.releaseDateValue.text = FormatUtils.formatIsoToYear(track.releaseDate)
+        binding.primaryGenreNameValue.text = track.primaryGenreName
+        binding.countryValue.text = track.country
+        binding.trackTimeValue.text = FormatUtils.formatLongToTrakTime(track.trackTimeMillis)
 
         // Уловия отображения
-        collectionNameGroup.isVisible = track.collectionName.isNotEmpty()
+        binding.collectionNameGroup.isVisible = track.collectionName.isNotEmpty()
+    }
+
+    private fun showPlayerState(state: PlayerState) {
+        playerState = state
+        when (state) {
+            PlayerState.DEFAULT, PlayerState.PAUSED, PlayerState.PREPARED -> {
+                binding.ibPlay.setImageResource(R.drawable.ic_play)
+            }
+
+            PlayerState.PLAYING -> {
+                binding.ibPlay.setImageResource(R.drawable.ic_stop)
+            }
+        }
     }
 }
