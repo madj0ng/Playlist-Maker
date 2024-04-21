@@ -16,20 +16,20 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.PlayerActivity"
+            android:name=".ui.player.PlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.MediaActivity"
-            android:exported="false"></activity>
+            android:name=".ui.media.MediaActivity"
+            android:exported="false"/>
         <activity
-            android:name=".presentation.SearchActivity"
+            android:name=".ui.tracks.SearchActivity"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible"></activity>
+            android:windowSoftInputMode="stateVisible"/>
         <activity
-            android:name=".presentation.SettingsActivity"
+            android:name=".ui.settings.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
