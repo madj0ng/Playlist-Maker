@@ -1,6 +1,6 @@
 package com.example.playlistmaker.data.player.impl
 
-import com.example.playlistmaker.data.player.MediaPlayerRepository
+import com.example.playlistmaker.domain.player.MediaPlayerRepository
 import com.example.playlistmaker.data.player.PlayerClient
 import com.example.playlistmaker.data.player.mapper.PlayerStatusMapper
 import com.example.playlistmaker.data.player.mapper.PlayerTimeMapper
