@@ -2,16 +2,10 @@ package com.example.playlistmaker.ui.player.view_model
 
 import android.app.Application
 import android.os.Handler
-import android.os.Looper
 import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.search.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
@@ -53,20 +47,7 @@ class PlayerViewModel(
 
     companion object {
         private val TRACK_TIME_TOKEN = Any()
-
-//        fun getViewModelFactory(trackString: String?): ViewModelProvider.Factory =
-//            viewModelFactory {
-//                initializer {
-//                    PlayerViewModel(
-//                        this[APPLICATION_KEY] as Application,
-//                        trackString,
-//                        Creator.providePlayerIneractor(),
-//                    )
-//                }
-//            }
     }
-
-//    private val handler = Handler(Looper.getMainLooper())
 
     fun observeScreenState(): LiveData<PlayerState> = screenLiveData
     fun observePlayerStatus(): LiveData<PlayerStatus> = statusLiveData

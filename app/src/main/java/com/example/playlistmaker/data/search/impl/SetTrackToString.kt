@@ -7,6 +7,5 @@ import com.google.gson.Gson
 class SetTrackToString(private val gson: Gson) : SetTrack {
     override fun execute(track: Track): String {
         return gson.toJson(track)
-//        return Gson().toJson(track)
     }
 }

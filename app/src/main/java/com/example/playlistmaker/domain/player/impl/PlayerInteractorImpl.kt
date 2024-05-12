@@ -1,13 +1,13 @@
 package com.example.playlistmaker.domain.player.impl
 
-import com.example.playlistmaker.util.consumer.Consumer
-import com.example.playlistmaker.util.consumer.ConsumerData
 import com.example.playlistmaker.data.player.GetTrack
 import com.example.playlistmaker.data.player.MediaPlayerRepository
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.search.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.Resource
+import com.example.playlistmaker.util.consumer.Consumer
+import com.example.playlistmaker.util.consumer.ConsumerData
 import java.util.concurrent.Executors
 
 class PlayerInteractorImpl(

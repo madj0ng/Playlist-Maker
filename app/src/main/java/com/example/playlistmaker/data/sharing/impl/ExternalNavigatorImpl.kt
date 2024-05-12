@@ -20,12 +20,6 @@ class ExternalNavigatorImpl(
             setType(type)
         }
         startIntent(intent)
-//        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-//            putExtra(Intent.EXTRA_TEXT, getShareAppLink())
-//            setType(type)
-//        }
-//
-//        startIntent(shareIntent)
     }
 
     override fun openLink() {
@@ -34,9 +28,6 @@ class ExternalNavigatorImpl(
         intent.setAction(Intent.ACTION_VIEW)
         intent.setData(url)
         startIntent(intent)
-//        val urlIntent = Intent(Intent.ACTION_VIEW, url)
-//
-//        startIntent(urlIntent)
     }
 
     override fun openEmail() {
@@ -49,14 +40,6 @@ class ExternalNavigatorImpl(
         intent.putExtra(Intent.EXTRA_SUBJECT, emailData.subject)
         intent.putExtra(Intent.EXTRA_TEXT, emailData.message)
         startIntent(intent)
-
-//        val mailtoIntent = Intent(Intent.ACTION_SENDTO)
-//        mailtoIntent.data = Uri.parse(uri)
-//        mailtoIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailData.address))
-//        mailtoIntent.putExtra(Intent.EXTRA_SUBJECT, emailData.subject)
-//        mailtoIntent.putExtra(Intent.EXTRA_TEXT, emailData.message)
-//
-//        startIntent(mailtoIntent)
     }
 
     private fun getShareAppLink(): String {

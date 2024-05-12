@@ -5,15 +5,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.creator.App
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.example.playlistmaker.domain.sharing.SharingInteractor
-import com.example.playlistmaker.creator.App
 import com.example.playlistmaker.ui.settings.model.ThemeState
 
 class SettingsViewModel(
@@ -23,26 +18,14 @@ class SettingsViewModel(
 ) : AndroidViewModel(application) {
 
     private val switcherLiveData = MutableLiveData<ThemeState>(
-        getThemeFromBoolean(settingsInteractor.getSettingsTheme(
-            application.resources.configuration.uiMode == AppCompatDelegate.MODE_NIGHT_YES
-        ).isDark)
+        getThemeFromBoolean(
+            settingsInteractor.getSettingsTheme(
+                application.resources.configuration.uiMode == AppCompatDelegate.MODE_NIGHT_YES
+            ).isDark
+        )
     )
 
     fun observeTheme(): LiveData<ThemeState> = switcherLiveData
-
-//    companion object {
-//        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-//            initializer {
-//                val app =
-//                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as App
-//                SettingsViewModel(
-//                    app,
-//                    Creator.providerSharingInteractor(app.applicationContext),
-//                    app.settingsInteractor
-//                )
-//            }
-//        }
-//    }
 
     fun shareApp() {
         sharingInteractor.shareApp()
@@ -65,7 +48,7 @@ class SettingsViewModel(
         )
     }
 
-    private fun getThemeFromBoolean(darkThemeEnabled: Boolean): ThemeState{
+    private fun getThemeFromBoolean(darkThemeEnabled: Boolean): ThemeState {
         return when (darkThemeEnabled) {
             true -> ThemeState.Dark
             false -> ThemeState.Light

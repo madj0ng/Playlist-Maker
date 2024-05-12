@@ -7,22 +7,11 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.model.NetworkResponse
 import com.example.playlistmaker.data.search.model.TracksSearchRequest
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitNetworkClient(
     private val context: Context,
     private val itunesSearchService: ItunesSearchApi
 ) : NetworkClient {
-
-//    private val itunesBaseUrl = "https://itunes.apple.com"
-//
-//    private val retrofit = Retrofit.Builder()
-//        .baseUrl(itunesBaseUrl)
-//        .addConverterFactory(GsonConverterFactory.create())
-//        .build()
-//
-//    private val itunesSearchService = retrofit.create(ItunesSearchApi::class.java)
 
     override fun doRequest(dto: Any): NetworkResponse {
         if (isConnected() == false) {
@@ -42,9 +31,9 @@ class RetrofitNetworkClient(
         val resp = itunesSearchService.getTracks(dto.expression).execute()
         val body = resp.body()
 
-        return if(body != null) {
+        return if (body != null) {
             body.apply { resultCode = resp.code() }
-        }else {
+        } else {
             NetworkResponse().apply {
                 resultCode = resp.code()
                 errMessage = context.getString(R.string.error_server)

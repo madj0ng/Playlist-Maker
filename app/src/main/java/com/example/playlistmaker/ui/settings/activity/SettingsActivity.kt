@@ -1,9 +1,7 @@
 package com.example.playlistmaker.ui.settings.activity
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.ui.settings.model.ThemeState
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
@@ -20,10 +18,6 @@ class SettingsActivity : AppCompatActivity() {
 
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        viewModel = ViewModelProvider(
-//            this, SettingsViewModel.getViewModelFactory()
-//        )[SettingsViewModel::class.java]
 
         // Нажатие иконки назад экрана Настройки
         binding.back.setOnClickListener {

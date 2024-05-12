@@ -9,8 +9,6 @@ import com.example.playlistmaker.util.Resource
 import com.example.playlistmaker.util.consumer.Consumer
 import com.example.playlistmaker.util.consumer.ConsumerData
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.ThreadPoolExecutor
 
 class SearchInteractorImpl(
     private val searchRepository: SearchRepository,
@@ -18,7 +16,6 @@ class SearchInteractorImpl(
     private val trackRepository: SetTrack,
     private val executor: ExecutorService
 ) : SearchInteractor {
-//    private val executor = Executors.newCachedThreadPool()
 
     override fun searchTracks(expression: String, consumer: Consumer<ArrayList<Track>>) {
         executor.execute {
