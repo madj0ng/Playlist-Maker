@@ -33,8 +33,6 @@ class App : Application() {
             modules(utilModule, dataModule, interactorModule, repositoryModule, viewModelModule)
         }
 
-//        settingsInteractor =
-//            Creator.providerSettingsInteractor((this as Application).applicationContext)
         isDarkTheme = settingsInteractor.getSettingsTheme(
             resources.configuration.uiMode == AppCompatDelegate.MODE_NIGHT_YES
         ).isDark
