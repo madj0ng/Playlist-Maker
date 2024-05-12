@@ -1,12 +1,17 @@
 package com.example.playlistmaker.data.search.impl
 
-import com.example.playlistmaker.data.player.impl.GetTrackFromString
+import com.example.playlistmaker.data.player.GetTrack
 import com.example.playlistmaker.data.search.HistoryRepository
 import com.example.playlistmaker.data.search.LocalStorage
+import com.example.playlistmaker.data.search.SetTrack
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.Resource
 
-class HistoryRepositoryImpl(private val searchHistory: LocalStorage) : HistoryRepository {
+class HistoryRepositoryImpl(
+    private val searchHistory: LocalStorage,
+    private val setTrackRepository: SetTrack,
+    private val getTrackRepository: GetTrack
+) : HistoryRepository {
     private val trackList = ArrayList<Track>()
 
     init {
@@ -29,21 +34,17 @@ class HistoryRepositoryImpl(private val searchHistory: LocalStorage) : HistoryRe
     }
 
     private fun toStringFromTracks(trackList: ArrayList<Track>): Set<String> {
-        val list = trackList.map { SetTrackToString().execute(it) }.toMutableList()
+        val list = trackList.map { setTrackRepository.execute(it) }.toMutableList()
         return list.asReversed().toMutableSet()
     }
 
     private fun toTracksFromString(trackList: Set<String>): ArrayList<Track> {
         val mutableList = ArrayList<Track>()
         for (trackString in trackList) {
-            val track = GetTrackFromString().execute(trackString)
+            val track = getTrackRepository.execute(trackString)
             if (track != null) {
                 mutableList.add(track)
             }
-//            when(response){
-//                is Resource.Error -> {}
-//                is Resource.Success -> { mutableList.add(response.data)}
-//            }
         }
         return mutableList
     }

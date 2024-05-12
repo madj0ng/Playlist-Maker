@@ -4,8 +4,9 @@ import com.example.playlistmaker.data.search.SetTrack
 import com.example.playlistmaker.domain.search.model.Track
 import com.google.gson.Gson
 
-class SetTrackToString : SetTrack {
+class SetTrackToString(private val gson: Gson) : SetTrack {
     override fun execute(track: Track): String {
-        return Gson().toJson(track)
+        return gson.toJson(track)
+//        return Gson().toJson(track)
     }
 }

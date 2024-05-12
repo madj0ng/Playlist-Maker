@@ -3,7 +3,6 @@ package com.example.playlistmaker.ui.search.activity
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -11,42 +10,33 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.creator.HISTORY_ADAPTER
+import com.example.playlistmaker.creator.SEARCH_ADAPTER
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.search.models.AdapterState
 import com.example.playlistmaker.ui.search.models.ClearIconState
 import com.example.playlistmaker.ui.search.models.SearchState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
-import com.example.playlistmaker.util.HandlerUtils
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 class SearchActivity : AppCompatActivity() {
 
+    private val handler: Handler = getKoin().get()
+
     // Список треков
-    private val tracksAdapter = SearchAdapter(object : SearchAdapter.SearchClickListener {
-        override fun onTrackClick(track: Track) {
-            if (HandlerUtils.clickDebounce(handler)) {
-                viewModel.setHistory(track)
-                viewModel.startActiviryPlayer(track)
-            }
-        }
-    })
+    private val tracksAdapter: SearchAdapter by inject<SearchAdapter>(named(SEARCH_ADAPTER))
 
     // Список истории
-    private val historyAdapter = SearchAdapter(object : SearchAdapter.SearchClickListener {
-        override fun onTrackClick(track: Track) {
-            if (HandlerUtils.clickDebounce(handler)) {
-                viewModel.startActiviryPlayer(track)
-            }
-        }
-    })
+    private val historyAdapter: SearchAdapter by inject<SearchAdapter>(named(HISTORY_ADAPTER))
 
-    private val handler = Handler(Looper.getMainLooper())
+    private val viewModel: SearchViewModel by viewModel<SearchViewModel>()
 
     private lateinit var binding: ActivitySearchBinding
-
-    private lateinit var viewModel: SearchViewModel
 
     private var textWatcher: TextWatcher? = null
 
@@ -55,11 +45,6 @@ class SearchActivity : AppCompatActivity() {
 
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
 
         // Список
         binding.trackList.layoutManager =

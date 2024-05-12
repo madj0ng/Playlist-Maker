@@ -1,18 +1,13 @@
 package com.example.playlistmaker.ui.search.view_model
 
 import android.app.Application
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Handler
-import android.os.Looper
 import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.search.SearchInteractor
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
@@ -26,24 +21,15 @@ import com.example.playlistmaker.util.consumer.ConsumerData
 
 class SearchViewModel(
     private val application: Application,
-    private val searchInteractor: SearchInteractor
+    private val searchInteractor: SearchInteractor,
+    private val intent: Intent,
+    private val handler: Handler,
+    private val handlerUtils: HandlerUtils
 ) : AndroidViewModel(application) {
 
     companion object {
         private val SEARCH_REQUEST_TOKEN = Any()
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = this[APPLICATION_KEY] as Application
-                SearchViewModel(
-                    app,
-                    Creator.provideSearchInteractor(app)
-                )
-            }
-        }
     }
-
-    private val handler = Handler(Looper.getMainLooper())
 
     private var stateLiveData = MutableLiveData<SearchState>(SearchState.Search)
     fun observeState(): LiveData<SearchState> = stateLiveData
@@ -137,7 +123,7 @@ class SearchViewModel(
     // Методы операций со списком найденных треков
     // Повторное выполнение задачи поиска через CLICK_DEBOUNCE_DELAY
     fun search() {
-        if (HandlerUtils.clickDebounce(handler)) {
+        if (handlerUtils.clickDebounce(handler)) {
             removeToken()
             searchRequest(this.latestSearchText ?: "")
         }
@@ -201,7 +187,7 @@ class SearchViewModel(
 
     // Логика при очистке списков
     fun historyClear() {
-        if (HandlerUtils.clickDebounce(handler)) {
+        if (handlerUtils.clickDebounce(handler)) {
             removeToken()
             renderList(AdapterState.History(listOf()))
             renderState(SearchState.Search)
@@ -210,7 +196,7 @@ class SearchViewModel(
     }
 
     fun searchClear() {
-        if (HandlerUtils.clickDebounce(handler)) {
+        if (handlerUtils.clickDebounce(handler)) {
             removeToken()
             renderClearIcon(ClearIconState.None())
             renderList(AdapterState.Search(listOf()))
@@ -219,7 +205,7 @@ class SearchViewModel(
     }
 
     private fun runActivityPlayer(trackString: String) {
-        val player = Intent(application, PlayerActivity::class.java)
+        val player = intent.setComponent(ComponentName(application, PlayerActivity::class.java))
         player.putExtra(PlayerActivity.TRACK_KEY, trackString)
         player.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         application.applicationContext.startActivity(player)

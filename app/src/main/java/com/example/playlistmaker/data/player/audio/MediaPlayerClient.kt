@@ -9,8 +9,8 @@ import com.example.playlistmaker.domain.search.model.PlayerStatus
 import com.example.playlistmaker.util.consumer.Consumer
 import com.example.playlistmaker.util.consumer.ConsumerData
 
-class MediaPlayerClient : PlayerClient {
-    private var mediaPlayer = MediaPlayer()
+class MediaPlayerClient(private var mediaPlayer: MediaPlayer) : PlayerClient {
+//    private var mediaPlayer = MediaPlayer()
 
     override fun preparePlayer(playerRequest: PlayerRequest): PlayerResponse<PlayerStatusDto> {
         mediaPlayer.setDataSource(playerRequest.previewUrl)

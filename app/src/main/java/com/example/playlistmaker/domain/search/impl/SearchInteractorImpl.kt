@@ -1,21 +1,24 @@
 package com.example.playlistmaker.domain.search.impl
 
-import com.example.playlistmaker.domain.search.SearchInteractor
+import com.example.playlistmaker.data.search.HistoryRepository
 import com.example.playlistmaker.data.search.SearchRepository
+import com.example.playlistmaker.data.search.SetTrack
+import com.example.playlistmaker.domain.search.SearchInteractor
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.util.Resource
 import com.example.playlistmaker.util.consumer.Consumer
 import com.example.playlistmaker.util.consumer.ConsumerData
-import com.example.playlistmaker.util.Resource
-import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.data.search.HistoryRepository
-import com.example.playlistmaker.data.search.SetTrack
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.ThreadPoolExecutor
 
 class SearchInteractorImpl(
     private val searchRepository: SearchRepository,
     private val historyRepository: HistoryRepository,
     private val trackRepository: SetTrack,
+    private val executor: ExecutorService
 ) : SearchInteractor {
-    private val executor = Executors.newCachedThreadPool()
+//    private val executor = Executors.newCachedThreadPool()
 
     override fun searchTracks(expression: String, consumer: Consumer<ArrayList<Track>>) {
         executor.execute {
@@ -39,7 +42,7 @@ class SearchInteractorImpl(
         historyRepository.setHistory(track)
     }
 
-    override fun saveHistory(){
+    override fun saveHistory() {
         historyRepository.saveHistory()
     }
 

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -14,6 +13,9 @@ import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.models.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.example.playlistmaker.util.FormatUtils
+import org.koin.android.ext.android.getKoin
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 
 class PlayerActivity : AppCompatActivity() {
     companion object {
@@ -29,15 +31,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
 
-//    // Статус плеера
-//    private var playerStatus = PlayerStatus.DEFAULT
-
-    // Отложенная очередь задач
-//    private val handler = Handler(Looper.getMainLooper())
-//    private var trackRunnable = updateTrackTime()
-
-//    private val getPlayerIneractor = Creator.providePlayerIneractor()
-//    private var detailsRunnable: Runnable? = null
+    private val formatUtils: FormatUtils = getKoin().get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +42,7 @@ class PlayerActivity : AppCompatActivity() {
         // Распаковываем переданный класс
         val trackString = intent.getStringExtra(TRACK_KEY) ?: ""
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(trackString)
-        )[PlayerViewModel::class.java]
+        viewModel = getViewModel { parametersOf(trackString) }
 
         // Нажатие иконки назад экрана Настройки
         binding.back.setOnClickListener {
@@ -60,56 +51,13 @@ class PlayerActivity : AppCompatActivity() {
 
         // Подготовка плеера
         viewModel.preparePlayer()
-        /*getPlayerIneractor.preparePlayer(
-            trackStr = trackString,
-            consumer = object : Consumer<PlayerDetails> {
-                override fun consume(data: ConsumerData<PlayerDetails>) {
-                    if (detailsRunnable != null) {
-                        handler.removeCallbacks(detailsRunnable!!)
-                    }
-                    val newDetailsRunnable = Runnable {
-                        when (data) {
-                            is ConsumerData.Error -> showError(data.message)
-                            is ConsumerData.Data -> {
-                                val playerDetails = data.value
-                                playerStatus = playerDetails.status
-                                fillPlayer(playerDetails.track)
-                            }
-                        }
-                    }
-                    handler.post(newDetailsRunnable)
-                    detailsRunnable = newDetailsRunnable
-                }
-            })*/
 
         // Событие завершения проигрывания трека
         viewModel.onCompletePreparePlayer()
-        /*getPlayerIneractor.setOnCompletionListener(consumer = object :
-            Consumer<PlayerStatus> {
-            override fun consume(data: ConsumerData<PlayerStatus>) {
-                when (data) {
-                    is ConsumerData.Error -> {}
-                    is ConsumerData.Data -> {
-                        playerStatus = data.value
-                        showPlayerState(playerStatus)
-                        setCurrentTrackTime(TRACK_START_TIME)
-                        handler.removeCallbacks(trackRunnable)
-                    }
-                }
-            }
-        })*/
 
         // Действие при нажатии на ibPlay
         binding.ibPlay.setOnClickListener {
             viewModel.runPlayer()
-            /*when (val resource = getPlayerIneractor.runPlayer(playerStatus)) {
-                is Resource.Error -> {}
-                is Resource.Success -> {
-                    playerStatus = resource.data
-                }
-            }
-            updateHandler(playerStatus)
-            showPlayerState(playerStatus)*/
         }
 
         viewModel.observeScreenState().observe(this) {
@@ -182,56 +130,13 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.pausePlayer()
     }
 
-    /*override fun onDestroy() {
-        super.onDestroy()
-
-        // Очистить очередь отложенных задач
-        handler.removeCallbacksAndMessages(null)
-
-        // Освобождаем память от плеера
-        getPlayerIneractor.clearPlayer()
-    }*/
-
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         onBackPressedDispatcher.onBackPressed()
     }
 
-    /*private fun updateHandler(status: PlayerStatus) {
-        when (status) {
-            PlayerStatus.PLAYING -> {
-                handler.post(trackRunnable)
-            }
-
-            PlayerStatus.PAUSED -> {
-                handler.removeCallbacks(trackRunnable)
-            }
-
-            PlayerStatus.PREPARED, PlayerStatus.DEFAULT -> {}
-        }
-    }
-
-    private fun updateTrackTime(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                // Обновляем время
-                when (val resource = getPlayerIneractor.getTimePlayer()) {
-                    is Resource.Error -> {}
-                    is Resource.Success -> {
-                        setCurrentTrackTime(resource.data.toLong())
-                    }
-                }
-                // И снова планируем то же действие через 0.3 секунд
-                handler.postDelayed(
-                    this,
-                    HandlerUtils.TIME_DEBOUNCE_DELAY,
-                )
-            }
-        }
-    }*/
-
     private fun setCurrentTrackTime(time: Long) {
-        binding.playTime.text = FormatUtils.formatLongToTrakTime(time)
+        binding.playTime.text = formatUtils.formatLongToTrakTime(time)
     }
 
     private fun fillImage() {
@@ -247,7 +152,7 @@ class PlayerActivity : AppCompatActivity() {
             .centerCrop()
             .transform(
                 RoundedCorners(
-                    FormatUtils.dpToPx(
+                    formatUtils.dpToPx(
                         IMG_RADIUS_PX,
                         binding.albumImage.context
                     )
@@ -257,10 +162,10 @@ class PlayerActivity : AppCompatActivity() {
         binding.trackName.text = track.trackName
         binding.artistName.text = track.artistName
         binding.collectionNameValue.text = track.collectionName
-        binding.releaseDateValue.text = FormatUtils.formatIsoToYear(track.releaseDate)
+        binding.releaseDateValue.text = formatUtils.formatIsoToYear(track.releaseDate)
         binding.primaryGenreNameValue.text = track.primaryGenreName
         binding.countryValue.text = track.country
-        binding.trackTimeValue.text = FormatUtils.formatLongToTrakTime(track.trackTimeMillis)
+        binding.trackTimeValue.text = formatUtils.formatLongToTrakTime(track.trackTimeMillis)
 
         // Уловия отображения
         binding.collectionNameGroup.isVisible = binding.collectionNameValue.text.isNotEmpty()

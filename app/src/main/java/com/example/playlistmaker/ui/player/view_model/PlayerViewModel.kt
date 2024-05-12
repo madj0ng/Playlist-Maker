@@ -24,9 +24,11 @@ import com.example.playlistmaker.util.consumer.Consumer
 import com.example.playlistmaker.util.consumer.ConsumerData
 
 class PlayerViewModel(
+    application: Application,
     trackString: String?,
     private val playerInteractor: PlayerInteractor,
-    application: Application
+    private val handler: Handler,
+    private val handlerUtils: HandlerUtils
 ) : AndroidViewModel(application) {
 
     private val screenLiveData = MutableLiveData<PlayerState>(PlayerState.Loading)
@@ -52,19 +54,19 @@ class PlayerViewModel(
     companion object {
         private val TRACK_TIME_TOKEN = Any()
 
-        fun getViewModelFactory(trackString: String?): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    PlayerViewModel(
-                        trackString,
-                        Creator.providePlayerIneractor(),
-                        this[APPLICATION_KEY] as Application
-                    )
-                }
-            }
+//        fun getViewModelFactory(trackString: String?): ViewModelProvider.Factory =
+//            viewModelFactory {
+//                initializer {
+//                    PlayerViewModel(
+//                        this[APPLICATION_KEY] as Application,
+//                        trackString,
+//                        Creator.providePlayerIneractor(),
+//                    )
+//                }
+//            }
     }
 
-    private val handler = Handler(Looper.getMainLooper())
+//    private val handler = Handler(Looper.getMainLooper())
 
     fun observeScreenState(): LiveData<PlayerState> = screenLiveData
     fun observePlayerStatus(): LiveData<PlayerStatus> = statusLiveData
@@ -189,7 +191,7 @@ class PlayerViewModel(
                     }
                 }
                 // И снова планируем то же действие через 0.3 секунд
-                val postTime = SystemClock.uptimeMillis() + HandlerUtils.TIME_DEBOUNCE_DELAY
+                val postTime = SystemClock.uptimeMillis() + handlerUtils.TIME_DEBOUNCE_DELAY
                 handler.postAtTime(
                     this,
                     TRACK_TIME_TOKEN,

@@ -30,19 +30,19 @@ class SettingsViewModel(
 
     fun observeTheme(): LiveData<ThemeState> = switcherLiveData
 
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app =
-                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as App
-                SettingsViewModel(
-                    app,
-                    Creator.providerSharingInteractor(app.applicationContext),
-                    app.settingsInteractor
-                )
-            }
-        }
-    }
+//    companion object {
+//        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+//            initializer {
+//                val app =
+//                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as App
+//                SettingsViewModel(
+//                    app,
+//                    Creator.providerSharingInteractor(app.applicationContext),
+//                    app.settingsInteractor
+//                )
+//            }
+//        }
+//    }
 
     fun shareApp() {
         sharingInteractor.shareApp()
