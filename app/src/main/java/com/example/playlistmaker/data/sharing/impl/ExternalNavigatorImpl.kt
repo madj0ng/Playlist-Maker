@@ -8,39 +8,38 @@ import com.example.playlistmaker.data.sharing.ExternalNavigator
 import com.example.playlistmaker.domain.sharing.model.EmailData
 
 class ExternalNavigatorImpl(
-    private val context: Context
-) :
-    ExternalNavigator {
+    private val context: Context,
+    private val intent: Intent
+) : ExternalNavigator {
     override fun shareLink() {
         // Поделиться приложением
         val type = context.getString(R.string.sharing_type)
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        intent.setAction(Intent.ACTION_SEND)
+        intent.apply {
             putExtra(Intent.EXTRA_TEXT, getShareAppLink())
             setType(type)
         }
-
-        startIntent(shareIntent)
+        startIntent(intent)
     }
 
     override fun openLink() {
 //        // Пользовательское соглашение
         val url = Uri.parse(getTermsLink())
-        val urlIntent = Intent(Intent.ACTION_VIEW, url)
-
-        startIntent(urlIntent)
+        intent.setAction(Intent.ACTION_VIEW)
+        intent.setData(url)
+        startIntent(intent)
     }
 
     override fun openEmail() {
         // Написать в поддержку
         val uri = context.getString(R.string.mail_data_uri)
         val emailData = getSupportEmailData()
-        val mailtoIntent = Intent(Intent.ACTION_SENDTO)
-        mailtoIntent.data = Uri.parse(uri)
-        mailtoIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailData.address))
-        mailtoIntent.putExtra(Intent.EXTRA_SUBJECT, emailData.subject)
-        mailtoIntent.putExtra(Intent.EXTRA_TEXT, emailData.message)
-
-        startIntent(mailtoIntent)
+        intent.setAction(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse(uri)
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailData.address))
+        intent.putExtra(Intent.EXTRA_SUBJECT, emailData.subject)
+        intent.putExtra(Intent.EXTRA_TEXT, emailData.message)
+        startIntent(intent)
     }
 
     private fun getShareAppLink(): String {

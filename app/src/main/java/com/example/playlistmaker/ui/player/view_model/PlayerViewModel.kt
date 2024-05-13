@@ -2,16 +2,10 @@ package com.example.playlistmaker.ui.player.view_model
 
 import android.app.Application
 import android.os.Handler
-import android.os.Looper
 import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.search.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
@@ -24,9 +18,11 @@ import com.example.playlistmaker.util.consumer.Consumer
 import com.example.playlistmaker.util.consumer.ConsumerData
 
 class PlayerViewModel(
+    application: Application,
     trackString: String?,
     private val playerInteractor: PlayerInteractor,
-    application: Application
+    private val handler: Handler,
+    private val handlerUtils: HandlerUtils
 ) : AndroidViewModel(application) {
 
     private val screenLiveData = MutableLiveData<PlayerState>(PlayerState.Loading)
@@ -51,20 +47,7 @@ class PlayerViewModel(
 
     companion object {
         private val TRACK_TIME_TOKEN = Any()
-
-        fun getViewModelFactory(trackString: String?): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    PlayerViewModel(
-                        trackString,
-                        Creator.providePlayerIneractor(),
-                        this[APPLICATION_KEY] as Application
-                    )
-                }
-            }
     }
-
-    private val handler = Handler(Looper.getMainLooper())
 
     fun observeScreenState(): LiveData<PlayerState> = screenLiveData
     fun observePlayerStatus(): LiveData<PlayerStatus> = statusLiveData
@@ -189,7 +172,7 @@ class PlayerViewModel(
                     }
                 }
                 // И снова планируем то же действие через 0.3 секунд
-                val postTime = SystemClock.uptimeMillis() + HandlerUtils.TIME_DEBOUNCE_DELAY
+                val postTime = SystemClock.uptimeMillis() + handlerUtils.TIME_DEBOUNCE_DELAY
                 handler.postAtTime(
                     this,
                     TRACK_TIME_TOKEN,

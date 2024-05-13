@@ -9,21 +9,18 @@ import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.FormatUtils
 
 class SearchViewHolder(
-    private val binding: TrackViewBinding,  //itemView: View,
-    private val clickListener: SearchAdapter.SearchClickListener
-) : RecyclerView.ViewHolder(binding.root) { //(itemView) {
+    private val binding: TrackViewBinding,
+    private val clickListener: SearchAdapter.SearchClickListener,
+    formatUtils: FormatUtils
+) : RecyclerView.ViewHolder(binding.root) {
+
     companion object {
         // Округление в пикселяхr
         const val IMG_RADIUS_PX = 2F
     }
 
     // Значение закругления риснука в dp
-    private val imgRadius = FormatUtils.dpToPx(IMG_RADIUS_PX, itemView.context)
-
-//    private val trackName = itemView.findViewById<TextView>(R.id.trackName)
-//    private val artistName = itemView.findViewById<TextView>(R.id.artistName)
-//    private val trackTime = itemView.findViewById<TextView>(R.id.trackTime)
-//    private val trackImage = itemView.findViewById<ImageView>(R.id.trackImage)
+    private val imgRadius = formatUtils.dpToPx(IMG_RADIUS_PX, itemView.context)
 
     fun bind(track: Track) {
         binding.trackName.text = track.trackName
