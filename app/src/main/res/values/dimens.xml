@@ -2,6 +2,8 @@
 <resources>
     <dimen name="main_button_margin_vertical">8dp</dimen>
     <dimen name="title_padding">4dp</dimen>
+    <dimen name="title_image_w">48dp</dimen>
+    <dimen name="title_image_h">48dp</dimen>
     <dimen name="title_image_width">24dp</dimen>
     <dimen name="title_image_height">24dp</dimen>
     <dimen name="title_image_margin">12dp</dimen>
@@ -49,9 +51,13 @@
     <dimen name="margin_16dp">16dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
     <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="minus_12dp">-12dp</dimen>
     <dimen name="margin_28dp">28dp</dimen>
     <dimen name="size_52dp">52dp</dimen>
     <dimen name="margin_56dp">56dp</dimen>
     <dimen name="size_100dp">100dp</dimen>
     <dimen name="size_44dp">44dp</dimen>
+    <dimen name="button_vertical_10dp">10dp</dimen>
+    <dimen name="button_horizontal_14dp">14dp</dimen>
+    <dimen name="margin_46dp">46dp</dimen>
 </resources>

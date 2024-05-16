@@ -1,18 +1,22 @@
-import com.example.playlistmaker.domain.player.GetTrack
-import com.example.playlistmaker.domain.player.MediaPlayerRepository
+import com.example.playlistmaker.data.media.favourites.FavouritesRepositoryImpl
+import com.example.playlistmaker.data.media.playlist.PlaylistRepositoryImpl
 import com.example.playlistmaker.data.player.impl.GetTrackFromString
 import com.example.playlistmaker.data.player.impl.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.data.player.mapper.PlayerStatusMapper
 import com.example.playlistmaker.data.player.mapper.PlayerTimeMapper
-import com.example.playlistmaker.domain.search.HistoryRepository
-import com.example.playlistmaker.domain.search.SearchRepository
-import com.example.playlistmaker.domain.search.SetTrack
 import com.example.playlistmaker.data.search.impl.HistoryRepositoryImpl
 import com.example.playlistmaker.data.search.impl.SearchRepositoryImpl
 import com.example.playlistmaker.data.search.impl.SetTrackToString
 import com.example.playlistmaker.data.search.mapper.TrackMapper
-import com.example.playlistmaker.domain.settings.SettingsRepository
 import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
+import com.example.playlistmaker.domain.media.favourites.FavouritesRepository
+import com.example.playlistmaker.domain.media.playlist.PlaylistRepository
+import com.example.playlistmaker.domain.player.GetTrack
+import com.example.playlistmaker.domain.player.MediaPlayerRepository
+import com.example.playlistmaker.domain.search.HistoryRepository
+import com.example.playlistmaker.domain.search.SearchRepository
+import com.example.playlistmaker.domain.search.SetTrack
+import com.example.playlistmaker.domain.settings.SettingsRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -68,5 +72,15 @@ val repositoryModule = module {
     // getSettingsRepository
     single<SettingsRepository> {
         SettingsRepositoryImpl(themeLocalStorage = get())
+    }
+
+    // Favourites
+    single<FavouritesRepository> {
+        FavouritesRepositoryImpl()
+    }
+
+    // Playlist
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl()
     }
 }
