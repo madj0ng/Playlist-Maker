@@ -4,6 +4,7 @@
     <color name="background_setting">#1A1B22</color>
     <color name="background_search">#1A1B22</color>
     <color name="background_player">#1A1B22</color>
+    <color name="background_media">#1A1B22</color>
     <color name="text_color">#FFFFFF</color>
     <color name="icon_color">#FFFFFF</color>
     <color name="seach_background">#FFFFFF</color>

@@ -1,3 +1,7 @@
+import com.example.playlistmaker.domain.media.favourites.FavouritesInteractor
+import com.example.playlistmaker.domain.media.favourites.impl.FavouritesInteractorImpl
+import com.example.playlistmaker.domain.media.playlist.PlaylistInteractor
+import com.example.playlistmaker.domain.media.playlist.impl.PlaylistInteractorImpl
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.player.impl.PlayerInteractorImpl
 import com.example.playlistmaker.domain.search.SearchInteractor
@@ -41,5 +45,15 @@ val interactorModule = module {
     //providerSharingInteractor
     single<SharingInteractor> {
         SharingInteractorImpl(externalNavigator = get())
+    }
+
+    // Favourites
+    single<FavouritesInteractor> {
+        FavouritesInteractorImpl(favouritesRepository = get())
+    }
+
+    // Playlist
+    single<PlaylistInteractor> {
+        PlaylistInteractorImpl(playlistRepository = get())
     }
 }

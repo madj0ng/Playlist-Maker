@@ -11,6 +11,7 @@
     <color name="background_setting">#FFFFFF</color>
     <color name="background_search">#FFFFFF</color>
     <color name="background_player">#FFFFFF</color>
+    <color name="background_media">#FFFFFF</color>
     <color name="text_color">#1A1B22</color>
     <color name="icon_color">#1A1B22</color>
     <color name="settings_thumb_checked">#3772E7</color>
