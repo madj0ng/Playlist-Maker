@@ -1,8 +1,8 @@
 package com.example.playlistmaker.data.search.impl
 
+import com.example.playlistmaker.data.search.LocalStorage
 import com.example.playlistmaker.domain.player.GetTrack
 import com.example.playlistmaker.domain.search.HistoryRepository
-import com.example.playlistmaker.data.search.LocalStorage
 import com.example.playlistmaker.domain.search.SetTrack
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.Resource

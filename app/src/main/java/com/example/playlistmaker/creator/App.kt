@@ -15,8 +15,8 @@ import viewModelModule
 const val APP_PREFERENCES = "app_preferences"
 const val SEARCH_PREFERENCES = "search_preferences"
 
-const val SEARCH_ADAPTER = "SEARCH_ADAPTER"
-const val HISTORY_ADAPTER = "HISTORY_ADAPTER"
+//const val SEARCH_ADAPTER = "SEARCH_ADAPTER"
+//const val HISTORY_ADAPTER = "HISTORY_ADAPTER"
 
 class App : Application() {
     private var isDarkTheme = false

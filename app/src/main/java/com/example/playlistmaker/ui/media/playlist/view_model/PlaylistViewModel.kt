@@ -7,7 +7,7 @@ import com.example.playlistmaker.domain.media.playlist.PlaylistInteractor
 import com.example.playlistmaker.ui.media.playlist.models.PlaylistState
 
 class PlaylistViewModel(
-    private val playlistInteractor: PlaylistInteractor,
+    playlistInteractor: PlaylistInteractor,
 ) : ViewModel() {
 
     init {

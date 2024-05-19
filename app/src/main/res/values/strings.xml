@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Playlist Maker</string>
-    <string name="main_title">Playlist maker</string>
     <string name="activity_search">Поиск</string>
     <string name="activity_media">Медиатека</string>
     <string name="activity_settings">Настройки</string>
@@ -21,7 +20,6 @@
 
     <string name="url_offer">https://yandex.ru/legal/practicum_offer/</string>
 
-    <string name="error_find">Не найдено подходящее приложение!</string>
     <string name="error_search_find">Ничего не нашлось</string>
     <string name="error_connect_find">Проблема со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="error_server">Ошибка сервера</string>
@@ -44,6 +42,4 @@
     <string name="media_playlist_new">Новый плейлист</string>
     <string name="media_tab_playlist">Плейлисты</string>
     <string name="media_tab_favourites">Избранные треки</string>
-
-    <string name="back">Назад</string>
 </resources>
