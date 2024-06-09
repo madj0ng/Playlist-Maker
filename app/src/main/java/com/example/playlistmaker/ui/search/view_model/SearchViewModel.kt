@@ -1,8 +1,6 @@
 package com.example.playlistmaker.ui.search.view_model
 
 import android.app.Application
-import android.content.ComponentName
-import android.content.Intent
 import android.os.Handler
 import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
@@ -10,19 +8,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.playlistmaker.domain.search.SearchInteractor
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.models.AdapterState
 import com.example.playlistmaker.ui.search.models.ClearIconState
 import com.example.playlistmaker.ui.search.models.SearchState
 import com.example.playlistmaker.util.HandlerUtils
 import com.example.playlistmaker.util.HandlerUtils.SEARCH_DEBOUNCE_DELAY
+import com.example.playlistmaker.util.SingleLiveEvent
 import com.example.playlistmaker.util.consumer.Consumer
 import com.example.playlistmaker.util.consumer.ConsumerData
 
 class SearchViewModel(
-    private val application: Application,
+    application: Application,
     private val searchInteractor: SearchInteractor,
-    private val intent: Intent,
     private val handler: Handler,
     private val handlerUtils: HandlerUtils
 ) : AndroidViewModel(application) {
@@ -31,7 +28,7 @@ class SearchViewModel(
         private val SEARCH_REQUEST_TOKEN = Any()
     }
 
-    private var stateLiveData = MutableLiveData<SearchState>(SearchState.Search)
+    private var stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
     private var clearIconLiveData = MutableLiveData<ClearIconState>(ClearIconState.None())
@@ -39,6 +36,9 @@ class SearchViewModel(
 
     private var listLiveData = MutableLiveData<AdapterState>(AdapterState.Search())
     fun observelist(): LiveData<AdapterState> = listLiveData
+
+    private var showTrackTrigger = SingleLiveEvent<String>()
+    fun observeShowTrackTrigger(): LiveData<String> = showTrackTrigger
 
     private var latestSearchText: String? = null
     private var hasEditTextFocus: Boolean? = null
@@ -48,7 +48,7 @@ class SearchViewModel(
     }
 
     fun startActiviryPlayer(track: Track) {
-        runActivityPlayer(searchInteractor.setTrack(track))
+        showTrackTrigger.postValue(searchInteractor.setTrack(track))
     }
 
     fun changeEditText(
@@ -204,13 +204,6 @@ class SearchViewModel(
         }
     }
 
-    private fun runActivityPlayer(trackString: String) {
-        val player = intent.setComponent(ComponentName(application, PlayerActivity::class.java))
-        player.putExtra(PlayerActivity.TRACK_KEY, trackString)
-        player.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        application.applicationContext.startActivity(player)
-    }
-
     private fun isNewSearchText(newSearchText: String): Boolean {
         return when (this.latestSearchText != newSearchText) {
             true -> {
@@ -225,7 +218,7 @@ class SearchViewModel(
     }
 
     private fun isNewEditTextFocus(newHasEditTextFocus: Boolean): Boolean {
-        return when (this.hasEditTextFocus != newHasEditTextFocus) {
+        return when (this.hasEditTextFocus != newHasEditTextFocus || this.hasEditTextFocus == null) {
             true -> {
                 this.hasEditTextFocus = newHasEditTextFocus
                 true

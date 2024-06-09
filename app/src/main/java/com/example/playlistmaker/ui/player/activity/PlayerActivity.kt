@@ -3,6 +3,7 @@ package com.example.playlistmaker.ui.player.activity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -25,6 +26,9 @@ class PlayerActivity : AppCompatActivity() {
 
         // Начальное значение трека
         const val TRACK_START_TIME = 0L
+
+        fun createArgs(trackString: String): Bundle =
+            bundleOf(TRACK_KEY to trackString)
     }
 
     private lateinit var viewModel: PlayerViewModel
@@ -44,10 +48,10 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel = getViewModel { parametersOf(trackString) }
 
-        // Нажатие иконки назад экрана Настройки
+        /*// Нажатие иконки назад экрана Настройки
         binding.back.setOnClickListener {
             super.finish()
-        }
+        }*/
 
         // Подготовка плеера
         viewModel.preparePlayer()

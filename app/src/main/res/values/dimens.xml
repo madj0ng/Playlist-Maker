@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="main_button_margin_vertical">8dp</dimen>
-    <dimen name="title_padding">4dp</dimen>
-    <dimen name="title_image_w">48dp</dimen>
-    <dimen name="title_image_h">48dp</dimen>
     <dimen name="title_image_width">24dp</dimen>
     <dimen name="title_image_height">24dp</dimen>
-    <dimen name="title_image_margin">12dp</dimen>
-    <dimen name="title_text_margin_start">12dp</dimen>
-    <dimen name="title_text_margin_top">10dp</dimen>
-    <dimen name="title_text_margin_bottom">12dp</dimen>
     <dimen name="title_text_size">22sp</dimen>
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_13sp">13sp</dimen>
-    <dimen name="body_margin_horizontal">16dp</dimen>
-    <dimen name="body_margin_vertical">16dp</dimen>
+    <dimen name="text_size_12sp">12sp</dimen>
     <dimen name="body_padding_vertical">20dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
-    <dimen name="button_text_size">22sp</dimen>
-    <dimen name="button_radius">16dp</dimen>
-    <dimen name="icon_padding">8dp</dimen>
     <dimen name="settings_icon_size">24dp</dimen>
     <dimen name="search_input_padding">12dp</dimen>
     <dimen name="search_input_text_size">16sp</dimen>
@@ -51,13 +39,13 @@
     <dimen name="margin_16dp">16dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
     <dimen name="margin_24dp">24dp</dimen>
-    <dimen name="minus_12dp">-12dp</dimen>
+    <dimen name="minus_4dp">-4dp</dimen>
     <dimen name="margin_28dp">28dp</dimen>
     <dimen name="size_52dp">52dp</dimen>
-    <dimen name="margin_56dp">56dp</dimen>
     <dimen name="size_100dp">100dp</dimen>
     <dimen name="size_44dp">44dp</dimen>
     <dimen name="button_vertical_10dp">10dp</dimen>
     <dimen name="button_horizontal_14dp">14dp</dimen>
     <dimen name="margin_46dp">46dp</dimen>
+    <dimen name="dim_56dp">56dp</dimen>
 </resources>

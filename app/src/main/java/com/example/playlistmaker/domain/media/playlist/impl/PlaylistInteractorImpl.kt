@@ -3,9 +3,8 @@ package com.example.playlistmaker.domain.media.playlist.impl
 import com.example.playlistmaker.domain.media.playlist.PlaylistInteractor
 import com.example.playlistmaker.domain.media.playlist.PlaylistRepository
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.settings.SettingsRepository
 
-class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository):
+class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository) :
     PlaylistInteractor {
 
     override fun loadFavourites(
@@ -13,9 +12,9 @@ class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository)
         onError: (String) -> Unit
     ) {
         val list = playlistRepository.getPlayList()
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             onError.invoke("")
-        }else{
+        } else {
             onComplete.invoke(list)
         }
     }

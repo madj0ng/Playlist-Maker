@@ -1,10 +1,11 @@
-package com.example.playlistmaker.ui.search.activity
+package com.example.playlistmaker.ui.search.fragment
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.databinding.TrackViewBinding
 import com.example.playlistmaker.domain.search.model.Track
-import org.koin.core.parameter.parametersOf
-import org.koin.java.KoinJavaComponent.getKoin
+import com.example.playlistmaker.util.FormatUtils
 
 class SearchAdapter(
     private val clickListener: SearchClickListener
@@ -13,7 +14,13 @@ class SearchAdapter(
     var tracks = ArrayList<Track>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        return getKoin().get { parametersOf(parent, clickListener) }
+        val binding = TrackViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SearchViewHolder(
+            binding = binding,
+            clickListener = clickListener,
+            formatUtils = FormatUtils
+        )
+//        return getKoin().get { parametersOf(parent, clickListener) }
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {

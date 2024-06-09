@@ -7,7 +7,7 @@ import com.example.playlistmaker.domain.media.favourites.FavouritesInteractor
 import com.example.playlistmaker.ui.media.favourites.models.FavouritesState
 
 class FavouritesViewModel(
-    private val favouritesInteractor: FavouritesInteractor
+    favouritesInteractor: FavouritesInteractor
 ) : ViewModel() {
 
     init {

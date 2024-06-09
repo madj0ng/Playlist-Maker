@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_search"
+    tools:context=".ui.search.fragment.SearchFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/header_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/dim_56dp" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/historyGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="historyGroupTitle, historyGroupButton" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/errorGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="ivError, tvError" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/noConnectGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="ivNotConnect, tvNotConnect, errorConnectButton" />
+
+    <TextView
+        style="@style/TitleText"
+        android:text="@string/activity_search"
+        app:layout_constraintBottom_toTopOf="@+id/header_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/inputEditText"
+        style="@style/SearchInputText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="no"
+        android:hint="@string/activity_search"
+        android:imeOptions="actionDone"
+        android:paddingLeft="@dimen/search_input_padding"
+        android:paddingTop="@dimen/search_input_padding"
+        android:paddingRight="@dimen/search_input_padding"
+        android:paddingBottom="@dimen/search_input_padding"
+        android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/header_guideline" />
+
+    <ImageView
+        android:id="@+id/searchIcon"
+        style="@style/SearchInputIconStart"
+        android:padding="10dp"
+        android:src="@drawable/icon_search"
+        app:layout_constraintBottom_toBottomOf="@+id/inputEditText"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/inputEditText" />
+
+    <ImageView
+        android:id="@+id/clearIcon"
+        style="@style/SearchInputIconEnd"
+        android:padding="10dp"
+        android:src="@drawable/icon_close"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/inputEditText"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/inputEditText" />
+
+    <!--ProgressBar-->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/size_44dp"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/color_blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText" />
+
+    <!--Error Group-->
+    <ImageView
+        android:id="@+id/ivError"
+        android:layout_width="@dimen/search_err_image_size"
+        android:layout_height="@dimen/search_err_image_size"
+        android:layout_gravity="center"
+        android:src="@drawable/error_find"
+        android:layout_marginTop="@dimen/margin_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText" />
+
+    <TextView
+        android:id="@+id/tvError"
+        style="@style/SearchErrText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/search_err_margin_horizontal"
+        android:layout_marginTop="@dimen/search_err_margin_vertical"
+        android:layout_marginEnd="@dimen/search_err_margin_horizontal"
+        android:text="@string/error_search_find"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/ivError" />
+
+    <!--NotConnectGroup-->
+    <ImageView
+        android:id="@+id/ivNotConnect"
+        android:layout_width="@dimen/search_err_image_size"
+        android:layout_height="@dimen/search_err_image_size"
+        android:layout_gravity="center"
+        android:src="@drawable/error_connect"
+        android:layout_marginTop="@dimen/margin_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText" />
+
+    <TextView
+        android:id="@+id/tvNotConnect"
+        style="@style/SearchErrText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/search_err_margin_horizontal"
+        android:layout_marginTop="@dimen/search_err_margin_vertical"
+        android:layout_marginEnd="@dimen/search_err_margin_horizontal"
+        android:text="@string/error_connect_find"
+        app:layout_constraintBottom_toTopOf="@+id/errorConnectButton"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/ivNotConnect" />
+
+    <Button
+        android:id="@+id/errorConnectButton"
+        style="@style/ButtonBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/search_err_margin_vertical"
+        android:text="@string/sharing_update"
+        app:cornerRadius="@dimen/search_err_button_radius"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvNotConnect" />
+
+    <TextView
+        android:id="@+id/historyGroupTitle"
+        style="@style/SearchHistoryTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_16dp"
+        android:layout_marginBottom="@dimen/margin_12dp"
+        android:text="@string/history_title"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/trackList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:visibility="visible"
+        android:layout_marginEnd="@dimen/minus_4dp"
+        android:layout_marginStart="@dimen/minus_4dp"
+        android:layout_marginTop="@dimen/margin_16dp"
+        app:layout_constraintBottom_toTopOf="@+id/historyGroupButton"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/historyGroupTitle" />
+
+    <Button
+        android:id="@+id/historyGroupButton"
+        style="@style/ButtonBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/search_err_margin_vertical"
+        android:text="@string/history_clear_button"
+        app:cornerRadius="@dimen/search_err_button_radius"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/trackList" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

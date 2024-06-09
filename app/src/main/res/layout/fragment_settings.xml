@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_setting"
+    tools:context=".ui.settings.fragment.SettingsFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/header_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/dim_56dp" />
+
+    <TextView
+        style="@style/TitleText"
+        android:text="@string/settings_title"
+        app:layout_constraintBottom_toTopOf="@+id/header_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--Theme-->
+    <TextView
+        style="@style/SettingsMenuText"
+        android:id="@+id/tvTheme"
+        android:text="@string/settings_theme"
+        android:paddingTop="@dimen/body_padding_vertical"
+        android:paddingBottom="@dimen/body_padding_vertical"
+        android:layout_marginTop="@dimen/margin_24dp"
+        app:layout_constraintTop_toTopOf="@+id/header_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/themeSwitcher"
+        style="@style/SettingsMenuIcon"
+        android:layout_width="@dimen/switch_compat_icon_width"
+        android:layout_height="@dimen/switch_compat_icon_height"
+        android:checked="false"
+        app:thumbTint="@drawable/settings_theme_thumb"
+        app:trackTint="@drawable/settings_theme_track"
+        app:layout_constraintTop_toTopOf="@+id/tvTheme"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTheme"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"/>
+
+<!--Share application-->
+    <TextView
+        style="@style/SettingsMenuText"
+        android:id="@+id/tvShareApp"
+        android:text="@string/settings_output"
+        android:paddingTop="@dimen/body_padding_vertical"
+        android:paddingBottom="@dimen/body_padding_vertical"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvTheme"/>
+
+    <ImageView
+        android:id="@+id/social"
+        style="@style/SettingsMenuIcon"
+        android:src="@drawable/icon_output"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/tvShareApp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvShareApp"/>
+
+<!--Share Support-->
+    <TextView
+        style="@style/SettingsMenuText"
+        android:id="@+id/tvShareSupport"
+        android:text="@string/settings_helper"
+        android:paddingTop="@dimen/body_padding_vertical"
+        android:paddingBottom="@dimen/body_padding_vertical"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvShareApp" />
+
+    <ImageView
+        android:id="@+id/sendHelp"
+        style="@style/SettingsMenuIcon"
+        android:src="@drawable/icon_helper"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/tvShareSupport"
+        app:layout_constraintBottom_toBottomOf="@+id/tvShareSupport" />
+
+<!--Share Agreement-->
+    <TextView
+        android:id="@+id/tvShareAgreement"
+        style="@style/SettingsMenuText"
+        android:text="@string/settings_agreement"
+        android:paddingTop="@dimen/body_padding_vertical"
+        android:paddingBottom="@dimen/body_padding_vertical"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvShareSupport"/>
+
+    <ImageView
+        android:id="@+id/agreement"
+        style="@style/SettingsMenuIcon"
+        android:src="@drawable/icon_agreement"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/tvShareAgreement"
+        app:layout_constraintBottom_toBottomOf="@+id/tvShareAgreement" />
+</androidx.constraintlayout.widget.ConstraintLayout>

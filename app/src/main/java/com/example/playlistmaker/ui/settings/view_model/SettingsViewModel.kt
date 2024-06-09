@@ -17,11 +17,13 @@ class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : AndroidViewModel(application) {
 
+    private val isDarkThemeEnabled = settingsInteractor.getSettingsTheme(
+        application.resources.configuration.uiMode == AppCompatDelegate.MODE_NIGHT_YES
+    ).isDark
+
     private val switcherLiveData = MutableLiveData<ThemeState>(
         getThemeFromBoolean(
-            settingsInteractor.getSettingsTheme(
-                application.resources.configuration.uiMode == AppCompatDelegate.MODE_NIGHT_YES
-            ).isDark
+            isDarkThemeEnabled
         )
     )
 
@@ -40,18 +42,31 @@ class SettingsViewModel(
     }
 
     fun updateSwitcher(darkThemeEnabled: Boolean) {
-        (application as App).switchTheme(darkThemeEnabled)
-        settingsInteractor.updateThemeSetting(ThemeSettings(darkThemeEnabled))
+        if (isDarckThemeEnabled(darkThemeEnabled)) {
+            (application as App).switchTheme(darkThemeEnabled)
+            settingsInteractor.updateThemeSetting(ThemeSettings(darkThemeEnabled))
 
-        setSwitcher(
-            getThemeFromBoolean(darkThemeEnabled)
-        )
+            setSwitcher(
+                getThemeFromBoolean(darkThemeEnabled)
+            )
+        }
+    }
+
+    private fun isDarckThemeEnabled(newThemeEnabled: Boolean): Boolean {
+        val oldTheme = when (val state = switcherLiveData.value) {
+            is ThemeState.Dark -> state.isVisible
+            is ThemeState.Light -> state.isVisible
+            null -> {
+                isDarkThemeEnabled
+            }
+        }
+        return (oldTheme != newThemeEnabled)
     }
 
     private fun getThemeFromBoolean(darkThemeEnabled: Boolean): ThemeState {
         return when (darkThemeEnabled) {
-            true -> ThemeState.Dark
-            false -> ThemeState.Light
+            true -> ThemeState.Dark()
+            false -> ThemeState.Light()
         }
     }
 

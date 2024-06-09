@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_player">
-
+    android:background="@color/background_player"
+    tools:context=".ui.media.fragment.MediaFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"
@@ -26,33 +26,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/margin_56dp" />
-
-    <ImageButton
-        android:id="@+id/back"
-        style="@style/TitleImage"
-        android:layout_width="@dimen/title_image_w"
-        android:layout_height="@dimen/title_image_h"
-        android:layout_marginStart="@dimen/minus_12dp"
-        android:layout_marginTop="@dimen/margin_4dp"
-        android:layout_marginBottom="@dimen/margin_4dp"
-        android:paddingStart="@dimen/margin_24dp"
-        android:paddingTop="@dimen/margin_24dp"
-        android:paddingEnd="@dimen/margin_24dp"
-        android:paddingBottom="@dimen/margin_24dp"
-        android:src="@drawable/icon_back"
-        android:contentDescription="@string/back"
-        app:layout_constraintBottom_toTopOf="@+id/header_guideline"
-        app:layout_constraintStart_toEndOf="@+id/left_guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintGuide_begin="@dimen/dim_56dp" />
 
     <TextView
         style="@style/TitleText"
         android:text="@string/media_title"
         app:layout_constraintBottom_toTopOf="@+id/header_guideline"
-        app:layout_constraintStart_toEndOf="@+id/back"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
@@ -63,8 +44,7 @@
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/header_guideline"
-        app:tabTextAppearance="@style/MediaTabTextAppearance"
-        tools:ignore="MissingConstraints" />
+        app:tabTextAppearance="@style/MediaTabTextAppearance" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
@@ -74,14 +54,5 @@
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
-
-    <!--<androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toEndOf="@+id/left_guideline"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/header_guideline"
-        app:layout_constraintBottom_toBottomOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

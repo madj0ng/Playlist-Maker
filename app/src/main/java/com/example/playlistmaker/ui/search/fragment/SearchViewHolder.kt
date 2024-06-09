@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.search.activity
+package com.example.playlistmaker.ui.search.fragment
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide

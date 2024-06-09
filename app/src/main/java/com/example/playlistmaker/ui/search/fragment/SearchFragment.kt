@@ -1,59 +1,87 @@
-package com.example.playlistmaker.ui.search.activity
+package com.example.playlistmaker.ui.search.fragment
 
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.creator.HISTORY_ADAPTER
-import com.example.playlistmaker.creator.SEARCH_ADAPTER
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.models.AdapterState
 import com.example.playlistmaker.ui.search.models.ClearIconState
 import com.example.playlistmaker.ui.search.models.SearchState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
+import com.example.playlistmaker.util.HandlerUtils
 import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.qualifier.named
+import org.koin.core.component.KoinComponent
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
+
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: SearchViewModel by viewModel()
 
     private val handler: Handler = getKoin().get()
 
-    // Список треков
-    private val tracksAdapter: SearchAdapter by inject<SearchAdapter>(named(SEARCH_ADAPTER))
-
-    // Список истории
-    private val historyAdapter: SearchAdapter by inject<SearchAdapter>(named(HISTORY_ADAPTER))
-
-    private val viewModel: SearchViewModel by viewModel<SearchViewModel>()
-
-    private lateinit var binding: ActivitySearchBinding
-
     private var textWatcher: TextWatcher? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    // Список треков
+    private lateinit var tracksAdapter: SearchAdapter
 
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    // Список истории
+    private lateinit var historyAdapter: SearchAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        historyAdapter =
+            SearchAdapter(clickListener = object : SearchAdapter.SearchClickListener,
+                KoinComponent {
+                override fun onTrackClick(track: Track) {
+                    if (HandlerUtils.clickDebounce(handler)) {
+                        viewModel.startActiviryPlayer(track)
+                    }
+                }
+            })
+
+        tracksAdapter =
+            SearchAdapter(clickListener = object : SearchAdapter.SearchClickListener,
+                KoinComponent {
+                override fun onTrackClick(track: Track) {
+                    if (HandlerUtils.clickDebounce(handler)) {
+                        viewModel.setHistory(track)
+                        viewModel.startActiviryPlayer(track)
+                    }
+                }
+            })
 
         // Список
         binding.trackList.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        // Нажатие иконки назад экрана Настройки
-        binding.back.setOnClickListener {
-            super.finish()
-        }
+        // Фокус на строке поиска
+        binding.inputEditText.requestFocus()
 
         // Обработчик нажатия иконки удаления
         binding.clearIcon.setOnClickListener {
@@ -103,54 +131,40 @@ class SearchActivity : AppCompatActivity() {
             viewModel.search()
         }
 
-        // Фокус на строке поиска
-        binding.inputEditText.requestFocus()
-
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        viewModel.observeIconState().observe(this) {
+        viewModel.observeIconState().observe(viewLifecycleOwner) {
             setIconState(it)
         }
 
-        viewModel.observelist().observe(this) {
+        viewModel.observelist().observe(viewLifecycleOwner) {
             setAdapterlist(it)
         }
+
+        viewModel.observeShowTrackTrigger().observe(viewLifecycleOwner) {
+            showTrackDetails(it)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
+        _binding = null
+
+        viewModel.onDestroy()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
         handler.removeCallbacksAndMessages(null)
-
-        textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
-        viewModel.onDestroy()
-    }
-
-    private fun setIconState(state: ClearIconState) {
-        when (state) {
-            is ClearIconState.None -> {
-                showClearIcon(state.isVisible)
-                // Очистка поискового запроса
-                clearEditText()
-            }
-
-            is ClearIconState.Show -> showClearIcon(state.isVisible)
-        }
-    }
-
-    private fun showClearIcon(isVisible: Boolean) {
-        binding.clearIcon.isVisible = isVisible
-    }
-
-    private fun clearEditText() {
-        binding.inputEditText.text = null
     }
 
     private fun setInvisibleKeyboard() {
         val inputMethodManager =
-            this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(binding.inputEditText.windowToken, 0)
     }
 
@@ -165,47 +179,42 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        binding.historyGroupTitle.visibility = View.GONE
-        binding.historyGroupButton.visibility = View.GONE
+        binding.historyGroup.visibility = View.GONE
+        binding.errorGroup.visibility = View.GONE
+        binding.noConnectGroup.visibility = View.GONE
         binding.trackList.visibility = View.GONE
-        binding.errorConnectGroup.visibility = View.GONE
-        binding.errorFoundGroup.visibility = View.GONE
         binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun showSearch() {
-        binding.historyGroupTitle.visibility = View.GONE
-        binding.historyGroupButton.visibility = View.GONE
+        binding.historyGroup.visibility = View.GONE
+        binding.errorGroup.visibility = View.GONE
+        binding.noConnectGroup.visibility = View.GONE
         binding.trackList.visibility = View.VISIBLE
-        binding.errorConnectGroup.visibility = View.GONE
-        binding.errorFoundGroup.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
     }
 
     private fun showHistory() {
-        binding.historyGroupTitle.visibility = View.VISIBLE
-        binding.historyGroupButton.visibility = View.VISIBLE
+        binding.historyGroup.visibility = View.VISIBLE
+        binding.errorGroup.visibility = View.GONE
+        binding.noConnectGroup.visibility = View.GONE
         binding.trackList.visibility = View.VISIBLE
-        binding.errorConnectGroup.visibility = View.GONE
-        binding.errorFoundGroup.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
     }
 
     private fun showFailure() {
-        binding.historyGroupTitle.visibility = View.GONE
-        binding.historyGroupButton.visibility = View.GONE
+        binding.historyGroup.visibility = View.GONE
+        binding.errorGroup.visibility = View.GONE
+        binding.noConnectGroup.visibility = View.VISIBLE
         binding.trackList.visibility = View.GONE
-        binding.errorConnectGroup.visibility = View.VISIBLE
-        binding.errorFoundGroup.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
     }
 
     private fun showError() {
-        binding.historyGroupTitle.visibility = View.GONE
-        binding.historyGroupButton.visibility = View.GONE
+        binding.historyGroup.visibility = View.GONE
+        binding.errorGroup.visibility = View.VISIBLE
+        binding.noConnectGroup.visibility = View.GONE
         binding.trackList.visibility = View.GONE
-        binding.errorConnectGroup.visibility = View.GONE
-        binding.errorFoundGroup.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
     }
 
@@ -228,5 +237,32 @@ class SearchActivity : AppCompatActivity() {
         tracksAdapter.tracks.clear()
         tracksAdapter.tracks.addAll(tracks)
         tracksAdapter.notifyDataSetChanged()
+    }
+
+    private fun setIconState(state: ClearIconState) {
+        when (state) {
+            is ClearIconState.None -> {
+                showClearIcon(state.isVisible)
+                // Очистка поискового запроса
+                clearEditText()
+            }
+
+            is ClearIconState.Show -> showClearIcon(state.isVisible)
+        }
+    }
+
+    private fun showClearIcon(isVisible: Boolean) {
+        binding.clearIcon.isVisible = isVisible
+    }
+
+    private fun clearEditText() {
+        binding.inputEditText.text = null
+    }
+
+    private fun showTrackDetails(trackString: String) {
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerActivity,
+            PlayerActivity.createArgs(trackString)
+        )
     }
 }

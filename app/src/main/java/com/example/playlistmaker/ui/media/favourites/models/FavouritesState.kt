@@ -3,7 +3,7 @@ package com.example.playlistmaker.ui.media.favourites.models
 import com.example.playlistmaker.domain.search.model.Track
 
 sealed interface FavouritesState {
-    object Loading : FavouritesState
+    data object Loading : FavouritesState
 
     data class Content(val data: List<Track>) : FavouritesState
 
