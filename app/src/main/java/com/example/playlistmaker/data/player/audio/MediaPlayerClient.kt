@@ -5,39 +5,52 @@ import com.example.playlistmaker.data.player.PlayerClient
 import com.example.playlistmaker.data.search.model.PlayerRequest
 import com.example.playlistmaker.data.search.model.PlayerResponse
 import com.example.playlistmaker.data.search.model.PlayerStatusDto
-import com.example.playlistmaker.domain.search.model.PlayerStatus
-import com.example.playlistmaker.util.consumer.Consumer
-import com.example.playlistmaker.util.consumer.ConsumerData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.resume
 
 class MediaPlayerClient(private var mediaPlayer: MediaPlayer) : PlayerClient {
 
-    override fun preparePlayer(playerRequest: PlayerRequest): PlayerResponse<PlayerStatusDto> {
-        mediaPlayer.setDataSource(playerRequest.previewUrl)
-        mediaPlayer.prepare()
-        return PlayerResponse.Data(PlayerStatusDto.PREPARED)
-    }
-
-    override fun start(): PlayerResponse<PlayerStatusDto> {
-        mediaPlayer.start()
-        return PlayerResponse.Data(PlayerStatusDto.PLAYING)
-    }
-
-    override fun pause(): PlayerResponse<PlayerStatusDto> {
-        mediaPlayer.pause()
-        return PlayerResponse.Data(PlayerStatusDto.PAUSED)
-    }
-
-    override fun setOnCompletionListener(consumer: Consumer<PlayerStatus>) {
-        mediaPlayer.setOnCompletionListener {
-            consumer.consume(ConsumerData.Data(PlayerStatus.PREPARED))
+    override suspend fun preparePlayerSuspend(playerRequest: PlayerRequest): PlayerResponse<PlayerStatusDto> {
+        return withContext(Dispatchers.IO) {
+            try {
+                mediaPlayer.setDataSource(playerRequest.previewUrl)
+                mediaPlayer.prepare()
+                PlayerResponse.Data(PlayerStatusDto.PREPARED)
+            } catch (e: Throwable) {
+                PlayerResponse.Data(PlayerStatusDto.DEFAULT)
+            }
         }
     }
+
+    override fun getPlayerStatus(): PlayerResponse<Boolean> {
+        return PlayerResponse.Data(mediaPlayer.isPlaying)
+    }
+
+    override fun start() {
+        mediaPlayer.start()
+    }
+
+    override fun pause() {
+        mediaPlayer.pause()
+    }
+
+    override suspend fun setOnCompletionListenerSuspend(): PlayerResponse<PlayerStatusDto> =
+        suspendCancellableCoroutine { continuation ->
+            mediaPlayer.setOnCompletionListener {
+                if (continuation.isActive) {
+                    continuation.resume(PlayerResponse.Data(PlayerStatusDto.PREPARED))
+                }
+            }
+        }
 
     override fun getCurrentPosition(): PlayerResponse<Int> {
         return PlayerResponse.Data(mediaPlayer.currentPosition)
     }
 
     override fun release() {
+        mediaPlayer.stop()
         mediaPlayer.release()
     }
 }

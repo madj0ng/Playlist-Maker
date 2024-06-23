@@ -1,13 +1,13 @@
+import com.example.playlistmaker.util.DebounceUtils
 import com.example.playlistmaker.util.FormatUtils
-import com.example.playlistmaker.util.HandlerUtils
 import org.koin.dsl.module
 
 val utilModule = module {
     single {
-        HandlerUtils
+        DebounceUtils
     }
 
-    single{
+    single {
         FormatUtils
     }
 }

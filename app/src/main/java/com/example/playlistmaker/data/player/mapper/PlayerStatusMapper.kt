@@ -2,7 +2,7 @@ package com.example.playlistmaker.data.player.mapper
 
 import com.example.playlistmaker.data.search.model.PlayerResponse
 import com.example.playlistmaker.data.search.model.PlayerStatusDto
-import com.example.playlistmaker.domain.search.model.PlayerStatus
+import com.example.playlistmaker.domain.player.model.PlayerStatus
 import com.example.playlistmaker.util.Resource
 
 object PlayerStatusMapper {
@@ -16,10 +16,10 @@ object PlayerStatusMapper {
 
     private fun mapStatus(status: PlayerStatusDto): PlayerStatus {
         return when (status) {
-            PlayerStatusDto.DEFAULT -> PlayerStatus.DEFAULT
-            PlayerStatusDto.PAUSED -> PlayerStatus.PAUSED
-            PlayerStatusDto.PLAYING -> PlayerStatus.PLAYING
-            PlayerStatusDto.PREPARED -> PlayerStatus.PREPARED
+            PlayerStatusDto.DEFAULT -> PlayerStatus.Default()
+            PlayerStatusDto.PAUSED -> PlayerStatus.Paused(0)
+            PlayerStatusDto.PLAYING -> PlayerStatus.Playing(0)
+            PlayerStatusDto.PREPARED -> PlayerStatus.Prepared()
         }
     }
 }

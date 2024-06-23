@@ -1,34 +1,34 @@
 package com.example.playlistmaker.ui.player.view_model
 
 import android.app.Application
-import android.os.Handler
-import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.player.PlayerInteractor
-import com.example.playlistmaker.domain.search.model.PlayerStatus
+import com.example.playlistmaker.domain.player.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.activity.PlayerActivity.Companion.TRACK_START_TIME
 import com.example.playlistmaker.ui.player.models.PlayerState
-import com.example.playlistmaker.util.HandlerUtils
+import com.example.playlistmaker.util.DebounceUtils.TIME_DEBOUNCE_DELAY
 import com.example.playlistmaker.util.Resource
 import com.example.playlistmaker.util.SingleLiveEvent
-import com.example.playlistmaker.util.consumer.Consumer
-import com.example.playlistmaker.util.consumer.ConsumerData
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     application: Application,
     trackString: String?,
     private val playerInteractor: PlayerInteractor,
-    private val handler: Handler,
-    private val handlerUtils: HandlerUtils
 ) : AndroidViewModel(application) {
 
     private val screenLiveData = MutableLiveData<PlayerState>(PlayerState.Loading)
-    private val statusLiveData = MutableLiveData<PlayerStatus>(PlayerStatus.DEFAULT)
-    private val trackTimeLiveData = MutableLiveData<Long>(TRACK_START_TIME)
+    private val statusLiveData = MutableLiveData<PlayerStatus>(PlayerStatus.Default())
     private val toastLiveData = SingleLiveEvent<String>()
+
+    private var timerJob: Job? = null
+    private var onCompletionListenerJob: Job? = null
 
     init {
         playerInteractor.loadTrackData(
@@ -41,145 +41,109 @@ class PlayerViewModel(
                 showToast(it)
             }
         )
+
+        initMediaPlayer(this.track)
     }
 
     private lateinit var track: Track
 
-    companion object {
-        private val TRACK_TIME_TOKEN = Any()
-    }
-
     fun observeScreenState(): LiveData<PlayerState> = screenLiveData
     fun observePlayerStatus(): LiveData<PlayerStatus> = statusLiveData
-    fun observeTrackTime(): LiveData<Long> = trackTimeLiveData
     fun observeToastState(): LiveData<String> = toastLiveData
 
     // Подготовка плеера
-    fun preparePlayer() {
-        playerInteractor.preparePlayer(
-            track = this.track,
-            consumer = object : Consumer<PlayerStatus> {
-                override fun consume(data: ConsumerData<PlayerStatus>) {
-                    when (data) {
-                        is ConsumerData.Data -> {
-                            setStatus(data.value)
-                        }
+    fun initMediaPlayer(track: Track) {
+        // Подготовка плеера
+        viewModelScope.launch {
+            playerInteractor
+                .preparePlayerSuspend(track)
+                .collect { setStatus(it) }
+        }
+    }
 
-                        is ConsumerData.Error -> {
-                            showToast(data.message)
-                        }
-                    }
-                }
+    fun onPlayButtonClicked() {
+        when (statusLiveData.value) {
+            is PlayerStatus.Playing -> {
+                pausePlayer()
             }
-        )
+
+            is PlayerStatus.Paused, is PlayerStatus.Prepared -> {
+                startPlayer()
+            }
+
+            else -> {}
+        }
+    }
+
+    fun stopPlayer() {
+        when (statusLiveData.value) {
+            is PlayerStatus.Playing -> {
+                pausePlayer()
+            }
+
+            else -> {}
+        }
     }
 
     // Завершение проигрывания трека
-    fun onCompletePreparePlayer() {
-        playerInteractor.setOnCompletionListener(consumer = object :
-            Consumer<PlayerStatus> {
-            override fun consume(data: ConsumerData<PlayerStatus>) {
-                when (data) {
-                    is ConsumerData.Data -> {
-                        // Завершаем задачу получения времени проигрываемого трека
-                        stopTrackTime()
-
-                        // Актуализируем сатус проигрывателя
-                        setStatus(data.value)
-
-                        // Обнуляем время
-                        setTrackTime(TRACK_START_TIME)
-                    }
-
-                    is ConsumerData.Error -> {
-                        showToast(data.message)
-                    }
+    private fun startOnCompletionListenerSuspend() {
+        onCompletionListenerJob = viewModelScope.launch {
+            playerInteractor
+                .setOnCompletionListenerSuspend()
+                .collect {
+                    stopTimer()
+                    setStatus(it)
                 }
-            }
-        })
+        }
     }
 
-    fun runPlayer() {
-        val resource = when (statusLiveData.value ?: PlayerStatus.DEFAULT) {
-            PlayerStatus.DEFAULT -> {
-                Resource.Success(PlayerStatus.DEFAULT)
-            }
+    private fun stopOnCompletionListener() {
+        onCompletionListenerJob?.cancel()
+    }
 
-            PlayerStatus.PAUSED, PlayerStatus.PREPARED -> {
-                startTrackTime()
-                playerInteractor.startPlayer()
-            }
-
-            PlayerStatus.PLAYING -> {
-                stopTrackTime()
-                playerInteractor.pausePlayer()
-            }
-        }
-
-        when (resource) {
-            is Resource.Success -> {
-                setStatus(resource.data)
-            }
-
+    private fun getCurrentPlayerPosition(): Long {
+        return when (val resource = playerInteractor.getTimePlayer()) {
             is Resource.Error -> {
-                showToast(resource.message)
-            }
-        }
-    }
-
-    fun pausePlayer() {
-        val resource = when (val status = statusLiveData.value ?: PlayerStatus.DEFAULT) {
-            PlayerStatus.DEFAULT, PlayerStatus.PAUSED, PlayerStatus.PREPARED -> {
-                Resource.Success(status)
+                TRACK_START_TIME
             }
 
-            PlayerStatus.PLAYING -> {
-                stopTrackTime()
-                playerInteractor.pausePlayer()
-            }
-        }
-
-        when (resource) {
             is Resource.Success -> {
-                setStatus(resource.data)
-            }
-
-            is Resource.Error -> {
-                showToast(resource.message)
+                resource.data.toLong()
             }
         }
     }
 
-    private fun startTrackTime() {
-        stopTrackTime()
+    private fun startPlayer() {
+        startOnCompletionListenerSuspend()
 
-        val trackTimeRunnable = updateTrackTimePlayer()
-        handler.post(trackTimeRunnable)
+        playerInteractor.startPlayer()
+        setStatus(PlayerStatus.Playing(getCurrentPlayerPosition()))
+
+        startTimer()
     }
 
-    private fun stopTrackTime() {
-        handler.removeCallbacksAndMessages(TRACK_TIME_TOKEN)
+    private fun pausePlayer() {
+        stopOnCompletionListener()
+
+        playerInteractor.pausePlayer()
+        setStatus(PlayerStatus.Paused(getCurrentPlayerPosition()))
+
+        stopTimer()
     }
 
-    private fun updateTrackTimePlayer(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                // Обновляем время
-                when (val resource = playerInteractor.getTimePlayer()) {
-                    is Resource.Error -> {}
-                    is Resource.Success -> {
-                        setTrackTime(resource.data.toLong())
-                    }
-                }
-                // И снова планируем то же действие через 0.3 секунд
-                val postTime = SystemClock.uptimeMillis() + handlerUtils.TIME_DEBOUNCE_DELAY
-                handler.postAtTime(
-                    this,
-                    TRACK_TIME_TOKEN,
-                    postTime,
-                )
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            var isPosition = true
+            while (isPosition) {
+                delay(TIME_DEBOUNCE_DELAY)
+                setStatus(PlayerStatus.Playing(getCurrentPlayerPosition()))
+                playerInteractor.getPlayerStatus().collect { isPosition = it }
             }
         }
+    }
+
+    private fun stopTimer() {
+        timerJob?.cancel()
     }
 
     private fun showToast(message: String) {
@@ -194,13 +158,9 @@ class PlayerViewModel(
         screenLiveData.postValue(state)
     }
 
-    private fun setTrackTime(trackTime: Long) {
-        trackTimeLiveData.postValue(trackTime)
-    }
-
     override fun onCleared() {
-        // Очистить очередь от задачи
-        handler.removeCallbacksAndMessages(TRACK_TIME_TOKEN)
+        stopTimer()
+        stopOnCompletionListener()
 
         // Освобождаем память от плеера
         playerInteractor.clearPlayer()

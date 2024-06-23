@@ -1,5 +1,3 @@
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
@@ -18,9 +16,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    single {
-        Handler(Looper.getMainLooper())
-    }
 
     factory { (tabLayout: TabLayout, viewPager: ViewPager2) ->
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -33,43 +28,6 @@ val viewModelModule = module {
         }
     }
 
-    // Adapters
-//    single<SearchAdapter.SearchClickListener>(named(SEARCH_ADAPTER)) {
-//        object : SearchAdapter.SearchClickListener, KoinComponent {
-//            override fun onTrackClick(track: Track) {
-//                val handler: Handler = getKoin().get()
-//                val handlerUtils: HandlerUtils = getKoin().get()
-//                val viewModel: SearchViewModel = getKoin().get()
-//                if (handlerUtils.clickDebounce(handler)) {
-//                    viewModel.setHistory(track)
-//                    viewModel.startActiviryPlayer(track)
-//                }
-//            }
-//        }
-//    }
-//
-//    single(named(SEARCH_ADAPTER)) {
-//        SearchAdapter(clickListener = get(named(SEARCH_ADAPTER)))
-//    }
-//
-//    single<SearchAdapter.SearchClickListener>(named(HISTORY_ADAPTER)) {
-//        object : SearchAdapter.SearchClickListener, KoinComponent {
-//            override fun onTrackClick(track: Track) {
-//                val handler: Handler = getKoin().get()
-//                val handlerUtils: HandlerUtils = getKoin().get()
-//                val viewModel: SearchViewModel = getKoin().get()
-//                if (handlerUtils.clickDebounce(handler)) {
-//                    viewModel.setHistory(track)
-//                    viewModel.startActiviryPlayer(track)
-//                }
-//            }
-//        }
-//    }
-//
-//    single(named(HISTORY_ADAPTER)) {
-//        SearchAdapter(clickListener = get(named(HISTORY_ADAPTER)))
-//    }
-
     factory { (fragmentManager: FragmentManager, lifecycle: Lifecycle) ->
         MediaPagerAdapter(
             fragmentManager = fragmentManager,
@@ -77,30 +35,12 @@ val viewModelModule = module {
         )
     }
 
-    /*// ViewHolder
-    factory<LayoutInflater> { (parent: ViewGroup) ->
-        LayoutInflater.from(parent.context)
-    }
-
-    factory<TrackViewBinding> { (parent: ViewGroup) ->
-        TrackViewBinding.inflate(get { parametersOf(parent) }, parent, false)
-    }
-
-    factory<SearchViewHolder> { (parent: ViewGroup, clickListener: SearchAdapter.SearchClickListener) ->
-        SearchViewHolder(
-            binding = get { parametersOf(parent) },
-            clickListener = clickListener,
-            formatUtils = get()
-        )
-    }*/
-
     // Search
     viewModel {
         SearchViewModel(
             application = androidApplication(),
             searchInteractor = get(),
-            handler = get(),
-            handlerUtils = get(),
+            debounceUtils = get(),
         )
     }
 
@@ -110,8 +50,6 @@ val viewModelModule = module {
             application = androidApplication(),
             trackString = trackString,
             playerInteractor = get(),
-            handler = get(),
-            handlerUtils = get(),
         )
     }
 

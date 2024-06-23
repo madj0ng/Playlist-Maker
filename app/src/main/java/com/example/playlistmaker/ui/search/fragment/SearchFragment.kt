@@ -2,7 +2,6 @@ package com.example.playlistmaker.ui.search.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
@@ -22,10 +22,9 @@ import com.example.playlistmaker.ui.search.models.AdapterState
 import com.example.playlistmaker.ui.search.models.ClearIconState
 import com.example.playlistmaker.ui.search.models.SearchState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
-import com.example.playlistmaker.util.HandlerUtils
-import org.koin.android.ext.android.getKoin
+import com.example.playlistmaker.util.DebounceUtils.CLICK_DEBOUNCE_DELAY
+import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.component.KoinComponent
 
 class SearchFragment : Fragment() {
 
@@ -34,15 +33,15 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
 
-    private val handler: Handler = getKoin().get()
-
     private var textWatcher: TextWatcher? = null
 
     // Список треков
     private lateinit var tracksAdapter: SearchAdapter
+    private lateinit var onSearchTrackClickDebounce: (Track) -> Unit
 
     // Список истории
     private lateinit var historyAdapter: SearchAdapter
+    private lateinit var onHistoryTrackClickDebounce: (Track) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,26 +54,24 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        historyAdapter =
-            SearchAdapter(clickListener = object : SearchAdapter.SearchClickListener,
-                KoinComponent {
-                override fun onTrackClick(track: Track) {
-                    if (HandlerUtils.clickDebounce(handler)) {
-                        viewModel.startActiviryPlayer(track)
-                    }
-                }
-            })
+        onSearchTrackClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            true
+        ) { track ->
+            viewModel.startActiviryPlayer(track)
+        }
+        historyAdapter = SearchAdapter { track -> onSearchTrackClickDebounce(track) }
 
-        tracksAdapter =
-            SearchAdapter(clickListener = object : SearchAdapter.SearchClickListener,
-                KoinComponent {
-                override fun onTrackClick(track: Track) {
-                    if (HandlerUtils.clickDebounce(handler)) {
-                        viewModel.setHistory(track)
-                        viewModel.startActiviryPlayer(track)
-                    }
-                }
-            })
+        onHistoryTrackClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            true
+        ) { track ->
+            viewModel.setHistory(track)
+            viewModel.startActiviryPlayer(track)
+        }
+        tracksAdapter = SearchAdapter { track -> onHistoryTrackClickDebounce(track) }
 
         // Список
         binding.trackList.layoutManager =
@@ -155,11 +152,6 @@ class SearchFragment : Fragment() {
         _binding = null
 
         viewModel.onDestroy()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        handler.removeCallbacksAndMessages(null)
     }
 
     private fun setInvisibleKeyboard() {

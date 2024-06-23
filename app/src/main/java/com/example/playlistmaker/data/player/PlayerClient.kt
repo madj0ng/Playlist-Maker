@@ -3,17 +3,17 @@ package com.example.playlistmaker.data.player
 import com.example.playlistmaker.data.search.model.PlayerRequest
 import com.example.playlistmaker.data.search.model.PlayerResponse
 import com.example.playlistmaker.data.search.model.PlayerStatusDto
-import com.example.playlistmaker.domain.search.model.PlayerStatus
-import com.example.playlistmaker.util.consumer.Consumer
 
 interface PlayerClient {
-    fun preparePlayer(playerRequest: PlayerRequest): PlayerResponse<PlayerStatusDto>
+    suspend fun preparePlayerSuspend(playerRequest: PlayerRequest): PlayerResponse<PlayerStatusDto>
 
-    fun start(): PlayerResponse<PlayerStatusDto>
+    fun getPlayerStatus(): PlayerResponse<Boolean>
 
-    fun pause(): PlayerResponse<PlayerStatusDto>
+    fun start()
 
-    fun setOnCompletionListener(consumer: Consumer<PlayerStatus>)
+    fun pause()
+
+    suspend fun setOnCompletionListenerSuspend(): PlayerResponse<PlayerStatusDto>
 
     fun getCurrentPosition(): PlayerResponse<Int>
 

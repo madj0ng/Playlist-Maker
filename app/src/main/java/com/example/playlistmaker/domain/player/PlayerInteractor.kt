@@ -1,9 +1,9 @@
 package com.example.playlistmaker.domain.player
 
-import com.example.playlistmaker.util.consumer.Consumer
-import com.example.playlistmaker.domain.search.model.PlayerStatus
-import com.example.playlistmaker.util.Resource
+import com.example.playlistmaker.domain.player.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.util.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface PlayerInteractor {
     fun loadTrackData(
@@ -12,20 +12,18 @@ interface PlayerInteractor {
         onError: (String) -> Unit
     )
 
-    fun preparePlayer(
-        track: Track,
-        consumer: Consumer<PlayerStatus>
-    )
 
-    fun runPlayer(status: PlayerStatus): Resource<PlayerStatus>
+    fun preparePlayerSuspend(track: Track): Flow<PlayerStatus>
 
-    fun startPlayer(): Resource<PlayerStatus>
+    fun getPlayerStatus(): Flow<Boolean>
 
-    fun pausePlayer(): Resource<PlayerStatus>
+    fun startPlayer()
+
+    fun pausePlayer()
 
     fun getTimePlayer(): Resource<Int>
 
     fun clearPlayer()
 
-    fun setOnCompletionListener(consumer: Consumer<PlayerStatus>)
+    fun setOnCompletionListenerSuspend(): Flow<PlayerStatus>
 }

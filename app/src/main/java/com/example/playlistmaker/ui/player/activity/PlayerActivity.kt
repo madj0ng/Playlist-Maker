@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
-import com.example.playlistmaker.domain.search.model.PlayerStatus
+import com.example.playlistmaker.domain.player.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.models.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
@@ -54,14 +54,15 @@ class PlayerActivity : AppCompatActivity() {
         }*/
 
         // Подготовка плеера
-        viewModel.preparePlayer()
+//        viewModel.preparePlayer()
 
         // Событие завершения проигрывания трека
-        viewModel.onCompletePreparePlayer()
+//        viewModel.setOnCompletionListenerSuspend()
+//        viewModel.onCompletePreparePlayer()
 
         // Действие при нажатии на ibPlay
         binding.ibPlay.setOnClickListener {
-            viewModel.runPlayer()
+            viewModel.onPlayButtonClicked()
         }
 
         viewModel.observeScreenState().observe(this) {
@@ -72,9 +73,9 @@ class PlayerActivity : AppCompatActivity() {
             setPlayerStatus(it)
         }
 
-        viewModel.observeTrackTime().observe(this) {
-            setCurrentTrackTime(it)
-        }
+//        viewModel.observeTrackTime().observe(this) {
+//            setCurrentTrackTime(it)
+//        }
 
         viewModel.observeToastState().observe(this) {
             showToast(it)
@@ -83,26 +84,30 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun setPlayerStatus(status: PlayerStatus) {
         when (status) {
-            PlayerStatus.DEFAULT -> showPlayerDefault()
-            PlayerStatus.PREPARED -> showPlayerPrepared()
-            PlayerStatus.PLAYING -> showPlayerPlaying()
-            PlayerStatus.PAUSED -> showPlayerPaused()
+            is PlayerStatus.Default -> showPlayerDefault(status.progress)
+            is PlayerStatus.Prepared -> showPlayerPrepared(status.progress)
+            is PlayerStatus.Playing -> showPlayerPlaying(status.progress)
+            is PlayerStatus.Paused -> showPlayerPaused(status.progress)
         }
     }
 
-    private fun showPlayerPlaying() {
+    private fun showPlayerPlaying(time: Long) {
+        setCurrentTrackTime(time)
         binding.ibPlay.setImageResource(R.drawable.ic_stop)
     }
 
-    private fun showPlayerDefault() {
+    private fun showPlayerDefault(time: Long) {
+        setCurrentTrackTime(time)
         binding.ibPlay.setImageResource(R.drawable.ic_play)
     }
 
-    private fun showPlayerPrepared() {
+    private fun showPlayerPrepared(time: Long) {
+        setCurrentTrackTime(time)
         binding.ibPlay.setImageResource(R.drawable.ic_play)
     }
 
-    private fun showPlayerPaused() {
+    private fun showPlayerPaused(time: Long) {
+        setCurrentTrackTime(time)
         binding.ibPlay.setImageResource(R.drawable.ic_play)
     }
 
@@ -131,7 +136,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onPause()
 
         // Пауза
-        viewModel.pausePlayer()
+        viewModel.stopPlayer()
     }
 
     private fun showToast(message: String) {
