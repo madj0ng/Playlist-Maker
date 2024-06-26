@@ -48,17 +48,10 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel = getViewModel { parametersOf(trackString) }
 
-        /*// Нажатие иконки назад экрана Настройки
+        // Нажатие иконки назад
         binding.back.setOnClickListener {
-            super.finish()
-        }*/
-
-        // Подготовка плеера
-//        viewModel.preparePlayer()
-
-        // Событие завершения проигрывания трека
-//        viewModel.setOnCompletionListenerSuspend()
-//        viewModel.onCompletePreparePlayer()
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         // Действие при нажатии на ibPlay
         binding.ibPlay.setOnClickListener {
@@ -72,10 +65,6 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.observePlayerStatus().observe(this) {
             setPlayerStatus(it)
         }
-
-//        viewModel.observeTrackTime().observe(this) {
-//            setCurrentTrackTime(it)
-//        }
 
         viewModel.observeToastState().observe(this) {
             showToast(it)
