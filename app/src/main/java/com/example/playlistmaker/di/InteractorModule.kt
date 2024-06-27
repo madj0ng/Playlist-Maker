@@ -18,7 +18,7 @@ val interactorModule = module {
     //providePlayerIneractor
     factory<PlayerInteractor> {
         PlayerInteractorImpl(
-            mediaPlayerRepository = get(),
+            playerRepository = get(),
             trackRepository = get()
         )
     }
@@ -33,7 +33,6 @@ val interactorModule = module {
             searchRepository = get(),
             historyRepository = get(),
             trackRepository = get(),
-            executor = get(),
         )
     }
 

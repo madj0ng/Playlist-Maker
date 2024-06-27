@@ -1,18 +1,20 @@
 package com.example.playlistmaker.domain.player
 
-import com.example.playlistmaker.domain.search.model.PlayerStatus
+import com.example.playlistmaker.domain.player.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.Resource
-import com.example.playlistmaker.util.consumer.Consumer
+import kotlinx.coroutines.flow.Flow
 
 interface MediaPlayerRepository {
-    fun preparePlayer(track: Track): Resource<PlayerStatus>
+    fun preparePlayerSuspend(track: Track): Flow<Resource<PlayerStatus>>
 
-    fun startPlayer(): Resource<PlayerStatus>
+    fun getPlayerStatus(): Flow<Resource<Boolean>>
 
-    fun pausePlayer(): Resource<PlayerStatus>
+    fun startPlayer()
 
-    fun setCompletionListener(consumer: Consumer<PlayerStatus>)
+    fun pausePlayer()
+
+    fun setCompletionListenerSuspend(): Flow<Resource<PlayerStatus>>
 
     fun getTimePlayer(): Resource<Int>
 

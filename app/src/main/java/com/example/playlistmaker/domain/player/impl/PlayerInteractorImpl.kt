@@ -3,18 +3,16 @@ package com.example.playlistmaker.domain.player.impl
 import com.example.playlistmaker.domain.player.GetTrack
 import com.example.playlistmaker.domain.player.MediaPlayerRepository
 import com.example.playlistmaker.domain.player.PlayerInteractor
-import com.example.playlistmaker.domain.search.model.PlayerStatus
+import com.example.playlistmaker.domain.player.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.Resource
-import com.example.playlistmaker.util.consumer.Consumer
-import com.example.playlistmaker.util.consumer.ConsumerData
-import java.util.concurrent.Executors
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class PlayerInteractorImpl(
-    private val mediaPlayerRepository: MediaPlayerRepository,
+    private val playerRepository: MediaPlayerRepository,
     private val trackRepository: GetTrack
 ) : PlayerInteractor {
-    private val executor = Executors.newCachedThreadPool()
 
     override fun loadTrackData(
         trackStr: String?,
@@ -27,56 +25,61 @@ class PlayerInteractorImpl(
         }
     }
 
-    override fun preparePlayer(
-        track: Track,
-        consumer: Consumer<PlayerStatus>
-    ) {
-        executor.execute {
-            when (val playerStatus = mediaPlayerRepository.preparePlayer(track)) {
+    override fun preparePlayerSuspend(track: Track): Flow<PlayerStatus> {
+        return playerRepository.preparePlayerSuspend(track).map { result ->
+            when (result) {
                 is Resource.Success -> {
-                    consumer.consume(ConsumerData.Data(playerStatus.data))
+                    PlayerStatus.Prepared()
                 }
 
                 is Resource.Error -> {
-                    consumer.consume(ConsumerData.Data(PlayerStatus.DEFAULT))
+                    PlayerStatus.Default()
                 }
             }
         }
     }
 
-    override fun runPlayer(status: PlayerStatus): Resource<PlayerStatus> {
-        return when (status) {
-            PlayerStatus.DEFAULT -> {
-                Resource.Success(status)
-            }
+    override fun getPlayerStatus(): Flow<Boolean> {
+        return playerRepository.getPlayerStatus().map { result ->
+            when (result) {
+                is Resource.Success -> {
+                    result.data
+                }
 
-            PlayerStatus.PAUSED, PlayerStatus.PREPARED -> {
-                startPlayer()
-            }
-
-            PlayerStatus.PLAYING -> {
-                pausePlayer()
+                is Resource.Error -> {
+                    false
+                }
             }
         }
     }
 
-    override fun startPlayer(): Resource<PlayerStatus> {
-        return mediaPlayerRepository.startPlayer()
+    override fun startPlayer() {
+        playerRepository.startPlayer()
     }
 
-    override fun pausePlayer(): Resource<PlayerStatus> {
-        return mediaPlayerRepository.pausePlayer()
+    override fun pausePlayer() {
+        playerRepository.pausePlayer()
     }
 
-    override fun setOnCompletionListener(consumer: Consumer<PlayerStatus>) {
-        mediaPlayerRepository.setCompletionListener(consumer)
+    override fun setOnCompletionListenerSuspend(): Flow<PlayerStatus> {
+        return playerRepository.setCompletionListenerSuspend().map { result ->
+            when (result) {
+                is Resource.Success -> {
+                    PlayerStatus.Prepared()
+                }
+
+                is Resource.Error -> {
+                    PlayerStatus.Prepared()
+                }
+            }
+        }
     }
 
     override fun getTimePlayer(): Resource<Int> {
-        return mediaPlayerRepository.getTimePlayer()
+        return playerRepository.getTimePlayer()
     }
 
     override fun clearPlayer() {
-        mediaPlayerRepository.clearPlayer()
+        playerRepository.clearPlayer()
     }
 }

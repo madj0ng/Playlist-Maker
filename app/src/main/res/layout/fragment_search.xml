@@ -29,13 +29,6 @@
         app:layout_constraintGuide_begin="@dimen/dim_56dp" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/historyGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="historyGroupTitle, historyGroupButton" />
-
-    <androidx.constraintlayout.widget.Group
         android:id="@+id/errorGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,6 +85,73 @@
         app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toTopOf="@+id/inputEditText" />
 
+    <ScrollView
+        android:id="@+id/ScrollThisShit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="56dp"
+        android:orientation="vertical"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/historyGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:constraint_referenced_ids="historyGroupTitle, historyGroupButton" />
+
+            <TextView
+                android:id="@+id/historyGroupTitle"
+                style="@style/SearchHistoryTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16dp"
+                android:layout_marginBottom="@dimen/margin_12dp"
+                android:text="@string/history_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trackList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/minus_4dp"
+                android:layout_marginTop="@dimen/margin_16dp"
+                android:layout_marginEnd="@dimen/minus_4dp"
+                android:layout_weight="1"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/historyGroupButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/historyGroupTitle" />
+
+            <Button
+                android:id="@+id/historyGroupButton"
+                style="@style/ButtonBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/search_err_margin_vertical"
+                android:text="@string/history_clear_button"
+                android:visibility="visible"
+                app:cornerRadius="@dimen/search_err_button_radius"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/trackList" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
     <!--ProgressBar-->
     <ProgressBar
         android:id="@+id/progressBar"
@@ -111,12 +171,13 @@
         android:layout_width="@dimen/search_err_image_size"
         android:layout_height="@dimen/search_err_image_size"
         android:layout_gravity="center"
-        android:src="@drawable/error_find"
         android:layout_marginTop="@dimen/margin_16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/error_find"
+        app:layout_constraintBottom_toTopOf="@+id/tvError"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/inputEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tvError"
@@ -128,6 +189,7 @@
         android:layout_marginTop="@dimen/search_err_margin_vertical"
         android:layout_marginEnd="@dimen/search_err_margin_horizontal"
         android:text="@string/error_search_find"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/ivError" />
@@ -138,12 +200,13 @@
         android:layout_width="@dimen/search_err_image_size"
         android:layout_height="@dimen/search_err_image_size"
         android:layout_gravity="center"
-        android:src="@drawable/error_connect"
         android:layout_marginTop="@dimen/margin_16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/error_connect"
+        app:layout_constraintBottom_toTopOf="@+id/tvNotConnect"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/inputEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tvNotConnect"
@@ -169,47 +232,9 @@
         android:layout_marginTop="@dimen/search_err_margin_vertical"
         android:text="@string/sharing_update"
         app:cornerRadius="@dimen/search_err_button_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/tvNotConnect" />
-
-    <TextView
-        android:id="@+id/historyGroupTitle"
-        style="@style/SearchHistoryTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_16dp"
-        android:layout_marginBottom="@dimen/margin_12dp"
-        android:text="@string/history_title"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintStart_toEndOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/inputEditText" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trackList"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:visibility="visible"
-        android:layout_marginEnd="@dimen/minus_4dp"
-        android:layout_marginStart="@dimen/minus_4dp"
-        android:layout_marginTop="@dimen/margin_16dp"
-        app:layout_constraintBottom_toTopOf="@+id/historyGroupButton"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintStart_toEndOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/historyGroupTitle" />
-
-    <Button
-        android:id="@+id/historyGroupButton"
-        style="@style/ButtonBlack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/search_err_margin_vertical"
-        android:text="@string/history_clear_button"
-        app:cornerRadius="@dimen/search_err_button_radius"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintStart_toEndOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/trackList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

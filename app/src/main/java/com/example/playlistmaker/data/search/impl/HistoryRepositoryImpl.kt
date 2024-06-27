@@ -6,6 +6,8 @@ import com.example.playlistmaker.domain.search.HistoryRepository
 import com.example.playlistmaker.domain.search.SetTrack
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class HistoryRepositoryImpl(
     private val searchHistory: LocalStorage,
@@ -19,8 +21,8 @@ class HistoryRepositoryImpl(
         trackList.addAll(toTracksFromString(searchHistory.getHistory()))
     }
 
-    override fun getHistory(): Resource<ArrayList<Track>> {
-        return Resource.Success(this.trackList)
+    override fun getHistory(): Flow<Resource<ArrayList<Track>>> = flow {
+        emit(Resource.Success(trackList))
     }
 
     override fun setHistory(track: Track) {

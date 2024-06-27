@@ -1,22 +1,24 @@
 package com.example.playlistmaker.util
 
-import android.os.Handler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-object HandlerUtils {
-    private const val CLICK_DEBOUNCE_DELAY = 1000L
+object DebounceUtils {
+    const val CLICK_DEBOUNCE_DELAY = 1000L
     const val SEARCH_DEBOUNCE_DELAY = 2000L
     const val TIME_DEBOUNCE_DELAY = 300L
 
     private var isClickAllowed = true
 
-    fun clickDebounce(handler: Handler): Boolean {
+    fun clickDebounce(coroutineScope: CoroutineScope): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed(
-                { isClickAllowed = true },
-                CLICK_DEBOUNCE_DELAY
-            )
+            coroutineScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
