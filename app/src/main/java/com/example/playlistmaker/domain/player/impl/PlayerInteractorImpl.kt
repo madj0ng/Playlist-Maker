@@ -1,8 +1,7 @@
 package com.example.playlistmaker.domain.player.impl
 
-import com.example.playlistmaker.domain.player.GetTrack
-import com.example.playlistmaker.domain.player.MediaPlayerRepository
 import com.example.playlistmaker.domain.player.PlayerInteractor
+import com.example.playlistmaker.domain.player.PlayerRepository
 import com.example.playlistmaker.domain.player.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.Resource
@@ -10,18 +9,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PlayerInteractorImpl(
-    private val playerRepository: MediaPlayerRepository,
-    private val trackRepository: GetTrack
+    private val playerRepository: PlayerRepository,
 ) : PlayerInteractor {
 
-    override fun loadTrackData(
-        trackStr: String?,
-        onComplete: (Track) -> Unit,
-        onError: (String) -> Unit
-    ) {
-        val track = trackRepository.execute(trackStr)
-        if (track != null) {
-            onComplete.invoke(track)
+    override fun loadTrackData(trackId: Int): Flow<Pair<Track?, String?>> {
+        return playerRepository.getTrackById(trackId).map { result ->
+            when (result) {
+                is Resource.Error -> {
+                    Pair(null, result.message)
+                }
+
+                is Resource.Success -> {
+                    Pair(result.data, null)
+                }
+            }
         }
     }
 
@@ -37,6 +38,10 @@ class PlayerInteractorImpl(
                 }
             }
         }
+    }
+
+    override fun onFavouritePressed(track: Track): Flow<Boolean> {
+        return playerRepository.onFavouritePressed(track)
     }
 
     override fun getPlayerStatus(): Flow<Boolean> {

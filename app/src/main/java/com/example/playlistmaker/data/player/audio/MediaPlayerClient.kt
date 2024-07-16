@@ -11,7 +11,6 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
 class MediaPlayerClient(private var mediaPlayer: MediaPlayer) : PlayerClient {
-
     override suspend fun preparePlayerSuspend(playerRequest: PlayerRequest): PlayerResponse<PlayerStatusDto> {
         return withContext(Dispatchers.IO) {
             try {

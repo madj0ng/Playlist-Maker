@@ -25,6 +25,7 @@
     <string name="error_server">Ошибка сервера</string>
     <string name="error_playlist">Вы не создали\nни одного плейлиста</string>
     <string name="error_favourites">Ваша медиатека пуста</string>
+    <string name="error_find">Не удалось открыть приложение</string>
 
     <string name="history_title">Вы искали</string>
     <string name="history_clear_button">Очистить историю</string>

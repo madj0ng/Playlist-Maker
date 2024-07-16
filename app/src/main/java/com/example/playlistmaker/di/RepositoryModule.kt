@@ -1,22 +1,27 @@
+import com.example.playlistmaker.creator.TYPE_FAVOURITES
+import com.example.playlistmaker.creator.TYPE_HISTORY
+import com.example.playlistmaker.creator.TYPE_SEARCH
+import com.example.playlistmaker.data.converters.TrackDbConvertor
 import com.example.playlistmaker.data.media.favourites.FavouritesRepositoryImpl
 import com.example.playlistmaker.data.media.playlist.PlaylistRepositoryImpl
-import com.example.playlistmaker.data.player.impl.GetTrackFromString
-import com.example.playlistmaker.data.player.impl.MediaPlayerRepositoryImpl
+import com.example.playlistmaker.data.player.impl.GetTrackFromStringImpl
+import com.example.playlistmaker.data.player.impl.PlayerRepositoryImpl
 import com.example.playlistmaker.data.player.mapper.PlayerStatusMapper
 import com.example.playlistmaker.data.player.mapper.PlayerTimeMapper
 import com.example.playlistmaker.data.search.impl.HistoryRepositoryImpl
 import com.example.playlistmaker.data.search.impl.SearchRepositoryImpl
-import com.example.playlistmaker.data.search.impl.SetTrackToString
-import com.example.playlistmaker.data.search.mapper.TrackMapper
+import com.example.playlistmaker.data.search.impl.SetTrackToStringImpl
+import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
 import com.example.playlistmaker.domain.media.favourites.FavouritesRepository
 import com.example.playlistmaker.domain.media.playlist.PlaylistRepository
-import com.example.playlistmaker.domain.player.GetTrack
-import com.example.playlistmaker.domain.player.MediaPlayerRepository
+import com.example.playlistmaker.domain.player.GetTrackFromString
+import com.example.playlistmaker.domain.player.PlayerRepository
 import com.example.playlistmaker.domain.search.HistoryRepository
 import com.example.playlistmaker.domain.search.SearchRepository
-import com.example.playlistmaker.domain.search.SetTrack
+import com.example.playlistmaker.domain.search.SetTrackToString
 import com.example.playlistmaker.domain.settings.SettingsRepository
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -24,15 +29,16 @@ val repositoryModule = module {
     //getHistoryRepository
     single<HistoryRepository> {
         HistoryRepositoryImpl(
-            searchHistory = get(),
-            setTrackRepository = get(),
-            getTrackRepository = get()
+            trackMapper = get(),
+            getTracks = get(named(TYPE_HISTORY)),
+            setTrack = get(named(TYPE_HISTORY)),
+            deleteTracks = get(named(TYPE_HISTORY))
         )
     }
 
     //SearchRepositoryImpl
-    single<GetTrack> {
-        GetTrackFromString(gson = get())
+    single<GetTrackFromString<TrackDto>> {
+        GetTrackFromStringImpl(gson = get())
     }
 
     // getMediaPlayerRepository
@@ -44,29 +50,32 @@ val repositoryModule = module {
         PlayerStatusMapper
     }
 
-    factory<MediaPlayerRepository> {
-        MediaPlayerRepositoryImpl(
+    factory<PlayerRepository> { (trackDataType: String) ->
+        PlayerRepositoryImpl(
             playerClient = get(),
             playerTimeMapper = get(),
             playerStatusMapper = get(),
+            getTrackById = get(named(trackDataType)),
+            getFavouriteTrackById = get(named(TYPE_FAVOURITES)),
+            deleteFavouriteTracks = get(named(TYPE_FAVOURITES)),
+            setFavouriteTrack = get(named(TYPE_FAVOURITES)),
+            trackMapper = get(),
         )
     }
 
     //getSearchRepository
-    single<TrackMapper> {
-        TrackMapper
-    }
-
     single<SearchRepository> {
         SearchRepositoryImpl(
             networkClient = get(),
-            trackMapper = get()
+            trackMapper = get(),
+            getTracks = get(named(TYPE_SEARCH)),
+            setTracks = get(named(TYPE_SEARCH))
         )
     }
 
     //getTrackRepository
-    single<SetTrack> {
-        SetTrackToString(gson = get())
+    single<SetTrackToString<TrackDto>> {
+        SetTrackToStringImpl(gson = get())
     }
 
     // getSettingsRepository
@@ -76,11 +85,17 @@ val repositoryModule = module {
 
     // Favourites
     single<FavouritesRepository> {
-        FavouritesRepositoryImpl()
+        FavouritesRepositoryImpl(
+            trackSharedConvertor = get(),
+            getTracks = get(named(TYPE_FAVOURITES))
+        )
     }
 
     // Playlist
     single<PlaylistRepository> {
         PlaylistRepositoryImpl()
     }
+
+    // База данных
+    single { TrackDbConvertor() }
 }

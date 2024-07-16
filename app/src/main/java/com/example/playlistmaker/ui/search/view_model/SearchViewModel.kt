@@ -5,15 +5,20 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.creator.TYPE_HISTORY
+import com.example.playlistmaker.creator.TYPE_SEARCH
 import com.example.playlistmaker.domain.search.SearchInteractor
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.search.models.AdapterState
 import com.example.playlistmaker.ui.search.models.ClearIconState
 import com.example.playlistmaker.ui.search.models.SearchState
+import com.example.playlistmaker.ui.search.models.TrackTriggerState
 import com.example.playlistmaker.util.DebounceUtils
 import com.example.playlistmaker.util.DebounceUtils.SEARCH_DEBOUNCE_DELAY
+import com.example.playlistmaker.util.DebounceUtils.TIME_DEBOUNCE_EMPTY
 import com.example.playlistmaker.util.SingleLiveEvent
-import com.example.playlistmaker.util.debounce
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -22,7 +27,7 @@ class SearchViewModel(
     private val debounceUtils: DebounceUtils
 ) : AndroidViewModel(application) {
 
-    private var stateLiveData = MutableLiveData<SearchState>()
+    private var stateLiveData = MutableLiveData<SearchState>(SearchState.Loading)
     fun observeState(): LiveData<SearchState> = stateLiveData
 
     private var clearIconLiveData = MutableLiveData<ClearIconState>(ClearIconState.None())
@@ -31,26 +36,37 @@ class SearchViewModel(
     private var listLiveData = MutableLiveData<AdapterState>(AdapterState.Search())
     fun observelist(): LiveData<AdapterState> = listLiveData
 
-    private var showTrackTrigger = SingleLiveEvent<String>()
-    fun observeShowTrackTrigger(): LiveData<String> = showTrackTrigger
+    private var showTrackTrigger = SingleLiveEvent<TrackTriggerState>()
+    fun observeShowTrackTrigger(): LiveData<TrackTriggerState> = showTrackTrigger
 
     private var latestSearchText: String? = null
     private var hasEditTextFocus: Boolean? = null
 
-    // Формирование отложенной задачи поиска
-    private val searchRequestDebounce: (String) -> Unit = debounce(
-        SEARCH_DEBOUNCE_DELAY,
-        viewModelScope,
-        true,
-    ) { newSearchText -> searchRequest(newSearchText) }
-
+    //    // Формирование отложенной задачи поиска
+    private var requestDebounce: Job? = null
 
     fun onDestroy() {
-        searchInteractor.saveHistory()
+//        searchInteractor.saveHistory()
+        requestDebounce?.cancel()
     }
 
-    fun startActiviryPlayer(track: Track) {
-        showTrackTrigger.postValue(searchInteractor.setTrack(track))
+    fun startActivityPlayer(track: Track, fromType: String) {
+        val state = when (fromType) {
+            TYPE_SEARCH -> startPlayerFromSearch(track)
+
+            TYPE_HISTORY -> startPlayerFromHistory(track)
+            else -> TrackTriggerState.Empty(0)
+        }
+        showTrackTrigger.postValue(state)
+    }
+
+    private fun startPlayerFromSearch(track: Track): TrackTriggerState {
+        setHistory(track)
+        return TrackTriggerState.Search(track.trackId)
+    }
+
+    private fun startPlayerFromHistory(track: Track): TrackTriggerState {
+        return TrackTriggerState.History(track.trackId)
     }
 
     fun changeEditText(
@@ -68,7 +84,9 @@ class SearchViewModel(
             } else {
                 // Список найденных треков
                 renderClearIcon(ClearIconState.Show())
-                searchRequestDebounce(changedText)
+
+                searchDebounce(changedText, SEARCH_DEBOUNCE_DELAY)
+//                searchRequestDebounce(changedText)
             }
         } else {
             return
@@ -86,8 +104,10 @@ class SearchViewModel(
     }
 
     // Методы для работы со списком истории просмотренных треков
-    fun setHistory(track: Track) {
-        searchInteractor.setHistory(track)
+    private fun setHistory(track: Track) {
+        viewModelScope.launch {
+            searchInteractor.setHistory(track)
+        }
     }
 
     private fun getHistory() {
@@ -127,7 +147,15 @@ class SearchViewModel(
     // Повторное выполнение задачи поиска через CLICK_DEBOUNCE_DELAY
     fun search() {
         if (debounceUtils.clickDebounce(viewModelScope)) {
-            searchRequest(this.latestSearchText ?: "")
+            searchDebounce(this.latestSearchText ?: "", TIME_DEBOUNCE_EMPTY)
+        }
+    }
+
+    private fun searchDebounce(changedText: String, delayTime: Long) {
+        requestDebounce?.cancel()
+        requestDebounce = viewModelScope.launch {
+            delay(delayTime)
+            searchRequest(changedText)
         }
     }
 
@@ -174,7 +202,10 @@ class SearchViewModel(
         if (debounceUtils.clickDebounce(viewModelScope)) {
             renderList(AdapterState.History(listOf()))
             renderState(SearchState.Search)
-            searchInteractor.clearHistory()
+            viewModelScope.launch {
+                searchInteractor.clearHistory()
+            }
+
         }
     }
 
@@ -182,7 +213,7 @@ class SearchViewModel(
         if (debounceUtils.clickDebounce(viewModelScope)) {
             renderClearIcon(ClearIconState.None())
             renderList(AdapterState.Search(listOf()))
-            getHistory()
+            requestDebounce?.cancel()
         }
     }
 

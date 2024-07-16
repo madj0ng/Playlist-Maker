@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -45,11 +46,11 @@ val viewModelModule = module {
     }
 
     // Player
-    viewModel { (trackString: String?) ->
+    viewModel { (trackId: Int, trackDataType: String) ->
         PlayerViewModel(
             application = androidApplication(),
-            trackString = trackString,
-            playerInteractor = get(),
+            trackId = trackId,
+            playerInteractor = get { parametersOf(trackDataType) },
         )
     }
 
@@ -58,7 +59,7 @@ val viewModelModule = module {
         SettingsViewModel(
             application = androidApplication(),
             sharingInteractor = get(),
-            settingsInteractor = get(),
+            settingsInteractor = get()
         )
     }
 

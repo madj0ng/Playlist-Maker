@@ -20,7 +20,6 @@ class SearchAdapter(
             clickListener = clickListener,
             formatUtils = FormatUtils
         )
-//        return getKoin().get { parametersOf(parent, clickListener) }
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {

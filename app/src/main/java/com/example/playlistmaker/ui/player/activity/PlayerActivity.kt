@@ -23,12 +23,16 @@ class PlayerActivity : AppCompatActivity() {
         // Округление в пикселях
         const val IMG_RADIUS_PX = 8F
         const val TRACK_KEY = "track_key"
+        const val TRACK_DATA_TYPE = "track_data_type"
 
         // Начальное значение трека
         const val TRACK_START_TIME = 0L
 
-        fun createArgs(trackString: String): Bundle =
-            bundleOf(TRACK_KEY to trackString)
+        fun createArgs(trackId: Int, trackDataType: String): Bundle =
+            bundleOf(
+                TRACK_KEY to trackId,
+                TRACK_DATA_TYPE to trackDataType
+            )
     }
 
     private lateinit var viewModel: PlayerViewModel
@@ -44,9 +48,10 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Распаковываем переданный класс
-        val trackString = intent.getStringExtra(TRACK_KEY) ?: ""
+        val trackId = intent.getIntExtra(TRACK_KEY, 0)
+        val trackDataType = intent.getStringExtra(TRACK_DATA_TYPE) ?: ""
 
-        viewModel = getViewModel { parametersOf(trackString) }
+        viewModel = getViewModel { parametersOf(trackId, trackDataType) }
 
         // Нажатие иконки назад
         binding.back.setOnClickListener {
@@ -56,6 +61,11 @@ class PlayerActivity : AppCompatActivity() {
         // Действие при нажатии на ibPlay
         binding.ibPlay.setOnClickListener {
             viewModel.onPlayButtonClicked()
+        }
+
+        // Действие при нажатии на понравившиеся
+        binding.ibFavourite.setOnClickListener {
+            viewModel.onFavouriteButtonClicked()
         }
 
         viewModel.observeScreenState().observe(this) {
@@ -68,6 +78,9 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel.observeToastState().observe(this) {
             showToast(it)
+        }
+        viewModel.observeFavourite().observe(this) {
+            setFavoutite(it)
         }
     }
 
@@ -133,13 +146,20 @@ class PlayerActivity : AppCompatActivity() {
         onBackPressedDispatcher.onBackPressed()
     }
 
+    private fun setFavoutite(isFavourite: Boolean) {
+        if (isFavourite) {
+            binding.ibFavourite.setImageResource(R.drawable.ic_is_liked)
+        } else {
+            binding.ibFavourite.setImageResource(R.drawable.ic_add_liked)
+        }
+    }
+
     private fun setCurrentTrackTime(time: Long) {
         binding.playTime.text = formatUtils.formatLongToTrakTime(time)
     }
 
     private fun fillImage() {
         binding.playlistAdd.setImageResource(R.drawable.ic_add_playlist)
-        binding.likedAdd.setImageResource(R.drawable.ic_add_liked)
     }
 
     private fun fillTrack(track: Track) {

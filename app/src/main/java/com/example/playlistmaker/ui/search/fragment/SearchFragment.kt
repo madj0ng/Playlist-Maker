@@ -15,12 +15,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.TYPE_HISTORY
+import com.example.playlistmaker.creator.TYPE_SEARCH
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.models.AdapterState
 import com.example.playlistmaker.ui.search.models.ClearIconState
 import com.example.playlistmaker.ui.search.models.SearchState
+import com.example.playlistmaker.ui.search.models.TrackTriggerState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.example.playlistmaker.util.DebounceUtils.CLICK_DEBOUNCE_DELAY
 import com.example.playlistmaker.util.debounce
@@ -59,19 +62,18 @@ class SearchFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope,
             true
         ) { track ->
-            viewModel.startActiviryPlayer(track)
+            viewModel.startActivityPlayer(track, TYPE_SEARCH)
         }
-        historyAdapter = SearchAdapter { track -> onSearchTrackClickDebounce(track) }
+        tracksAdapter = SearchAdapter { track -> onSearchTrackClickDebounce(track) }
 
         onHistoryTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
             true
         ) { track ->
-            viewModel.setHistory(track)
-            viewModel.startActiviryPlayer(track)
+            viewModel.startActivityPlayer(track, TYPE_HISTORY)
         }
-        tracksAdapter = SearchAdapter { track -> onHistoryTrackClickDebounce(track) }
+        historyAdapter = SearchAdapter { track -> onHistoryTrackClickDebounce(track) }
 
         // Список
         binding.trackList.layoutManager =
@@ -251,10 +253,24 @@ class SearchFragment : Fragment() {
         binding.inputEditText.text = null
     }
 
-    private fun showTrackDetails(trackString: String) {
+    private fun showTrackDetails(state: TrackTriggerState) {
+        when (state) {
+            is TrackTriggerState.History -> {
+                navigateToDetails(state.trackId, state.dataType)
+            }
+
+            is TrackTriggerState.Search -> {
+                navigateToDetails(state.trackId, state.dataType)
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun navigateToDetails(trackId: Int, trackDataType: String) {
         findNavController().navigate(
             R.id.action_searchFragment_to_playerActivity,
-            PlayerActivity.createArgs(trackString)
+            PlayerActivity.createArgs(trackId, trackDataType)
         )
     }
 }
