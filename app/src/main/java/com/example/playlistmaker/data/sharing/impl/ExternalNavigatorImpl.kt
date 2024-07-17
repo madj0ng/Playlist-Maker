@@ -64,7 +64,7 @@ class ExternalNavigatorImpl(
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         } catch (err: Exception) {
-//            val message = context.getString(R.string.error_find)
+            val message = context.getString(R.string.error_find)
         }
     }
 }

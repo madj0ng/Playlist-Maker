@@ -6,14 +6,11 @@ import com.example.playlistmaker.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface PlayerInteractor {
-    fun loadTrackData(
-        trackStr: String?,
-        onComplete: (Track) -> Unit,
-        onError: (String) -> Unit
-    )
-
+    fun loadTrackData(trackId: Int): Flow<Pair<Track?, String?>>
 
     fun preparePlayerSuspend(track: Track): Flow<PlayerStatus>
+
+    fun onFavouritePressed(track: Track): Flow<Boolean>
 
     fun getPlayerStatus(): Flow<Boolean>
 

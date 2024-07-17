@@ -138,7 +138,7 @@
         app:srcCompat="@drawable/ic_play" />
 
     <ImageButton
-        android:id="@+id/likedAdd"
+        android:id="@+id/ibFavourite"
         style="@style/PlayerTrackActionButton"
         android:layout_width="@dimen/size_52dp"
         android:layout_height="@dimen/size_52dp"

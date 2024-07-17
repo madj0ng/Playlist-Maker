@@ -19,30 +19,26 @@ import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     application: Application,
-    trackString: String?,
+    trackId: Int,
     private val playerInteractor: PlayerInteractor,
 ) : AndroidViewModel(application) {
 
     private val screenLiveData = MutableLiveData<PlayerState>(PlayerState.Loading)
     private val statusLiveData = MutableLiveData<PlayerStatus>(PlayerStatus.Default())
+    private val favouriteLiveData = MutableLiveData(false)
     private val toastLiveData = SingleLiveEvent<String>()
 
     private var timerJob: Job? = null
     private var onCompletionListenerJob: Job? = null
 
     init {
-        playerInteractor.loadTrackData(
-            trackStr = trackString,
-            onComplete = { track ->
-                this.track = track
-                renderState(PlayerState.Content(track))
-            },
-            onError = {
-                showToast(it)
-            }
-        )
-
-        initMediaPlayer(this.track)
+        viewModelScope.launch {
+            playerInteractor
+                .loadTrackData(trackId)
+                .collect { pair ->
+                    loadResult(pair.first, pair.second)
+                }
+        }
     }
 
     private lateinit var track: Track
@@ -50,9 +46,26 @@ class PlayerViewModel(
     fun observeScreenState(): LiveData<PlayerState> = screenLiveData
     fun observePlayerStatus(): LiveData<PlayerStatus> = statusLiveData
     fun observeToastState(): LiveData<String> = toastLiveData
+    fun observeFavourite(): LiveData<Boolean> = favouriteLiveData
+
+    private fun loadResult(track: Track?, errorMessage: String?) {
+        if (track != null) {
+            this.track = track
+
+            renderState(PlayerState.Content(track))
+            renderFavourite(track.isFavourite)
+
+            // Подготовка плеера
+            initMediaPlayer(track)
+        }
+
+        if (errorMessage != null) {
+            showToast(errorMessage)
+        }
+    }
 
     // Подготовка плеера
-    fun initMediaPlayer(track: Track) {
+    private fun initMediaPlayer(track: Track) {
         // Подготовка плеера
         viewModelScope.launch {
             playerInteractor
@@ -72,6 +85,16 @@ class PlayerViewModel(
             }
 
             else -> {}
+        }
+    }
+
+    fun onFavouriteButtonClicked() {
+        viewModelScope.launch {
+            playerInteractor
+                .onFavouritePressed(track)
+                .collect {
+                    renderFavourite(it)
+                }
         }
     }
 
@@ -156,6 +179,10 @@ class PlayerViewModel(
 
     private fun renderState(state: PlayerState) {
         screenLiveData.postValue(state)
+    }
+
+    private fun renderFavourite(isFavourite: Boolean) {
+        favouriteLiveData.postValue(isFavourite)
     }
 
     override fun onCleared() {
