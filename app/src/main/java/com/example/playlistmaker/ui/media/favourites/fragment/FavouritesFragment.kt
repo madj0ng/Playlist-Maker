@@ -97,9 +97,11 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun showContent(trackList: List<Track>) {
-        binding.progressBar.visibility = View.GONE
-        binding.favourites.visibility = View.VISIBLE
-        binding.errorGroup.visibility = View.GONE
+        with(binding) {
+                progressBar.visibility = View.GONE
+               favourites.visibility = View.VISIBLE
+                errorGroup.visibility = View.GONE
+                ...
         favouriteAdapter.setList(trackList)
         binding.favourites.adapter = favouriteAdapter
         favouriteAdapter.notifyDataSetChanged()
