@@ -1,5 +1,5 @@
 package com.example.playlistmaker.data.storage
 
-interface GetTracks<T> {
+interface GetItems<T> {
     suspend fun get(): List<T>
 }

@@ -7,6 +7,7 @@ import com.example.playlistmaker.creator.SEARCH_PREFERENCES
 import com.example.playlistmaker.creator.TYPE_FAVOURITES
 import com.example.playlistmaker.creator.TYPE_HISTORY
 import com.example.playlistmaker.creator.TYPE_SEARCH
+import com.example.playlistmaker.data.converters.FavouriteTrackDbConvertor
 import com.example.playlistmaker.data.player.PlayerClient
 import com.example.playlistmaker.data.player.audio.MediaPlayerClient
 import com.example.playlistmaker.data.search.NetworkClient
@@ -17,18 +18,22 @@ import com.example.playlistmaker.data.sharing.ExternalNavigator
 import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
 import com.example.playlistmaker.data.storage.DeleteTrack
 import com.example.playlistmaker.data.storage.DeleteTracks
+import com.example.playlistmaker.data.storage.GetItems
 import com.example.playlistmaker.data.storage.GetTrackById
-import com.example.playlistmaker.data.storage.GetTracks
-import com.example.playlistmaker.data.storage.SetTrack
+import com.example.playlistmaker.data.storage.SetItem
 import com.example.playlistmaker.data.storage.SetTracks
 import com.example.playlistmaker.data.storage.db.AppDatabase
+import com.example.playlistmaker.data.storage.db.DataOfAlbum
 import com.example.playlistmaker.data.storage.db.DataOfFavourites
+import com.example.playlistmaker.data.storage.db.DataOfTrack
 import com.example.playlistmaker.data.storage.empty.DataOfEmpty
+import com.example.playlistmaker.data.storage.file.DataOfFile
 import com.example.playlistmaker.data.storage.memory.DataOfSearch
 import com.example.playlistmaker.data.storage.sharedpref.DataOfHistory
 import com.example.playlistmaker.data.storage.sharedpref.LocalStoreImpl
 import com.example.playlistmaker.data.storage.sharedpref.dao.LocalStorage
 import com.google.gson.Gson
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.binds
@@ -108,7 +113,7 @@ val dataModule = module {
     single(named(TYPE_SEARCH)) {
         DataOfSearch()
     } binds (arrayOf(
-        GetTracks::class,
+        GetItems::class,
         SetTracks::class,
         GetTrackById::class,
         DeleteTracks::class
@@ -121,8 +126,8 @@ val dataModule = module {
             getTrackFromString = get()
         )
     } binds (arrayOf(
-        GetTracks::class,
-        SetTrack::class,
+        GetItems::class,
+        SetItem::class,
         GetTrackById::class,
         DeleteTracks::class
     ))
@@ -133,11 +138,29 @@ val dataModule = module {
             trackDbConvertor = get()
         )
     } binds (arrayOf(
-        GetTracks::class,
-        SetTrack::class,
+        GetItems::class,
+        SetItem::class,
         GetTrackById::class,
         DeleteTrack::class
     ))
+
+    factory {
+        DataOfAlbum(
+            appDatabase = get(),
+            albumModelConverter = get()
+        )
+    }
+
+    factory {
+        DataOfFile(
+            application = androidApplication(),
+        )
+    }
+
+    // База данных
+    single {
+        FavouriteTrackDbConvertor()
+    }
 
     single(named("")) {
         DataOfEmpty()
@@ -146,6 +169,13 @@ val dataModule = module {
     single<LocalStorage> {
         LocalStoreImpl(
             sharedPreferences = get(named(SEARCH_PREFERENCES)),
+        )
+    }
+
+    single {
+        DataOfTrack(
+            appDatabase = get(),
+            trackDbConvertor = get()
         )
     }
 }

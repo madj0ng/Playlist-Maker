@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackViewBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.FormatUtils
+import org.koin.android.ext.android.getKoin
+import org.koin.java.KoinJavaComponent.getKoin
 
 class FavouritesAdapter(
     private val clickListener: FavouritesClickListener
@@ -23,7 +25,7 @@ class FavouritesAdapter(
         return FavouritesViewHolder(
             binding = binding,
             clickListener = clickListener,
-            formatUtils = FormatUtils
+            formatUtils = getKoin().get() //FormatUtils
         )
     }
     override fun getItemCount() = tracks.size

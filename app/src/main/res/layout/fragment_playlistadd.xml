@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_playlistadd"
+    tools:context=".ui.playlistadd.fragment.PlaylistAddFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/header_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/dim_56dp" />
+
+    <ImageButton
+        android:id="@+id/ibBack"
+        style="@style/TitleImage"
+        android:layout_width="@dimen/title_image_height"
+        android:layout_height="@dimen/title_image_height"
+        android:layout_marginStart="@dimen/minus_12dp"
+        android:padding="@dimen/margin_24dp"
+        android:src="@drawable/icon_back"
+        app:layout_constraintBottom_toTopOf="@+id/header_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/TitleText"
+        android:layout_marginStart="@dimen/margin_12dp"
+        android:text="@string/playlistadd_title"
+        app:layout_constraintBottom_toTopOf="@+id/header_guideline"
+        app:layout_constraintStart_toEndOf="@+id/ibBack"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivAlbumIcon"
+        style="@style/PlayerTrackImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_24dp"
+        android:layout_marginEnd="@dimen/margin_8dp"
+        android:src="@drawable/ic_add_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/ivAlbum"
+        app:layout_constraintEnd_toEndOf="@+id/ivAlbum"
+        app:layout_constraintStart_toStartOf="@+id/ivAlbum"
+        app:layout_constraintTop_toTopOf="@+id/ivAlbum"
+        app:srcCompat="@drawable/ic_add_photo" />
+
+    <ImageView
+        android:id="@+id/ivAlbum"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_24dp"
+        android:layout_marginEnd="@dimen/margin_8dp"
+        android:background="@drawable/sh_album_image"
+        app:layout_constraintBottom_toTopOf="@+id/etName"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/header_guideline" />
+
+    <EditText
+        android:id="@+id/etName"
+        style="@style/AlbumEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dim_56dp"
+        android:layout_marginTop="@dimen/margin_32dp"
+        android:hint="@string/playlistadd_name"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"
+        android:background="@drawable/sh_input_outfocus"
+        app:layout_constraintBottom_toTopOf="@+id/etDescription"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/ivAlbum" />
+
+    <TextView
+        android:id="@+id/tvUpName"
+        style="@style/AlbumHintText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:padding="@dimen/margin_4dp"
+        android:text="@string/playlistadd_name"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/etName"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/etName" />
+
+    <EditText
+        android:id="@+id/etDescription"
+        style="@style/AlbumEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dim_56dp"
+        android:layout_marginTop="@dimen/margin_16dp"
+        android:hint="@string/playlistadd_description"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"
+        android:background="@drawable/sh_input_outfocus"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/etName" />
+
+    <TextView
+        android:id="@+id/tvUpDescription"
+        style="@style/AlbumHintText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:padding="@dimen/margin_4dp"
+        android:text="@string/playlistadd_description"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/etDescription"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/etDescription" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/acbCreate"
+        style="@style/AlbumAddButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginBottom="@dimen/margin_32dp"
+        android:text="@string/playlistadd_create"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/etDescription"
+        app:layout_constraintVertical_bias="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

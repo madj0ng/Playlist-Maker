@@ -57,10 +57,7 @@
         android:autofillHints="no"
         android:hint="@string/activity_search"
         android:imeOptions="actionDone"
-        android:paddingLeft="@dimen/search_input_padding"
-        android:paddingTop="@dimen/search_input_padding"
-        android:paddingRight="@dimen/search_input_padding"
-        android:paddingBottom="@dimen/search_input_padding"
+        android:padding="@dimen/search_input_padding"
         android:singleLine="true"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/left_guideline"
@@ -86,10 +83,10 @@
         app:layout_constraintTop_toTopOf="@+id/inputEditText" />
 
     <ScrollView
-        android:id="@+id/ScrollThisShit"
+        android:id="@+id/svList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="@dimen/dim_56dp"
         android:orientation="vertical"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"

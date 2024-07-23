@@ -46,8 +46,7 @@ class SearchViewModel(
     private var requestDebounce: Job? = null
 
     fun onDestroy() {
-//        searchInteractor.saveHistory()
-        requestDebounce?.cancel()
+//        requestDebounce?.cancel()
     }
 
     fun startActivityPlayer(track: Track, fromType: String) {

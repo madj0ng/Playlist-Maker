@@ -45,13 +45,7 @@ class SearchInteractorImpl(
         historyRepository.setHistory(track)
     }
 
-//    override fun saveHistory() {
-//        historyRepository.saveHistory()
-//    }
-
     override suspend fun clearHistory() {
         historyRepository.clearHistory()
     }
-
-//    override fun setTrack(track: Track): String = trackRepository.execute(track)
 }

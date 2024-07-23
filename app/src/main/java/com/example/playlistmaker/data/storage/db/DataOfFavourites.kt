@@ -1,20 +1,20 @@
 package com.example.playlistmaker.data.storage.db
 
-import com.example.playlistmaker.data.converters.TrackDbConvertor
+import com.example.playlistmaker.data.converters.FavouriteTrackDbConvertor
 import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.storage.DeleteTrack
+import com.example.playlistmaker.data.storage.GetItems
 import com.example.playlistmaker.data.storage.GetTrackById
-import com.example.playlistmaker.data.storage.GetTracks
-import com.example.playlistmaker.data.storage.SetTrack
+import com.example.playlistmaker.data.storage.SetItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 class DataOfFavourites(
     private val appDatabase: AppDatabase,
-    private val trackDbConvertor: TrackDbConvertor,
-) : GetTracks<TrackDto>,
-    SetTrack<TrackDto>,
+    private val trackDbConvertor: FavouriteTrackDbConvertor,
+) : GetItems<TrackDto>,
+    SetItem<TrackDto, Unit>,
     GetTrackById<TrackDto>,
     DeleteTrack<TrackDto> {
 
@@ -36,11 +36,11 @@ class DataOfFavourites(
         }
     }
 
-    override suspend fun set(track: TrackDto) {
-        appDatabase.favoriteTrackDao().insertFavorite(trackDbConvertor.map(track))
+    override suspend fun set(item: TrackDto) {
+        appDatabase.favoriteTrackDao().insertFavorite(trackDbConvertor.map(item))
     }
 
-    override suspend fun del(track: TrackDto) {
+    override suspend fun delete(track: TrackDto) {
         appDatabase.favoriteTrackDao().deleteFavorite(trackDbConvertor.map(track))
     }
 }

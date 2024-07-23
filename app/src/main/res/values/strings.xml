@@ -43,4 +43,20 @@
     <string name="media_playlist_new">Новый плейлист</string>
     <string name="media_tab_playlist">Плейлисты</string>
     <string name="media_tab_favourites">Избранные треки</string>
+
+    <string name="playlist_item">треков</string>
+    <string name="playlist_count_zero">0</string>
+
+    <string name="playlistadd_title">Новый плейлист</string>
+    <string name="playlistadd_name">Название*</string>
+    <string name="playlistadd_description">Описание</string>
+    <string name="playlistadd_create">Создать</string>
+    <string name="playlistadd_dialog_title">Сохранить изменения?</string>
+    <string name="playlistadd_dialog_cancel">Отмена</string>
+    <string name="playlistadd_dialog_close">Завершить</string>
+    <string name="playlistadd_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="playlistadd_create_success">Плейлист %1 создан</string>
+    <string name="playlistadd_bottom_sheet_title">Добавить в плейлист</string>
+    <string name="playlistadd_add_track">Добавлено в плейлист %1</string>
+    <string name="playlistadd_also_add_track">Трек уже добавлен в плейлист %1</string>
 </resources>

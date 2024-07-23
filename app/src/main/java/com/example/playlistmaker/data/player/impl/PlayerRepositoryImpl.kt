@@ -9,7 +9,7 @@ import com.example.playlistmaker.data.search.model.PlayerResponse
 import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.storage.DeleteTrack
 import com.example.playlistmaker.data.storage.GetTrackById
-import com.example.playlistmaker.data.storage.SetTrack
+import com.example.playlistmaker.data.storage.SetItem
 import com.example.playlistmaker.domain.player.PlayerRepository
 import com.example.playlistmaker.domain.player.model.PlayerStatus
 import com.example.playlistmaker.domain.search.model.Track
@@ -24,7 +24,7 @@ class PlayerRepositoryImpl(
     private val getTrackById: GetTrackById<TrackDto>,
     private val getFavouriteTrackById: GetTrackById<TrackDto>,
     private val deleteFavouriteTracks: DeleteTrack<TrackDto>,
-    private val setFavouriteTrack: SetTrack<TrackDto>,
+    private val setFavouriteTrack: SetItem<TrackDto, Unit>,
     private val trackMapper: TrackSharedConvertor,
 ) : PlayerRepository {
 
@@ -39,7 +39,7 @@ class PlayerRepositoryImpl(
 
     override fun onFavouritePressed(track: Track): Flow<Boolean> = flow {
         if (track.isFavourite) {
-            deleteFavouriteTracks.del(trackMapper.map(track))
+            deleteFavouriteTracks.delete(trackMapper.map(track))
         } else {
             setFavouriteTrack.set(trackMapper.map(track))
         }

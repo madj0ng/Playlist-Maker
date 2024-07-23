@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                tools:text="Имя исполнителя:Имя исполнителя::Имя исполнителя:" />
+                tools:text="Имя исполнителя:Имя исполнителя::Имя исполнителя:sassa" />
 
             <ImageView
                 style="@style/SearchTextSeparator"

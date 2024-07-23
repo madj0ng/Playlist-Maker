@@ -2,10 +2,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.example.playlistmaker.R
+import com.example.playlistmaker.data.converters.AlbumModelConverter
 import com.example.playlistmaker.ui.media.favourites.view_model.FavouritesViewModel
 import com.example.playlistmaker.ui.media.fragment.MediaPagerAdapter
 import com.example.playlistmaker.ui.media.playlist.view_model.PlaylistViewModel
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
+import com.example.playlistmaker.ui.playlistadd.view_model.PlaylistAddViewModel
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
 import com.google.android.material.tabs.TabLayout
@@ -51,6 +53,7 @@ val viewModelModule = module {
             application = androidApplication(),
             trackId = trackId,
             playerInteractor = get { parametersOf(trackDataType) },
+            playlistInteractor = get()
         )
     }
 
@@ -72,5 +75,14 @@ val viewModelModule = module {
     // Favourites
     viewModel {
         FavouritesViewModel(favouritesInteractor = get())
+    }
+
+    // AddAlbum
+    viewModel {
+        PlaylistAddViewModel(
+            application = androidApplication(),
+            playlistAddInteractor = get(),
+            albumModelConverter = get()
+        )
     }
 }
