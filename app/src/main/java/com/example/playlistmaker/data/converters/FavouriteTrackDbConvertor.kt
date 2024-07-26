@@ -3,7 +3,7 @@ package com.example.playlistmaker.data.converters
 import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.storage.db.entity.FavouriteTrackEntity
 
-class TrackDbConvertor {
+class FavouriteTrackDbConvertor {
 
     fun map(track: TrackDto): FavouriteTrackEntity {
         return FavouriteTrackEntity(

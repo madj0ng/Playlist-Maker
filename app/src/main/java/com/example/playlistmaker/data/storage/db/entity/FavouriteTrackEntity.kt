@@ -18,7 +18,7 @@ data class FavouriteTrackEntity(
     val primaryGenreName: String,   // Жанр трека
     val country: String,            // Страна исполнителя
     val previewUrl: String?,        // Ссылка на отрывок трека
-    var reservationDate: Long
+    val reservationDate: Long
 ) {
     companion object {
         fun setReservationDate(): Long = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)

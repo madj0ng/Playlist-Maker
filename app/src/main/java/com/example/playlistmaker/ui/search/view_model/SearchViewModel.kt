@@ -45,11 +45,6 @@ class SearchViewModel(
     //    // Формирование отложенной задачи поиска
     private var requestDebounce: Job? = null
 
-    fun onDestroy() {
-//        searchInteractor.saveHistory()
-        requestDebounce?.cancel()
-    }
-
     fun startActivityPlayer(track: Track, fromType: String) {
         val state = when (fromType) {
             TYPE_SEARCH -> startPlayerFromSearch(track)

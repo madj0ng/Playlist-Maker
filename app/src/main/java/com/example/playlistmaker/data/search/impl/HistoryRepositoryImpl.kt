@@ -3,8 +3,8 @@ package com.example.playlistmaker.data.search.impl
 import com.example.playlistmaker.data.converters.TrackSharedConvertor
 import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.storage.DeleteTracks
-import com.example.playlistmaker.data.storage.GetTracks
-import com.example.playlistmaker.data.storage.SetTrack
+import com.example.playlistmaker.data.storage.GetItems
+import com.example.playlistmaker.data.storage.SetItem
 import com.example.playlistmaker.domain.search.HistoryRepository
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.util.Resource
@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.flow
 
 class HistoryRepositoryImpl(
     private val trackMapper: TrackSharedConvertor,
-    private val getTracks: GetTracks<TrackDto>,
-    private val setTrack: SetTrack<TrackDto>,
+    private val getTracks: GetItems<TrackDto>,
+    private val setTrack: SetItem<TrackDto,Unit>,
     private val deleteTracks: DeleteTracks,
 ) : HistoryRepository {
 
@@ -28,6 +28,6 @@ class HistoryRepositoryImpl(
     }
 
     override suspend fun clearHistory() {
-        deleteTracks.del()
+        deleteTracks.delete()
     }
 }

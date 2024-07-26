@@ -11,7 +11,7 @@ import com.example.playlistmaker.util.FormatUtils
 class FavouritesViewHolder(
     private val binding: TrackViewBinding,
     private val clickListener: FavouritesAdapter.FavouritesClickListener,
-    formatUtils: FormatUtils
+    private val formatUtils: FormatUtils
 ) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
@@ -25,7 +25,7 @@ class FavouritesViewHolder(
     fun bind(track: Track) {
         binding.trackName.text = track.trackName
         binding.artistName.text = track.artistName
-        binding.trackTime.text = FormatUtils.formatLongToTrakTime(track.trackTimeMillis)
+        binding.trackTime.text = formatUtils.formatLongToTrakTime(track.trackTimeMillis)
 
         Glide.with(itemView)
             .load(track.artworkUrl100)

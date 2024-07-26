@@ -3,11 +3,11 @@ package com.example.playlistmaker.data.storage.memory
 import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.storage.DeleteTracks
 import com.example.playlistmaker.data.storage.GetTrackById
-import com.example.playlistmaker.data.storage.GetTracks
+import com.example.playlistmaker.data.storage.GetItems
 import com.example.playlistmaker.data.storage.SetTracks
 
 class DataOfSearch :
-    GetTracks<TrackDto>,
+    GetItems<TrackDto>,
     SetTracks<TrackDto>,
     GetTrackById<TrackDto>,
     DeleteTracks {
@@ -22,11 +22,11 @@ class DataOfSearch :
     }
 
     override suspend fun set(tracks: List<TrackDto>) {
-        this.del()
+        this.delete()
         this.trackList.addAll(tracks)
     }
 
-    override suspend fun del() {
+    override suspend fun delete() {
         trackList.clear()
     }
 }

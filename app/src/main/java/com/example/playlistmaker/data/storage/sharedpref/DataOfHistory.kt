@@ -3,8 +3,8 @@ package com.example.playlistmaker.data.storage.sharedpref
 import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.storage.DeleteTracks
 import com.example.playlistmaker.data.storage.GetTrackById
-import com.example.playlistmaker.data.storage.GetTracks
-import com.example.playlistmaker.data.storage.SetTrack
+import com.example.playlistmaker.data.storage.GetItems
+import com.example.playlistmaker.data.storage.SetItem
 import com.example.playlistmaker.data.storage.sharedpref.dao.LocalStorage
 import com.example.playlistmaker.domain.player.GetTrackFromString
 import com.example.playlistmaker.domain.search.SetTrackToString
@@ -16,8 +16,8 @@ class DataOfHistory(
     private val localStore: LocalStorage,
     private val setTrackToString: SetTrackToString<TrackDto>,
     private val getTrackFromString: GetTrackFromString<TrackDto>,
-) : GetTracks<TrackDto>,
-    SetTrack<TrackDto>,
+) : GetItems<TrackDto>,
+    SetItem<TrackDto, Unit>,
     GetTrackById<TrackDto>,
     DeleteTracks {
 
@@ -39,8 +39,8 @@ class DataOfHistory(
         return trackList.find { it.trackId == trackId }
     }
 
-    override suspend fun set(track: TrackDto) {
-        val trackList = checkTrackBeforAdd(track)
+    override suspend fun set(item: TrackDto) {
+        val trackList = checkTrackBeforAdd(item)
         val tracksSet = withContext(Dispatchers.Default) {
             async { setTrackToString.execute(trackList) }
         }
@@ -49,7 +49,7 @@ class DataOfHistory(
         }
     }
 
-    override suspend fun del() {
+    override suspend fun delete() {
         withContext(Dispatchers.IO) {
             localStore.clear()
         }

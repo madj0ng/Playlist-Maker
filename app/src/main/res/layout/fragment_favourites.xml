@@ -4,8 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_player"
+    android:layout_marginBottom="@dimen/dim_56dp"
     tools:context=".ui.media.favourites.fragment.FavouritesFragment">
+
+    <ScrollView
+        android:id="@+id/svList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_player"
+        android:orientation="vertical"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/favourites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16dp"
+                android:layout_weight="1"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/track_view" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/errorGroup"
@@ -14,18 +46,30 @@
         android:visibility="gone"
         app:constraint_referenced_ids="ivEmpty, tvEpmty" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favourites"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_16dp"
-        android:layout_weight="1"
-        android:visibility="gone"
+    <ImageView
+        android:id="@+id/ivEmpty"
+        android:layout_width="@dimen/search_err_image_size"
+        android:layout_height="@dimen/search_err_image_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_46dp"
+        android:src="@drawable/error_find"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:listitem="@layout/track_view" />
+        app:layout_constraintVertical_bias="0.2" />
+
+    <TextView
+        android:id="@+id/tvEpmty"
+        style="@style/SearchErrText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_16dp"
+        android:text="@string/error_favourites"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivEmpty" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -37,45 +81,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btEmpty"
-        style="@style/ButtonBlack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_24dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/ivEmpty"
-        android:layout_width="@dimen/search_err_image_size"
-        android:layout_height="@dimen/search_err_image_size"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_46dp"
-        android:src="@drawable/error_find"
-        app:layout_constraintVertical_bias="0.1"
-        app:layout_constraintTop_toBottomOf="@+id/btEmpty"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/tvEpmty"
-        style="@style/SearchErrText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_16dp"
-        android:text="@string/error_favourites"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivEmpty"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,9 @@ const val SEARCH_PREFERENCES = "search_preferences"
 const val TYPE_SEARCH = "TYPE_SEARCH"
 const val TYPE_HISTORY = "TYPE_HISTORY"
 const val TYPE_FAVOURITES = "TYPE_FAVOURITES"
+const val TYPE_PLAYER = "TYPE_PLAYER"
+
+const val DB_FAVOURITES = "database.db"
 
 class App : Application() {
     private var isDarkTheme = false

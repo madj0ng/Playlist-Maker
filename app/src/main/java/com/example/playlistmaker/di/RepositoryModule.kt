@@ -1,13 +1,13 @@
 import com.example.playlistmaker.creator.TYPE_FAVOURITES
 import com.example.playlistmaker.creator.TYPE_HISTORY
 import com.example.playlistmaker.creator.TYPE_SEARCH
-import com.example.playlistmaker.data.converters.TrackDbConvertor
 import com.example.playlistmaker.data.media.favourites.FavouritesRepositoryImpl
 import com.example.playlistmaker.data.media.playlist.PlaylistRepositoryImpl
 import com.example.playlistmaker.data.player.impl.GetTrackFromStringImpl
 import com.example.playlistmaker.data.player.impl.PlayerRepositoryImpl
 import com.example.playlistmaker.data.player.mapper.PlayerStatusMapper
 import com.example.playlistmaker.data.player.mapper.PlayerTimeMapper
+import com.example.playlistmaker.data.playlistadd.impl.PlaylistAddRepositoryImpl
 import com.example.playlistmaker.data.search.impl.HistoryRepositoryImpl
 import com.example.playlistmaker.data.search.impl.SearchRepositoryImpl
 import com.example.playlistmaker.data.search.impl.SetTrackToStringImpl
@@ -17,6 +17,7 @@ import com.example.playlistmaker.domain.media.favourites.FavouritesRepository
 import com.example.playlistmaker.domain.media.playlist.PlaylistRepository
 import com.example.playlistmaker.domain.player.GetTrackFromString
 import com.example.playlistmaker.domain.player.PlayerRepository
+import com.example.playlistmaker.domain.playlistadd.PlaylistAddRepository
 import com.example.playlistmaker.domain.search.HistoryRepository
 import com.example.playlistmaker.domain.search.SearchRepository
 import com.example.playlistmaker.domain.search.SetTrackToString
@@ -93,9 +94,16 @@ val repositoryModule = module {
 
     // Playlist
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl()
+        PlaylistRepositoryImpl(
+            dataOfAlbum = get(),
+        )
     }
 
-    // База данных
-    single { TrackDbConvertor() }
+    // PlaylistAdd
+    factory<PlaylistAddRepository> {
+        PlaylistAddRepositoryImpl(
+            dataOfAlbum = get(),
+            dataOfFile = get()
+        )
+    }
 }

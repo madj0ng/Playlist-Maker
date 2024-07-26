@@ -5,7 +5,7 @@ import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.search.model.TracksSearchRequest
 import com.example.playlistmaker.data.search.model.TracksSearchResponse
-import com.example.playlistmaker.data.storage.GetTracks
+import com.example.playlistmaker.data.storage.GetItems
 import com.example.playlistmaker.data.storage.SetTracks
 import com.example.playlistmaker.domain.search.SearchRepository
 import com.example.playlistmaker.domain.search.model.Track
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flow
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
     private val trackMapper: TrackSharedConvertor,
-    private val getTracks: GetTracks<TrackDto>,
+    private val getTracks: GetItems<TrackDto>,
     private val setTracks: SetTracks<TrackDto>,
 ) : SearchRepository {
 

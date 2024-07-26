@@ -15,7 +15,7 @@ import com.example.playlistmaker.databinding.FragmentFavouritesBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.media.favourites.models.FavouritesState
 import com.example.playlistmaker.ui.media.favourites.view_model.FavouritesViewModel
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
+import com.example.playlistmaker.ui.player.fragment.PlayerFragment
 import com.example.playlistmaker.ui.search.models.TrackTriggerState
 import com.example.playlistmaker.util.DebounceUtils
 import com.example.playlistmaker.util.debounce
@@ -98,31 +98,35 @@ class FavouritesFragment : Fragment() {
 
     private fun showContent(trackList: List<Track>) {
         with(binding) {
-                progressBar.visibility = View.GONE
-               favourites.visibility = View.VISIBLE
-                errorGroup.visibility = View.GONE
-                ...
-        favouriteAdapter.setList(trackList)
-        binding.favourites.adapter = favouriteAdapter
-        favouriteAdapter.notifyDataSetChanged()
+            progressBar.visibility = View.GONE
+            favourites.visibility = View.VISIBLE
+            errorGroup.visibility = View.GONE
+            favourites.adapter = favouriteAdapter
+            favouriteAdapter.setList(trackList)
+            favouriteAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun showEmpty() {
-        binding.progressBar.visibility = View.GONE
-        binding.favourites.visibility = View.GONE
-        binding.errorGroup.visibility = View.VISIBLE
+        with(binding) {
+            progressBar.visibility = View.GONE
+            favourites.visibility = View.GONE
+            errorGroup.visibility = View.VISIBLE
+        }
     }
 
     private fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
-        binding.favourites.visibility = View.GONE
-        binding.errorGroup.visibility = View.GONE
+        with(binding) {
+            progressBar.visibility = View.VISIBLE
+            favourites.visibility = View.GONE
+            errorGroup.visibility = View.GONE
+        }
     }
 
     private fun navigateToDetails(trackId: Int, trackDataType: String) {
         findNavController().navigate(
-            R.id.action_mediaFragment_to_playerActivity,
-            PlayerActivity.createArgs(trackId, trackDataType)
+            R.id.action_mediaFragment_to_playerFragment,
+            PlayerFragment.createArgs(trackId, trackDataType)
         )
     }
 

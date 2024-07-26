@@ -16,7 +16,7 @@ class SearchViewHolder(
 
     companion object {
         // Округление в пикселяхr
-        const val IMG_RADIUS_PX = 2F
+        private const val IMG_RADIUS_PX = 2F
     }
 
     // Значение закругления риснука в dp

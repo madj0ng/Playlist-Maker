@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_marginStart="@dimen/margin_8dp"
+    android:layout_marginEnd="@dimen/margin_8dp"
+    android:layout_marginTop="@dimen/margin_4dp"
+    android:layout_marginBottom="@dimen/margin_4dp" >
+
+    <ImageView
+        android:id="@+id/ivAlbum"
+        android:layout_width="@dimen/dim_45dp"
+        android:layout_height="@dimen/dim_45dp"
+        android:src="@drawable/ic_placeholder"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvName"
+        style="@style/AlbumBottomSheetName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxLines="1"
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivAlbum"
+        app:layout_constraintTop_toTopOf="@+id/ivAlbum"
+        app:layout_constraintBottom_toTopOf="@+id/tvCount"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:lines="1"
+        android:text="@string/playlist_count_zero"
+        android:textColor="@color/text_color_gray"
+        android:textFontWeight="400"
+        android:textSize="@dimen/text_size_11sp"
+        app:layout_constraintStart_toEndOf="@+id/ivAlbum"
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
+        app:layout_constraintBottom_toBottomOf="@+id/ivAlbum" />
+
+    <TextView
+        android:id="@+id/tvCountName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_4dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:lines="1"
+        android:singleLine="true"
+        android:text="@string/playlist_item"
+        android:textColor="@color/text_color_gray"
+        android:textFontWeight="400"
+        android:textSize="@dimen/text_size_11sp"
+        app:layout_constraintStart_toEndOf="@+id/tvCount"
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
+        app:layout_constraintBottom_toBottomOf="@+id/ivAlbum" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

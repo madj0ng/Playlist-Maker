@@ -19,7 +19,7 @@ import com.example.playlistmaker.creator.TYPE_HISTORY
 import com.example.playlistmaker.creator.TYPE_SEARCH
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
+import com.example.playlistmaker.ui.player.fragment.PlayerFragment
 import com.example.playlistmaker.ui.search.models.AdapterState
 import com.example.playlistmaker.ui.search.models.ClearIconState
 import com.example.playlistmaker.ui.search.models.SearchState
@@ -152,8 +152,6 @@ class SearchFragment : Fragment() {
 
         textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
         _binding = null
-
-        viewModel.onDestroy()
     }
 
     private fun setInvisibleKeyboard() {
@@ -269,8 +267,9 @@ class SearchFragment : Fragment() {
 
     private fun navigateToDetails(trackId: Int, trackDataType: String) {
         findNavController().navigate(
-            R.id.action_searchFragment_to_playerActivity,
-            PlayerActivity.createArgs(trackId, trackDataType)
+            R.id.action_searchFragment_to_playerFragment,
+//            R.id.action_searchFragment_to_playerActivity,
+            PlayerFragment.createArgs(trackId, trackDataType)
         )
     }
 }
