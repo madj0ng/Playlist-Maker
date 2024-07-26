@@ -10,7 +10,4 @@ import com.example.playlistmaker.data.storage.db.entity.TrackEntity
 interface TrackDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrack(trackEntity: TrackEntity): Long
-
-    @Query("SELECT * FROM all_tracks")
-    suspend fun readTracks(): List<TrackEntity>
 }

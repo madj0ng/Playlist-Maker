@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
-class DataOfFavourites(
+class FavouritesLocalDataSource(
     private val appDatabase: AppDatabase,
     private val trackDbConvertor: FavouriteTrackDbConvertor,
 ) : GetItems<TrackDto>,

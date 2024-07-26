@@ -24,8 +24,7 @@ import com.example.playlistmaker.data.storage.SetItem
 import com.example.playlistmaker.data.storage.SetTracks
 import com.example.playlistmaker.data.storage.db.AppDatabase
 import com.example.playlistmaker.data.storage.db.DataOfAlbum
-import com.example.playlistmaker.data.storage.db.DataOfFavourites
-import com.example.playlistmaker.data.storage.db.DataOfTrack
+import com.example.playlistmaker.data.storage.db.FavouritesLocalDataSource
 import com.example.playlistmaker.data.storage.empty.DataOfEmpty
 import com.example.playlistmaker.data.storage.file.DataOfFile
 import com.example.playlistmaker.data.storage.memory.DataOfSearch
@@ -133,7 +132,7 @@ val dataModule = module {
     ))
 
     single(named(TYPE_FAVOURITES)) {
-        DataOfFavourites(
+        FavouritesLocalDataSource(
             appDatabase = get(),
             trackDbConvertor = get()
         )
@@ -147,7 +146,8 @@ val dataModule = module {
     factory {
         DataOfAlbum(
             appDatabase = get(),
-            albumModelConverter = get()
+            albumModelConverter = get(),
+            trackDbConverter = get()
         )
     }
 
@@ -172,10 +172,10 @@ val dataModule = module {
         )
     }
 
-    single {
-        DataOfTrack(
-            appDatabase = get(),
-            trackDbConvertor = get()
-        )
-    }
+//    single {
+//        DataOfTrack(
+//            appDatabase = get(),
+//            trackDbConvertor = get()
+//        )
+//    }
 }

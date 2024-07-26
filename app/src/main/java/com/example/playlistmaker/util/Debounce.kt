@@ -24,23 +24,3 @@ fun <T> debounce(
         }
     }
 }
-
-fun <T, K> debounce2(
-    delayMillis: Long,
-    coroutineScope: CoroutineScope,
-    useLastParam: Boolean,
-    action: (T, K) -> Unit
-): (T, K) -> Unit {
-    var debounceJob: Job? = null
-    return { param1: T, param2: K ->
-        if (useLastParam) {
-            debounceJob?.cancel()
-        }
-        if (debounceJob?.isCompleted != false || useLastParam) {
-            debounceJob = coroutineScope.launch {
-                delay(delayMillis)
-                action(param1, param2)
-            }
-        }
-    }
-}

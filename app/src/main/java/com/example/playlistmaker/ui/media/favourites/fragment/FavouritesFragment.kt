@@ -15,7 +15,6 @@ import com.example.playlistmaker.databinding.FragmentFavouritesBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.media.favourites.models.FavouritesState
 import com.example.playlistmaker.ui.media.favourites.view_model.FavouritesViewModel
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.player.fragment.PlayerFragment
 import com.example.playlistmaker.ui.search.models.TrackTriggerState
 import com.example.playlistmaker.util.DebounceUtils

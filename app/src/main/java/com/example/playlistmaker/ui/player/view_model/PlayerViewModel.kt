@@ -85,32 +85,33 @@ class PlayerViewModel(
     }
 
     fun addTrackToAlbum(album: Album) {
-        var findId: Int? = null
-        val track = when (screenLiveData.value) {
-            is PlayerState.Content -> (screenLiveData.value as PlayerState.Content).track
+        viewModelScope.launch {
+            playlistInteractor
+                .addTrackToAlbum(track, album)
+                .collect { result ->
+                    when (result) {
+                        true -> successAddResultShow(album.name)
 
-            else -> null
+                        false -> errorAddResultShow(album.name)
+                    }
+                }
         }
-        if (track != null) {
-            findId = album.tracksId.find { it == track.trackId }
-            if (findId == null) {
-                viewModelScope.launch {
-                    playlistInteractor
-                        .addTrackToAlbum(track, album)
-                        .collect { resId ->
-                            stringReplace(application, resId, album.name)?.let {
-                                setDialogState(BottomSheetBehavior.STATE_HIDDEN)
-                                setBottomSheetState(it)
-                            }
-                        }
-                }
-            } else {
-                stringReplace(application, R.string.playlistadd_also_add_track, album.name)?.let {
-                    setDialogState(BottomSheetBehavior.STATE_COLLAPSED)
-                    setBottomSheetState(it)
-                }
+    }
+
+    private fun successAddResultShow(replaceString: String) {
+        stringReplace(application, R.string.playlistadd_add_track, replaceString)
+            ?.let {
+                setDialogState(BottomSheetBehavior.STATE_HIDDEN)
+                setBottomSheetState(it)
             }
-        }
+    }
+
+    private fun errorAddResultShow(replaceString: String) {
+        stringReplace(application, R.string.playlistadd_also_add_track, replaceString)
+            ?.let {
+                setDialogState(BottomSheetBehavior.STATE_COLLAPSED)
+                setBottomSheetState(it)
+            }
     }
 
     fun loadAlbumsData() {

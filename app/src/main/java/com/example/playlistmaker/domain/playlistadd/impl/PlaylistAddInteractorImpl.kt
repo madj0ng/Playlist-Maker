@@ -5,7 +5,6 @@ import com.example.playlistmaker.domain.playlistadd.PlaylistAddInteractor
 import com.example.playlistmaker.domain.playlistadd.PlaylistAddRepository
 import com.example.playlistmaker.domain.playlistadd.model.Album
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class PlaylistAddInteractorImpl(
     private val playlistAddRepository: PlaylistAddRepository

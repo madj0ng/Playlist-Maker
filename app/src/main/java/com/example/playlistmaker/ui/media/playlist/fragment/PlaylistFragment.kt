@@ -81,7 +81,7 @@ class PlaylistFragment : Fragment() {
     private fun render(state: PlaylistState) {
         when (state) {
             is PlaylistState.Content -> showContent(state.data)
-            is PlaylistState.Empty -> showEmpty(state.message)
+            is PlaylistState.Empty -> showEmpty()
             is PlaylistState.Error -> showError(state.errorMessage)
             is PlaylistState.Loading -> showLoading()
         }
@@ -98,7 +98,7 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-    private fun showEmpty(message: String) {
+    private fun showEmpty() {
         with(binding) {
             btPlaylistAdd.visibility = View.VISIBLE
             playList.visibility = View.GONE

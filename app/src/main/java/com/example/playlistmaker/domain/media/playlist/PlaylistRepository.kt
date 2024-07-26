@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlaylistRepository {
     fun getPlayList(): Flow<List<Album>>
-    fun addTrackToAlbum(track: Track, album: Album): Flow<Int>
+    fun addTrackToAlbum(track: Track, album: Album): Flow<Boolean>
 }

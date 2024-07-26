@@ -257,9 +257,9 @@
         <item name="android:maxLength">255</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:autofillHints">no</item>
-        <item name="android:imeOptions">actionDone</item>
+        <item name="android:imeOptions">actionNone</item>
         <item name="android:selectAllOnFocus">true</item>
-        <item name="android:inputType">text</item>
+        <item name="android:inputType">textShortMessage|text</item>
 <!--        <item name="android:background">@drawable/sl_input_album</item>-->
     </style>
 

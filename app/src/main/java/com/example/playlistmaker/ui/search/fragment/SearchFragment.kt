@@ -152,8 +152,6 @@ class SearchFragment : Fragment() {
 
         textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
         _binding = null
-
-        viewModel.onDestroy()
     }
 
     private fun setInvisibleKeyboard() {

@@ -2,7 +2,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.converters.AlbumModelConverter
 import com.example.playlistmaker.ui.media.favourites.view_model.FavouritesViewModel
 import com.example.playlistmaker.ui.media.fragment.MediaPagerAdapter
 import com.example.playlistmaker.ui.media.playlist.view_model.PlaylistViewModel

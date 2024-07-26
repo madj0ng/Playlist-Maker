@@ -12,5 +12,4 @@ data class AlbumEntity(
     val uri: String,
     val tracksId: String,
     val tracksCount: Int,
-) {
-}
+)

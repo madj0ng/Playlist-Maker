@@ -306,12 +306,12 @@ class PlayerFragment : Fragment() {
 
     private fun render(state: AlbumTriggerState) {
         when (state) {
-            is AlbumTriggerState.Player -> navigateToAdd(state.type)
+            is AlbumTriggerState.Player -> navigateToAdd()
             else -> {}
         }
     }
 
-    private fun navigateToAdd(type: String) {
+    private fun navigateToAdd() {
         val navHostFragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.container_view) as NavHostFragment
         val navController = navHostFragment.navController

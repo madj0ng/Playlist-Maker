@@ -51,12 +51,13 @@
     <dimen name="size_52dp">52dp</dimen>
     <dimen name="size_100dp">100dp</dimen>
     <dimen name="size_44dp">44dp</dimen>
-    <dimen name="button_vertical_10dp">10dp</dimen>
-    <dimen name="button_horizontal_14dp">14dp</dimen>
+<!--    <dimen name="button_vertical_10dp">10dp</dimen>-->
+<!--    <dimen name="button_horizontal_14dp">14dp</dimen>-->
     <dimen name="margin_46dp">46dp</dimen>
     <dimen name="dim_45dp">45dp</dimen>
     <dimen name="dim_56dp">56dp</dimen>
     <dimen name="dim_48dp">48dp</dimen>
     <dimen name="radius_16dp">16dp</dimen>
     <dimen name="radius_44dp">44dp</dimen>
+    <dimen name="dim_05dp">0.5dp</dimen>
 </resources>

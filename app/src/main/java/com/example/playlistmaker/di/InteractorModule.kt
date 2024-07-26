@@ -12,6 +12,7 @@ import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
 import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.example.playlistmaker.domain.sharing.impl.SharingInteractorImpl
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import java.util.concurrent.ExecutorService
@@ -53,8 +54,9 @@ val interactorModule = module {
     }
 
     // Playlist
-    single<PlaylistInteractor> {
-        PlaylistInteractorImpl(playlistRepository = get())
+    factory<PlaylistInteractor> {
+        PlaylistInteractorImpl(
+            playlistRepository = get())
     }
 
     //PlaylistAdd
