@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlaylistInteractor {
     fun loadFavourites(): Flow<Pair<List<Album>?, String?>>
-    fun addTrackToAlbum(track: Track, album: Album): Flow<Boolean>
+    fun addTrackToAlbum(albumId: Long, track: Track): Flow<Boolean>
 }

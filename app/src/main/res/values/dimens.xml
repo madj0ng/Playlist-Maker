@@ -5,7 +5,11 @@
     <dimen name="title_text_size">22sp</dimen>
     <dimen name="line_height_16sp">16sp</dimen>
     <dimen name="line_height_18_75sp">18.75sp</dimen>
+    <dimen name="line_height_23_13sp">28.13sp</dimen>
+    <dimen name="line_height_21_1sp">21.1sp</dimen>
+    <dimen name="text_size_24sp">24sp</dimen>
     <dimen name="text_size_19sp">19sp</dimen>
+    <dimen name="text_size_18sp">18sp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_13sp">13sp</dimen>

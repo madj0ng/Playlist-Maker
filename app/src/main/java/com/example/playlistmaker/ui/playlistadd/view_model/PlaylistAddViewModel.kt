@@ -2,58 +2,120 @@ package com.example.playlistmaker.ui.playlistadd.view_model
 
 import android.app.Application
 import android.net.Uri
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.data.converters.AlbumModelConverter
 import com.example.playlistmaker.domain.playlistadd.PlaylistAddInteractor
+import com.example.playlistmaker.domain.playlistadd.model.Album
+import com.example.playlistmaker.ui.album.model.AlbumState
 import com.example.playlistmaker.ui.playlistadd.models.AlbumDialogState
-import com.example.playlistmaker.ui.playlistadd.models.AlbumState
 import com.example.playlistmaker.util.stringReplace
 import kotlinx.coroutines.launch
 
-class PlaylistAddViewModel(
+open class PlaylistAddViewModel(
     private val application: Application,
-    private val playlistAddInteractor: PlaylistAddInteractor,
-    private val albumModelConverter: AlbumModelConverter
-) : AndroidViewModel(application) {
+    private val playlistAddInteractor: PlaylistAddInteractor
+) : ViewModel() {
 
-    private var albumState = MutableLiveData<AlbumState>(AlbumState("", "", null))
-    fun observerAlbum(): LiveData<AlbumState> = albumState
+    private var album = Album(0L, "", "", null, 0, 0L)
+
+    open var albumState = MutableLiveData<AlbumState>(AlbumState.Loading)
+    fun observerAlbumState(): LiveData<AlbumState> = albumState
+
+    open var albumName = MutableLiveData<Boolean>()
+    fun observerAlbumName(): LiveData<Boolean> = albumName
+
+    open var albumDescription = MutableLiveData<Boolean>()
+    fun observerAlbumDescription(): LiveData<Boolean> = albumDescription
+
+    open var albumUri = MutableLiveData<Uri?>()
+    fun observerAlbumUri(): LiveData<Uri?> = albumUri
 
     private var toastState = MutableLiveData<String>()
     fun observerToast(): LiveData<String> = toastState
 
-    private var dialogState = MutableLiveData<AlbumDialogState>(AlbumDialogState.None(true))
+    open var dialogState = MutableLiveData<AlbumDialogState>(AlbumDialogState.None(true))
     fun observerDialog(): LiveData<AlbumDialogState> = dialogState
 
+    fun changeAlbumState(state: AlbumState) {
+        albumState.postValue(state)
+        when (state) {
+            is AlbumState.Content -> {
+                changeAlbum(state.data)
+            }
+
+            else -> {}
+        }
+    }
+
     fun changeAlbumName(changedText: String?) {
-        albumState.postValue(albumState.value?.copy(name = changedText ?: ""))
+        if (isNewName(changedText ?: "")) {
+            album = album.copy(name = changedText ?: "")
+            albumName.postValue(album.name.isNotEmpty())
+        }
     }
 
     fun changeAlbumDescription(changedText: String?) {
-        albumState.postValue(albumState.value?.copy(description = changedText ?: ""))
+        if (isNewDescription(changedText ?: "")) {
+            album = album.copy(description = changedText ?: "")
+            albumDescription.postValue(album.description.isNotEmpty())
+        }
     }
 
     fun changeAlbumUri(uri: Uri?) {
-        albumState.postValue(albumState.value?.copy(uri = uri))
+        if (isNewUri(uri)) {
+            album = album.copy(uri = uri)
+            albumUri.postValue(album.uri)
+        }
     }
 
-    fun albumCreate() {
-        if (albumState.value != null) {
+    private fun changeAlbum(newAlbum: Album) {
+        if (isNewAlbum(newAlbum)) {
+            album = newAlbum.copy()
+            albumName.postValue(album.name.isNotEmpty())
+            albumDescription.postValue(album.description.isNotEmpty())
+            albumUri.postValue(album.uri)
+        }
+    }
+
+    fun setToast(message: String) {
+        toastState.postValue(message)
+    }
+
+    open fun albumOnClick() {
+        albumCreate()
+    }
+
+    open fun onBackPressed() {
+        if (album.name.isNotEmpty() ||
+            album.description.isNotEmpty() ||
+            album.uri != null
+        ) {
+            dialogState.postValue(AlbumDialogState.Show(true))
+        } else {
+            dialogState.postValue(AlbumDialogState.None(false))
+        }
+    }
+
+    fun setDialogResult(isEnabled: Boolean) {
+        dialogState.postValue(AlbumDialogState.None(isEnabled))
+    }
+
+    private fun albumCreate() {
+        if (album.name.isNotEmpty()) {
             viewModelScope.launch {
-                // Сохраняем файл во внутренее хранилище
                 playlistAddInteractor
-                    .saveImageToPrivateStorage(albumState.value!!.uri)
+                    .saveImageToPrivateStorage(album.uri)
                     .collect { uri ->
-                        // Сохраняем Playlist в БД
+                        album = album.copy(uri = uri)
                         playlistAddInteractor
-                            .albumCreate(albumModelConverter.map(albumState.value!!.copy(uri = uri)))
+                            .albumCreate(album)
                             .collect {
-                                val s = stringReplace(application, it, albumState.value!!.name)
-                                if (s != null) {
-                                    toastState.postValue(s!!)
+                                val message =
+                                    stringReplace(application, it, album.name)
+                                if (message != null) {
+                                    setToast(message)
                                 }
                                 // Закрытие
                                 setDialogResult(false)
@@ -63,20 +125,62 @@ class PlaylistAddViewModel(
         }
     }
 
-    fun onBackPressed() {
-        if (albumState.value != null) {
-            if (albumState.value!!.name.isNotEmpty() ||
-                albumState.value!!.description.isNotEmpty() ||
-                albumState.value!!.uri != null
-            ) {
-                dialogState.postValue(AlbumDialogState.Show(true))
-            } else {
-                dialogState.postValue(AlbumDialogState.None(false))
+    fun albumUpdate(oldAlbum: Album) {
+        if (album.name.isNotEmpty()) {
+            viewModelScope.launch {
+                when (true) {
+                    (oldAlbum.uri != album.uri) -> {
+                        // Удаляем файл обложки
+                        playlistAddInteractor.deleteImageFromPrivateStorage(oldAlbum.uri)
+                        // Сохраняем файл обложки во внутреннее хранилище
+                        playlistAddInteractor
+                            .saveImageToPrivateStorage(album.uri)
+                            .collect { uri ->
+                                album = album.copy(uri = uri)
+                                albumUpdateRun(album)
+                            }
+                    }
+
+                    (oldAlbum.name != album.name || oldAlbum.description != album.description) -> {
+                        albumUpdateRun(album)
+                    }
+
+                    else -> {}
+                }
+
+                if (oldAlbum.uri != album.uri) {
+                    playlistAddInteractor
+                        .deleteImageFromPrivateStorage(oldAlbum.uri)
+                    playlistAddInteractor
+                        .saveImageToPrivateStorage(album.uri)
+                        .collect { uri ->
+                            album = album.copy(uri = uri)
+                            playlistAddInteractor
+                                .albumUpdate(album)
+                                .collect {
+                                    // Закрытие
+                                    setDialogResult(false)
+                                }
+                        }
+                }
             }
         }
     }
 
-    fun setDialogResult(isEnabled: Boolean) {
-        dialogState.postValue(AlbumDialogState.None(isEnabled))
+    private suspend fun albumUpdateRun(album: Album) {
+        playlistAddInteractor
+            .albumUpdate(album)
+            .collect {
+                // Закрытие
+                setDialogResult(false)
+            }
     }
+
+    private fun isNewName(newText: String): Boolean = (newText != album.name)
+
+    private fun isNewDescription(newText: String): Boolean = (newText != album.description)
+
+    private fun isNewUri(newUri: Uri?): Boolean = (newUri != album.uri)
+
+    private fun isNewAlbum(newAlbum: Album): Boolean = (newAlbum != album)
 }

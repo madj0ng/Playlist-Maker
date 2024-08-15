@@ -32,7 +32,7 @@ class RootActivity : AppCompatActivity() {
         //Слушатель изменений текущего Destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.playlistAddFragment, R.id.playerFragment -> {
+                R.id.playlistAddFragment, R.id.playerFragment, R.id.playlistEditFragment -> {
                     setMenuVisibility(false)
                     setInputAdjustResize()
                 }
@@ -40,6 +40,12 @@ class RootActivity : AppCompatActivity() {
                 R.id.searchFragment -> {
                     setInputAdjustPan()
                     setMenuVisibility(true)
+                }
+
+                R.id.albumFragment -> {
+                    setInputAdjustResize()
+                    setMenuVisibility(true)
+                    bottomNavigationView.menu.findItem(R.id.mediaFragment).isChecked = true
                 }
 
                 else -> {

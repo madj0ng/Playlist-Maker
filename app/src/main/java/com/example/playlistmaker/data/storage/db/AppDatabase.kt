@@ -8,15 +8,18 @@ import com.example.playlistmaker.creator.DB_FAVOURITES
 import com.example.playlistmaker.data.storage.db.dao.AlbumDao
 import com.example.playlistmaker.data.storage.db.dao.FavoriteTrackDao
 import com.example.playlistmaker.data.storage.db.dao.TrackDao
+import com.example.playlistmaker.data.storage.db.dao.TrackInAlbum
 import com.example.playlistmaker.data.storage.db.entity.AlbumEntity
 import com.example.playlistmaker.data.storage.db.entity.FavouriteTrackEntity
 import com.example.playlistmaker.data.storage.db.entity.TrackEntity
+import com.example.playlistmaker.data.storage.db.entity.TrackInAlbumEntity
 
 @Database(
     version = 1, entities = [
         FavouriteTrackEntity::class,
         AlbumEntity::class,
-        TrackEntity::class
+        TrackEntity::class,
+        TrackInAlbumEntity::class
     ]
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -26,6 +29,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun albumDao(): AlbumDao
 
     abstract fun trackDao(): TrackDao
+
+    abstract fun trackInAlbum(): TrackInAlbum
 
     companion object {
         @Volatile

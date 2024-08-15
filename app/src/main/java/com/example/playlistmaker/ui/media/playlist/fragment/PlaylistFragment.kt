@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.domain.playlistadd.model.Album
+import com.example.playlistmaker.ui.album.fragment.AlbumFragment
 import com.example.playlistmaker.ui.media.playlist.models.PlaylistState
 import com.example.playlistmaker.ui.media.playlist.view_model.PlaylistViewModel
-import com.example.playlistmaker.ui.playlistadd.fragment.PlaylistAddFragment
 import com.example.playlistmaker.ui.playlistadd.models.AlbumTriggerState
 import com.example.playlistmaker.util.DebounceUtils
 import com.example.playlistmaker.util.debounce
@@ -50,7 +50,9 @@ class PlaylistFragment : Fragment() {
             DebounceUtils.CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
             true
-        ) { }
+        ) {
+            render(AlbumTriggerState.Album(it.id))
+        }
         playlistAdapter = PlaylistAdapter { album -> onPlaylistTrackClickDebounce(album) }
 
         // Список
@@ -58,7 +60,7 @@ class PlaylistFragment : Fragment() {
             GridLayoutManager(requireContext(), 2)
 
         binding.btPlaylistAdd.setOnClickListener {
-            render(AlbumTriggerState.Playlist())
+            render(AlbumTriggerState.Playlist)
         }
 
         viewModel.observeScreenState().observe(viewLifecycleOwner) {
@@ -122,15 +124,22 @@ class PlaylistFragment : Fragment() {
 
     private fun render(state: AlbumTriggerState) {
         when (state) {
-            is AlbumTriggerState.Playlist -> navigateToAdd(state.type)
-            else -> {}
+            is AlbumTriggerState.Playlist -> navigateToAdd()
+            is AlbumTriggerState.Album -> navigateToAlbum(state.albumId)
+            is AlbumTriggerState.Player -> {}
         }
     }
 
-    private fun navigateToAdd(type: String) {
+    private fun navigateToAdd() {
         findNavController().navigate(
-            R.id.action_mediaFragment_to_playlistAddFragment,
-            PlaylistAddFragment.createArgs(type)
+            R.id.action_mediaFragment_to_playlistAddFragment
+        )
+    }
+
+    private fun navigateToAlbum(albumId: Long) {
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_albumFragment,
+            AlbumFragment.createArgs(albumId)
         )
     }
 }

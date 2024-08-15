@@ -30,13 +30,44 @@ object TrackDbConverter {
             track.artistName,
             track.trackTimeMillis,
             track.artworkUrl100.ifEmpty { null },
-            if (track.collectionName.isNotEmpty()) track.collectionName else null,
+            if (track.collectionName.isEmpty()) null else track.collectionName,
             track.releaseDate,
             track.primaryGenreName,
             track.country,
-            if (track.previewUrl.isNotEmpty()) track.previewUrl else null,
+            if (track.previewUrl.isEmpty()) null else track.previewUrl,
             LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
         )
     }
 
+    fun map(track: TrackEntity): Track {
+        return Track(
+            track.trackId,
+            track.trackName,
+            track.artistName,
+            track.trackTimeMillis,
+            track.artworkUrl100 ?: "",
+            track.collectionName ?: "",
+            track.releaseDate ?: "",
+            track.primaryGenreName,
+            track.country,
+            track.previewUrl ?: "",
+            false,
+        )
+    }
+
+    fun mapToDto(track: TrackEntity): TrackDto {
+        return TrackDto(
+            track.trackId,
+            track.trackName,
+            track.artistName,
+            track.trackTimeMillis,
+            track.artworkUrl100 ?: "",
+            track.collectionName ?: "",
+            track.releaseDate,
+            track.primaryGenreName,
+            track.country,
+            track.previewUrl ?: "",
+            false,
+        )
+    }
 }

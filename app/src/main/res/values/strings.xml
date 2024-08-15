@@ -26,6 +26,7 @@
     <string name="error_playlist">Вы не создали\nни одного плейлиста</string>
     <string name="error_favourites">Ваша медиатека пуста</string>
     <string name="error_find">Не удалось открыть приложение</string>
+    <string name="error_album_find">Не удалось найти плейлист</string>
 
     <string name="history_title">Вы искали</string>
     <string name="history_clear_button">Очистить историю</string>
@@ -48,15 +49,33 @@
     <string name="playlist_count_zero">0</string>
 
     <string name="playlistadd_title">Новый плейлист</string>
+    <string name="playlistadd_create">Создать</string>
     <string name="playlistadd_name">Название*</string>
     <string name="playlistadd_description">Описание</string>
-    <string name="playlistadd_create">Создать</string>
     <string name="playlistadd_dialog_title">Сохранить изменения?</string>
     <string name="playlistadd_dialog_cancel">Отмена</string>
     <string name="playlistadd_dialog_close">Завершить</string>
     <string name="playlistadd_dialog_message">Все несохраненные данные будут потеряны</string>
     <string name="playlistadd_create_success">Плейлист %1 создан</string>
+    <string name="playlistadd_update_success">Плейлист %1 обновлен</string>
     <string name="playlistadd_bottom_sheet_title">Добавить в плейлист</string>
     <string name="playlistadd_add_track">Добавлено в плейлист %1</string>
     <string name="playlistadd_also_add_track">Трек уже добавлен в плейлист %1</string>
+
+    <string name="playlistedit_title">Редактировать</string>
+    <string name="playlistedit_save">Сохранить</string>
+
+    <string name="album_time_unit">минут</string>
+    <string name="album_count_unit">треков</string>
+    <string name="album_menu_share">Поделиться</string>
+    <string name="album_menu_edit">Редактировать информацию</string>
+    <string name="album_menu_delete">Удалить плейлист</string>
+    <string name="album_share_empty">В этом плейлисте нет списка треков, которым можно поделиться</string>
+
+    <string name="dialog_track_delete_title">Удалить трек</string>
+    <string name="dialog_track_delete_ask">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="dialog_album_delete_title">Удалить плейлист</string>
+    <string name="dialog_album_delete_ask">Хотите удалить плейлист "%1"?</string>
+    <string name="dialog_yes">Да</string>
+    <string name="dialog_no">Нет</string>
 </resources>

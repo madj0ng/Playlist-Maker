@@ -33,7 +33,7 @@ class FavouritesFragment : Fragment() {
 
     private val viewModel: FavouritesViewModel by activityViewModel<FavouritesViewModel>()
 
-    private lateinit var favouriteAdapter: FavouritesAdapter
+    private lateinit var favouriteAdapter: TracksAdapter
     private lateinit var onFavouriteTrackClickDebounce: (Track) -> Unit
 
     override fun onCreateView(
@@ -54,7 +54,11 @@ class FavouritesFragment : Fragment() {
         ) { track ->
             viewModel.startActiviryPlayer(track, TYPE_FAVOURITES)
         }
-        favouriteAdapter = FavouritesAdapter { track -> onFavouriteTrackClickDebounce(track) }
+//        favouriteAdapter = TracksAdapter { track -> onFavouriteTrackClickDebounce(track) }
+        favouriteAdapter = TracksAdapter(
+            { track -> onFavouriteTrackClickDebounce(track) },
+            { true },
+        )
 
         // Список
         binding.favourites.layoutManager =

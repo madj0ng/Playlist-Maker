@@ -14,6 +14,7 @@
     <color name="background_player">#FFFFFF</color>
     <color name="background_media">#FFFFFF</color>
     <color name="background_playlistadd">#FFFFFF</color>
+    <color name="background_album">#E6E8EB</color>
     <color name="text_color">#1A1B22</color>
     <color name="icon_color">#1A1B22</color>
     <color name="settings_thumb_checked">#3772E7</color>
@@ -36,9 +37,4 @@
 
     <color name="album_blue">#3772E7</color>
     <color name="album_gray">#AEAFB4</color>
-<!--    <color name="light_blue_600">#FF039BE5</color>-->
-<!--    <color name="light_blue_900">#FF01579B</color>-->
-<!--    <color name="light_blue_A200">#FF40C4FF</color>-->
-<!--    <color name="light_blue_A400">#FF00B0FF</color>-->
-<!--    <color name="black_overlay">#66000000</color>-->
 </resources>

@@ -5,7 +5,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import androidx.core.net.toFile
+import com.example.playlistmaker.data.storage.DeleteItem
 import com.example.playlistmaker.data.storage.SetItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDateTime
@@ -13,7 +17,8 @@ import java.time.ZoneOffset
 
 class DataOfFile(
     val application: Application
-) : SetItem<Uri, Uri?> {
+) : SetItem<Uri, Uri?>,
+    DeleteItem<Uri, Unit> {
     companion object {
         private const val NAME_PREFIX = "myalbum"
     }
@@ -47,5 +52,13 @@ class DataOfFile(
             null
         }
 //        }
+    }
+
+    override suspend fun delete(item: Uri) {
+        withContext(Dispatchers.IO) {
+            //создаём экземпляр класса File, который указывает на файл
+            val file = item.toFile()
+            file.delete()
+        }
     }
 }

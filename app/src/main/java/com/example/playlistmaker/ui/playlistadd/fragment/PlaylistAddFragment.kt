@@ -11,35 +11,29 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistaddBinding
+import com.example.playlistmaker.domain.playlistadd.model.Album
+import com.example.playlistmaker.ui.album.model.AlbumState
 import com.example.playlistmaker.ui.player.fragment.PlayerFragment
 import com.example.playlistmaker.ui.playlistadd.models.AlbumDialogState
+import com.example.playlistmaker.ui.playlistadd.models.PlaylistUi
 import com.example.playlistmaker.ui.playlistadd.view_model.PlaylistAddViewModel
 import com.example.playlistmaker.util.FormatUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistAddFragment : Fragment() {
-    companion object {
-        private const val ALBUM_TYPE = "album_type"
-
-        fun createArgs(albumType: String): Bundle =
-            bundleOf(
-                ALBUM_TYPE to albumType
-            )
-    }
+open class PlaylistAddFragment : Fragment() {
 
     private var _binding: FragmentPlaylistaddBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: PlaylistAddViewModel by viewModel()
+    open val viewModel: PlaylistAddViewModel by viewModel()
 
     private val formatUtils: FormatUtils = getKoin().get()
 
@@ -47,15 +41,13 @@ class PlaylistAddFragment : Fragment() {
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             //обрабатываем событие выбора пользователем фотографии
-            if (uri != null) {
-                viewModel.changeAlbumUri(uri)
-            }
+            viewModel.changeAlbumUri(uri)
         }
 
     private var nameTextWatcher: TextWatcher? = null
     private var descriptionTextWatcher: TextWatcher? = null
 
-    lateinit var confirmDialog: MaterialAlertDialogBuilder
+    private lateinit var confirmDialog: MaterialAlertDialogBuilder
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             viewModel.onBackPressed()
@@ -73,13 +65,20 @@ class PlaylistAddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        render(
+            PlaylistUi(
+                requireContext().getString(R.string.playlistadd_title),
+                requireContext().getString(R.string.playlistadd_create)
+            )
+        )
+
         confirmDialog = MaterialAlertDialogBuilder(requireActivity())
             .setTitle(getString(R.string.playlistadd_dialog_title))
             .setMessage(getString(R.string.playlistadd_dialog_message))
-            .setNeutralButton(getString(R.string.playlistadd_dialog_cancel)) { dialog, which ->
+            .setNeutralButton(getString(R.string.playlistadd_dialog_cancel)) { _, _ ->
                 // ничего не делаем
                 viewModel.setDialogResult(true)
-            }.setNegativeButton(getString(R.string.playlistadd_dialog_close)) { dialog, which ->
+            }.setNegativeButton(getString(R.string.playlistadd_dialog_close)) { _, _ ->
                 // выходим из окна без сохранения
                 viewModel.setDialogResult(false)
             }
@@ -101,7 +100,7 @@ class PlaylistAddFragment : Fragment() {
 
         //Событие нажатия создания Playlist
         binding.acbCreate.setOnClickListener {
-            viewModel.albumCreate()
+            viewModel.albumOnClick()
         }
 
         //Изменения поля "Название" EditText
@@ -128,21 +127,29 @@ class PlaylistAddFragment : Fragment() {
         }
         descriptionTextWatcher?.let { binding.etDescription.addTextChangedListener(it) }
 
-        viewModel.observerAlbum().observe(viewLifecycleOwner) { album ->
+        viewModel.observerAlbumState().observe(viewLifecycleOwner) { album ->
+            render(album)
+        }
+
+        viewModel.observerAlbumName().observe(viewLifecycleOwner) { isNameFilled ->
             // Наименование
-            when (album.name.isNotEmpty()) {
+            when (isNameFilled) {
                 true -> albumNameFilled()
                 false -> albumNameNotFilled()
             }
+        }
+
+        viewModel.observerAlbumDescription().observe(viewLifecycleOwner) { isDescriptionFilled ->
             // Описание
-            when (album.description.isNotEmpty()) {
+            when (isDescriptionFilled) {
                 true -> albumDescriptionFilled()
                 false -> albumDescriptionNotFilled()
             }
+        }
+
+        viewModel.observerAlbumUri().observe(viewLifecycleOwner) { uri ->
             // Оболжка
-            if (album.uri != null) {
-                albumUriFill(album.uri)
-            }
+            albumUriFill(uri)
         }
 
         viewModel.observerToast().observe(viewLifecycleOwner) {
@@ -158,6 +165,26 @@ class PlaylistAddFragment : Fragment() {
         super.onDestroyView()
 
         _binding = null
+    }
+
+    private fun render(state: AlbumState) {
+        when (state) {
+            is AlbumState.Loading -> {}
+            is AlbumState.Content -> albumFill(state.data)
+            is AlbumState.Empty -> {}
+            is AlbumState.Error -> {}
+        }
+    }
+
+    fun render(playlistUi: PlaylistUi) {
+        binding.acbCreate.text = playlistUi.buttonText
+        binding.tvTitle.text = playlistUi.titleText
+    }
+
+    private fun albumFill(album: Album) {
+        albumNameFill(album.name)
+        albumDescriptionFill(album.description)
+        albumUriFill(album.uri)
     }
 
     private fun albumNameFilled() {
@@ -186,19 +213,32 @@ class PlaylistAddFragment : Fragment() {
         binding.tvUpDescription.setTextColor(requireActivity().getColor(R.color.album_blue))
     }
 
-    private fun albumUriFill(uri: Uri) {
-        Glide.with(binding.ivAlbum)
-            .load(uri)
-            .centerCrop()
-            .transform(
-                RoundedCorners(
-                    formatUtils.dpToPx(
-                        PlayerFragment.IMG_RADIUS_PX,
-                        binding.ivAlbum.context
+    private fun albumDescriptionFill(text: String) {
+        binding.etDescription.setText(text)
+    }
+
+    private fun albumNameFill(text: String) {
+        binding.etName.setText(text)
+    }
+
+    private fun albumUriFill(uri: Uri?) {
+        if (uri != null) {
+            Glide.with(binding.ivAlbum)
+                .load(uri)
+                .centerCrop()
+                .transform(
+                    RoundedCorners(
+                        formatUtils.dpToPx(
+                            PlayerFragment.IMG_RADIUS_PX,
+                            binding.ivAlbum.context
+                        )
                     )
                 )
-            )
-            .into(binding.ivAlbum)
+                .into(binding.ivAlbum)
+            binding.ivAlbum.setBackgroundResource(R.drawable.sh_album_image)
+        } else {
+            binding.ivAlbum.setBackgroundResource(R.drawable.sh_album_no_image)
+        }
     }
 
     private fun showToast(message: String) {

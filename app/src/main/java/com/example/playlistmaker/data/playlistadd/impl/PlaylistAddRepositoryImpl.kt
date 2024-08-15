@@ -6,6 +6,7 @@ import com.example.playlistmaker.data.storage.db.DataOfAlbum
 import com.example.playlistmaker.data.storage.file.DataOfFile
 import com.example.playlistmaker.domain.playlistadd.PlaylistAddRepository
 import com.example.playlistmaker.domain.playlistadd.model.Album
+import com.example.playlistmaker.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -13,9 +14,25 @@ class PlaylistAddRepositoryImpl(
     private val dataOfAlbum: DataOfAlbum,
     private val dataOfFile: DataOfFile
 ) : PlaylistAddRepository {
+
+    override fun getAlbum(albumId: Long): Flow<Resource<Album>> = flow {
+        val album = dataOfAlbum.getAlbumById(albumId)
+        emit(
+            when (album) {
+                null -> Resource.Error("")
+                else -> Resource.Success(album)
+            }
+        )
+    }
+
     override fun addAlbum(album: Album): Flow<Int> = flow {
         dataOfAlbum.set(album)
         emit(R.string.playlistadd_create_success)
+    }
+
+    override fun updateAlbum(album: Album): Flow<Int> = flow {
+        dataOfAlbum.set(album)
+        emit(R.string.playlistadd_update_success)
     }
 
     override fun saveImageToPrivateStorage(uri: Uri?): Flow<Uri?> = flow {
@@ -26,4 +43,10 @@ class PlaylistAddRepositoryImpl(
         emit(privateUri)
     }
 
+    override fun deleteImageFromPrivateStorage(uri: Uri?) = flow {
+        if(uri != null) {
+            dataOfFile.delete(uri)
+        }
+        emit(Unit)
+    }
 }

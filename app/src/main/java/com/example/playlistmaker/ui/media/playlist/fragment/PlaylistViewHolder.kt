@@ -11,7 +11,7 @@ import com.example.playlistmaker.util.FormatUtils
 class PlaylistViewHolder(
     private val binding: AlbumViewBinding,
     private val clickListener: PlaylistAdapter.PlaylistClickListener,
-    private val formatUtils: FormatUtils
+    formatUtils: FormatUtils
 ) : RecyclerView.ViewHolder(binding.root) {
     companion object {
         // Округление в пикселяхr

@@ -2,9 +2,9 @@ package com.example.playlistmaker.data.storage.db
 
 import com.example.playlistmaker.data.converters.FavouriteTrackDbConvertor
 import com.example.playlistmaker.data.search.model.TrackDto
-import com.example.playlistmaker.data.storage.DeleteTrack
+import com.example.playlistmaker.data.storage.DeleteItem
+import com.example.playlistmaker.data.storage.GetItemById
 import com.example.playlistmaker.data.storage.GetItems
-import com.example.playlistmaker.data.storage.GetTrackById
 import com.example.playlistmaker.data.storage.SetItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -15,8 +15,8 @@ class FavouritesLocalDataSource(
     private val trackDbConvertor: FavouriteTrackDbConvertor,
 ) : GetItems<TrackDto>,
     SetItem<TrackDto, Unit>,
-    GetTrackById<TrackDto>,
-    DeleteTrack<TrackDto> {
+    GetItemById<Int, TrackDto?>,
+    DeleteItem<TrackDto, Unit> {
 
     override suspend fun get(): List<TrackDto> {
         val tracks = withContext(Dispatchers.IO) {
@@ -25,9 +25,9 @@ class FavouritesLocalDataSource(
         return tracks.await().map { track -> trackDbConvertor.map(track) }
     }
 
-    override suspend fun get(trackId: Int): TrackDto? {
+    override suspend fun get(id: Int): TrackDto? {
         return withContext(Dispatchers.IO) {
-            val track = appDatabase.favoriteTrackDao().getFavoriteById(trackId)
+            val track = appDatabase.favoriteTrackDao().getFavoriteById(id)
             if (track != null) {
                 trackDbConvertor.map(track)
             } else {
@@ -40,7 +40,7 @@ class FavouritesLocalDataSource(
         appDatabase.favoriteTrackDao().insertFavorite(trackDbConvertor.map(item))
     }
 
-    override suspend fun delete(track: TrackDto) {
-        appDatabase.favoriteTrackDao().deleteFavorite(trackDbConvertor.map(track))
+    override suspend fun delete(item: TrackDto) {
+        appDatabase.favoriteTrackDao().deleteFavorite(trackDbConvertor.map(item))
     }
 }

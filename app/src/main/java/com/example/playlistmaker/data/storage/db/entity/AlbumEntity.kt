@@ -9,7 +9,7 @@ data class AlbumEntity(
     val id: Long,
     val name: String,
     val description: String,
-    val uri: String,
-    val tracksId: String,
+    val uri: String?,
     val tracksCount: Int,
+    val tracksMillis: Long,
 )

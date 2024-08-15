@@ -9,7 +9,6 @@ object DebounceUtils {
     const val SEARCH_DEBOUNCE_DELAY = 2000L
     const val TIME_DEBOUNCE_DELAY = 300L
     const val TIME_DEBOUNCE_EMPTY = 0L
-    const val TIME_DEBOUNCE_CLOSE = 2000L
 
     private var isClickAllowed = true
 

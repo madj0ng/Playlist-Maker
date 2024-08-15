@@ -1,3 +1,5 @@
+import com.example.playlistmaker.domain.album.AlbumInteractor
+import com.example.playlistmaker.domain.album.impl.AlbumInteractorImpl
 import com.example.playlistmaker.domain.media.favourites.FavouritesInteractor
 import com.example.playlistmaker.domain.media.favourites.impl.FavouritesInteractorImpl
 import com.example.playlistmaker.domain.media.playlist.PlaylistInteractor
@@ -12,7 +14,6 @@ import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
 import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.example.playlistmaker.domain.sharing.impl.SharingInteractorImpl
-import org.koin.android.ext.koin.androidApplication
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import java.util.concurrent.ExecutorService
@@ -56,13 +57,20 @@ val interactorModule = module {
     // Playlist
     factory<PlaylistInteractor> {
         PlaylistInteractorImpl(
-            playlistRepository = get())
+            playlistRepository = get()
+        )
     }
 
     //PlaylistAdd
     factory<PlaylistAddInteractor> {
         PlaylistAddInteractorImpl(
             playlistAddRepository = get()
+        )
+    }
+
+    factory<AlbumInteractor> {
+        AlbumInteractorImpl(
+            albumRepository = get()
         )
     }
 }
