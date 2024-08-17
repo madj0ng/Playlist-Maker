@@ -20,22 +20,22 @@ open class PlaylistAddViewModel(
 
     private var album = Album(0L, "", "", null, 0, 0L)
 
-    open var albumState = MutableLiveData<AlbumState>(AlbumState.Loading)
+    private val albumState = MutableLiveData<AlbumState>(AlbumState.Loading)
     fun observerAlbumState(): LiveData<AlbumState> = albumState
 
-    open var albumName = MutableLiveData<Boolean>()
+    private val albumName = MutableLiveData<Boolean>()
     fun observerAlbumName(): LiveData<Boolean> = albumName
 
-    open var albumDescription = MutableLiveData<Boolean>()
+    private val albumDescription = MutableLiveData<Boolean>()
     fun observerAlbumDescription(): LiveData<Boolean> = albumDescription
 
-    open var albumUri = MutableLiveData<Uri?>()
+    private val albumUri = MutableLiveData<Uri?>()
     fun observerAlbumUri(): LiveData<Uri?> = albumUri
 
-    private var toastState = MutableLiveData<String>()
+    private val toastState = MutableLiveData<String>()
     fun observerToast(): LiveData<String> = toastState
 
-    open var dialogState = MutableLiveData<AlbumDialogState>(AlbumDialogState.None(true))
+    val dialogState = MutableLiveData<AlbumDialogState>(AlbumDialogState.None(true))
     fun observerDialog(): LiveData<AlbumDialogState> = dialogState
 
     fun changeAlbumState(state: AlbumState) {

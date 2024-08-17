@@ -14,7 +14,7 @@ class AlbumExternalNavigatorImpl(
     private val formatUtils: FormatUtils
 ) : AlbumExternalNavigator {
 
-    companion object {
+    private companion object {
         const val STR_NEWLINE = "\n"
         const val STR_SPACE = " "
         const val STR_POINT = ". "

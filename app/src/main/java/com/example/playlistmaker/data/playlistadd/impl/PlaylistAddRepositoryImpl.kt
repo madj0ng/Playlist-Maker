@@ -18,9 +18,10 @@ class PlaylistAddRepositoryImpl(
     override fun getAlbum(albumId: Long): Flow<Resource<Album>> = flow {
         val album = dataOfAlbum.getAlbumById(albumId)
         emit(
-            when (album) {
-                null -> Resource.Error("")
-                else -> Resource.Success(album)
+            if(album != null){
+                Resource.Success(album)
+            }else{
+                Resource.Error("")
             }
         )
     }

@@ -33,23 +33,19 @@ interface TrackInAlbum : AlbumDao, TrackDao {
     @Transaction
     suspend fun insertTrackToAlbum(albumId: Long, track: TrackEntity): Int {
         val album = readAlbumById(albumId)
-        return if (album != null) {
-            if (getTrackInAlbum(albumId, track.trackId) == null) {
-                // Добавляем трек
-                insertTrack(track)
-                // Добавляем в таблицу мэппинга
-                insertTrackInAlbum(TrackInAlbumEntity(albumId, track.trackId))
-                // Обновляем плейлист
-                val resAlbum = updateAlbum(
-                    album.copy(
-                        tracksCount = album.tracksCount + 1,
-                        tracksMillis = album.tracksMillis + track.trackTimeMillis
-                    )
+        return if (album != null && getTrackInAlbum(albumId, track.trackId) == null) {
+            // Добавляем трек
+            insertTrack(track)
+            // Добавляем в таблицу мэппинга
+            insertTrackInAlbum(TrackInAlbumEntity(albumId, track.trackId))
+            // Обновляем плейлист
+            val resAlbum = updateAlbum(
+                album.copy(
+                    tracksCount = album.tracksCount + 1,
+                    tracksMillis = album.tracksMillis + track.trackTimeMillis
                 )
-                1
-            } else {
-                0
-            }
+            )
+            1
         } else {
             0
         }

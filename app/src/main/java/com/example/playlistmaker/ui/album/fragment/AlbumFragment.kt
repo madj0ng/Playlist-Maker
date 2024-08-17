@@ -29,6 +29,7 @@ import com.example.playlistmaker.ui.search.models.TrackTriggerState
 import com.example.playlistmaker.util.DebounceUtils
 import com.example.playlistmaker.util.FormatUtils
 import com.example.playlistmaker.util.debounce
+import com.example.playlistmaker.util.screenHight
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.android.ext.android.getKoin
@@ -37,7 +38,7 @@ import org.koin.core.parameter.parametersOf
 
 class AlbumFragment : Fragment() {
     companion object {
-        const val ALBUM_KEY = "album_key"
+        private val ALBUM_KEY = "album_key"
 
         fun createArgs(albumId: Long): Bundle =
             bundleOf(
@@ -162,33 +163,19 @@ class AlbumFragment : Fragment() {
             }
         })
 
-        viewModel.observeTracks().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        viewModel.observeTracks().observe(viewLifecycleOwner, ::render)
 
-        viewModel.observeAlbum().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        viewModel.observeAlbum().observe(viewLifecycleOwner, ::render)
 
-        viewModel.observeShowTrackTrigger().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        viewModel.observeShowTrackTrigger().observe(viewLifecycleOwner, ::render)
 
-        viewModel.observeItemChange().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        viewModel.observeItemChange().observe(viewLifecycleOwner, ::render)
 
-        viewModel.observeDialog().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        viewModel.observeDialog().observe(viewLifecycleOwner, ::render)
 
-        viewModel.observeBackPress().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        viewModel.observeBackPress().observe(viewLifecycleOwner, ::render)
 
-        viewModel.observeShowEdit().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        viewModel.observeShowEdit().observe(viewLifecycleOwner, ::render)
 
         viewModel.observerToast().observe(viewLifecycleOwner) {
             showToast(it)
@@ -207,21 +194,11 @@ class AlbumFragment : Fragment() {
     }
 
     private fun render(state: AlbumState) {
-        when (state) {
-            is AlbumState.Content -> showAlbumContent(state.data)
-            is AlbumState.Empty -> {}
-            is AlbumState.Error -> {}
-            is AlbumState.Loading -> {}
-        }
+        if (state is AlbumState.Content) showAlbumContent(state.data)
     }
 
     private fun render(state: TracksState) {
-        when (state) {
-            is TracksState.Content -> showTracksContent(state.data)
-            is TracksState.Empty -> {}
-            is TracksState.Error -> {}
-            is TracksState.Loading -> {}
-        }
+        if (state is TracksState.Content) showTracksContent(state.data)
     }
 
     private fun render(state: TrackTriggerState) {
@@ -274,6 +251,16 @@ class AlbumFragment : Fragment() {
         binding.tvAlbumDescription.text = album.description
         binding.tvTracksTime.text = formatUtils.formatLongToTimeMillis(album.tracksMillis)
         binding.tvTracksCount.text = album.tracksCount.toString()
+
+        // Определение высоты SheetBehavior
+        setPlaylistPeekHeight(binding.ibShare)
+    }
+
+    private fun setPlaylistPeekHeight(view: View) {
+        val bottomPixels = view.bottom
+        val sreenHeight = screenHight(requireContext())
+        val s = sreenHeight - bottomPixels
+        bottomSheetBehavior.setPeekHeight(sreenHeight - bottomPixels)
     }
 
     private fun fillMenu(album: Album) {
