@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -29,7 +30,6 @@ import com.example.playlistmaker.ui.search.models.TrackTriggerState
 import com.example.playlistmaker.util.DebounceUtils
 import com.example.playlistmaker.util.FormatUtils
 import com.example.playlistmaker.util.debounce
-import com.example.playlistmaker.util.screenHight
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.android.ext.android.getKoin
@@ -253,14 +253,13 @@ class AlbumFragment : Fragment() {
         binding.tvTracksCount.text = album.tracksCount.toString()
 
         // Определение высоты SheetBehavior
-        setPlaylistPeekHeight(binding.ibShare)
+        setPlaylistPeekHeight()
     }
 
-    private fun setPlaylistPeekHeight(view: View) {
-        val bottomPixels = view.bottom
-        val sreenHeight = screenHight(requireContext())
-        val s = sreenHeight - bottomPixels
-        bottomSheetBehavior.setPeekHeight(sreenHeight - bottomPixels)
+    private fun setPlaylistPeekHeight() {
+        binding.root.doOnNextLayout {
+            bottomSheetBehavior.setPeekHeight(it.bottom - binding.ibShare.bottom)
+        }
     }
 
     private fun fillMenu(album: Album) {
