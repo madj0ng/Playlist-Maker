@@ -38,7 +38,9 @@ class AlbumExternalNavigatorImpl(
         val stringList = mutableListOf<String>()
         // Заголовок плейлиста
         stringList.add(album.name)
-        stringList.add(if (album.description.isEmpty()) "" else album.description)
+        if (album.description.isNotEmpty()) {
+            stringList.add(album.description)
+        }
         stringList.add(
             formatUtils.formatIntToTrackCount(album.tracksCount) + STR_SPACE + context.getString(
                 R.string.playlist_item
@@ -46,8 +48,9 @@ class AlbumExternalNavigatorImpl(
         )
         // Таблица
         tracks.forEachIndexed { index, track ->
+            val number = index + 1
             stringList.add(
-                index.toString() +
+                number.toString() +
                         STR_POINT +
                         track.artistName +
                         STR_DASH +

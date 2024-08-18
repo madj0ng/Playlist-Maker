@@ -12,8 +12,8 @@ object FormatUtils {
     fun formatLongToTimeMillis(lTime: Long, patern: String = "mm"): String =
         SimpleDateFormat(patern, Locale.getDefault()).format(lTime)
 
-    fun formatIntToTrackCount(iCount: Int, patern: String = "mm"): String =
-        SimpleDateFormat(patern, Locale.getDefault()).format(iCount)
+    fun formatIntToTrackCount(iCount: Int, patern: String = "%02d"): String =
+        String.format(patern, iCount)
 
     fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(
