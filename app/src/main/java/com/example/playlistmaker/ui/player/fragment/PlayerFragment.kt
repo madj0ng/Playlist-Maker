@@ -83,9 +83,6 @@ class PlayerFragment : Fragment() {
             .from(binding.standardBottomSheet)
             .apply { state = BottomSheetBehavior.STATE_HIDDEN }
 
-//        // Диалог
-//        confirmDialog = MaterialAlertDialogBuilder(requireActivity())
-
         onPlayerTrackClickDebounce = debounce(
             DebounceUtils.CLICK_DEBOUNCE_DELAY,
             lifecycleScope,

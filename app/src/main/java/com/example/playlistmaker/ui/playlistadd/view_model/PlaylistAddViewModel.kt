@@ -126,43 +126,21 @@ open class PlaylistAddViewModel(
     }
 
     fun albumUpdate(oldAlbum: Album) {
-        if (album.name.isNotEmpty()) {
-            viewModelScope.launch {
-                when (true) {
-                    (oldAlbum.uri != album.uri) -> {
-                        // Удаляем файл обложки
-                        playlistAddInteractor.deleteImageFromPrivateStorage(oldAlbum.uri)
-                        // Сохраняем файл обложки во внутреннее хранилище
-                        playlistAddInteractor
-                            .saveImageToPrivateStorage(album.uri)
-                            .collect { uri ->
-                                album = album.copy(uri = uri)
-                                albumUpdateRun(album)
-                            }
-                    }
-
-                    (oldAlbum.name != album.name || oldAlbum.description != album.description) -> {
-                        albumUpdateRun(album)
-                    }
-
-                    else -> {}
-                }
-
+        viewModelScope.launch {
+            if (album.name.isNotEmpty() &&
+                (oldAlbum.uri != album.uri || oldAlbum.name != album.name || oldAlbum.description != album.description)
+            ) {
                 if (oldAlbum.uri != album.uri) {
-                    playlistAddInteractor
-                        .deleteImageFromPrivateStorage(oldAlbum.uri)
+                    // Удаляем файл обложки
+                    playlistAddInteractor.deleteImageFromPrivateStorage(oldAlbum.uri)
+                    // Сохраняем файл обложки во внутреннее хранилище
                     playlistAddInteractor
                         .saveImageToPrivateStorage(album.uri)
                         .collect { uri ->
                             album = album.copy(uri = uri)
-                            playlistAddInteractor
-                                .albumUpdate(album)
-                                .collect {
-                                    // Закрытие
-                                    setDialogResult(false)
-                                }
                         }
                 }
+                albumUpdateRun(album)
             }
         }
     }

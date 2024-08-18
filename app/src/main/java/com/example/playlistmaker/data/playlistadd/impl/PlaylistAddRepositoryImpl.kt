@@ -18,9 +18,9 @@ class PlaylistAddRepositoryImpl(
     override fun getAlbum(albumId: Long): Flow<Resource<Album>> = flow {
         val album = dataOfAlbum.getAlbumById(albumId)
         emit(
-            if(album != null){
+            if (album != null) {
                 Resource.Success(album)
-            }else{
+            } else {
                 Resource.Error("")
             }
         )
@@ -45,7 +45,7 @@ class PlaylistAddRepositoryImpl(
     }
 
     override fun deleteImageFromPrivateStorage(uri: Uri?) = flow {
-        if(uri != null) {
+        if (uri != null) {
             dataOfFile.delete(uri)
         }
         emit(Unit)

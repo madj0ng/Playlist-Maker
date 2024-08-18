@@ -48,22 +48,6 @@ class AlbumViewModel(
     private var toastState = MutableLiveData<String>()
     fun observerToast(): LiveData<String> = toastState
 
-//    init {
-//        viewModelScope.launch {
-//            albumInteractor
-//                .getAlbumData(albumId)
-//                .collect { pair ->
-//                    resultRender(pair.first, pair.second)
-//                }
-//
-//            albumInteractor
-//                .getTracksOfAlbum(albumId)
-//                .collect { tracks ->
-//                    setState(TracksState.Content(tracks))
-//                }
-//        }
-//    }
-
     fun loadData() {
         viewModelScope.launch {
             albumInteractor
@@ -95,9 +79,6 @@ class AlbumViewModel(
                 .shareApp(albumId)
                 .collect { pair ->
                     resultRender(pair.first, pair.second)
-//                    if (it != null && !it.isEmpty()) {
-//                        // сообщение
-//                    }
                 }
         }
     }
