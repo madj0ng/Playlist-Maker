@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.player.fragment
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,13 +24,9 @@ import com.example.playlistmaker.ui.player.models.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.example.playlistmaker.ui.playlistadd.models.AlbumTriggerState
 import com.example.playlistmaker.util.DebounceUtils
-import com.example.playlistmaker.util.DebounceUtils.TIME_DEBOUNCE_CLOSE
 import com.example.playlistmaker.util.FormatUtils
 import com.example.playlistmaker.util.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -65,7 +60,6 @@ class PlayerFragment : Fragment() {
 
     // bottomSheet
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
-    lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,8 +82,6 @@ class PlayerFragment : Fragment() {
         bottomSheetBehavior = BottomSheetBehavior
             .from(binding.standardBottomSheet)
             .apply { state = BottomSheetBehavior.STATE_HIDDEN }
-        // Диалог
-        confirmDialog = MaterialAlertDialogBuilder(requireActivity())
 
         onPlayerTrackClickDebounce = debounce(
             DebounceUtils.CLICK_DEBOUNCE_DELAY,
@@ -119,7 +111,6 @@ class PlayerFragment : Fragment() {
         }
 
         binding.playlistAdd.setOnClickListener {
-//            viewModel.setBottomSheetState(BottomSheetBehavior.STATE_COLLAPSED)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
@@ -144,7 +135,7 @@ class PlayerFragment : Fragment() {
 
         // Переход на плейлист
         binding.btPlaylistAdd.setOnClickListener {
-            render(AlbumTriggerState.Player())
+            render(AlbumTriggerState.Player)
         }
 
         viewModel.observeScreenState().observe(viewLifecycleOwner) {
@@ -166,22 +157,6 @@ class PlayerFragment : Fragment() {
         }
         viewModel.observeBottomSheet().observe(viewLifecycleOwner) {
             bottomSheetBehavior.state = it
-        }
-        viewModel.observeDialog().observe(viewLifecycleOwner) {
-            confirmDialog
-                .setMessage(it)
-                .setNeutralButton(
-                    getString(R.string.playlistadd_dialog_cancel),
-                    object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                            //ничего не делаем
-                        }
-                    })
-            val dialog = confirmDialog.show()
-            lifecycleScope.launch {
-                delay(TIME_DEBOUNCE_CLOSE)
-                dialog.dismiss()
-            }
         }
     }
 
@@ -217,9 +192,9 @@ class PlayerFragment : Fragment() {
     private fun render(state: PlayerState) {
         when (state) {
             is PlayerState.Content -> showContent(state.track)
-            is PlayerState.Empty -> showEmpty()
-            is PlayerState.Error -> showErr()
-            is PlayerState.Loading -> showLoading()
+            is PlayerState.Empty -> {}
+            is PlayerState.Error -> {}
+            is PlayerState.Loading -> {}
         }
     }
 
@@ -228,12 +203,6 @@ class PlayerFragment : Fragment() {
 
         fillImage()
     }
-
-    private fun showEmpty() {}
-
-    private fun showErr() {}
-
-    private fun showLoading() {}
 
     override fun onPause() {
         super.onPause()
@@ -244,7 +213,6 @@ class PlayerFragment : Fragment() {
 
     private fun showToast(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
-        requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
     private fun setFavoutite(isFavourite: Boolean) {

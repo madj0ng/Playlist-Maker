@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.media.MediaPlayer
 import com.example.playlistmaker.creator.APP_PREFERENCES
 import com.example.playlistmaker.creator.SEARCH_PREFERENCES
+import com.example.playlistmaker.creator.TYPE_ALBUM
 import com.example.playlistmaker.creator.TYPE_FAVOURITES
 import com.example.playlistmaker.creator.TYPE_HISTORY
 import com.example.playlistmaker.creator.TYPE_SEARCH
@@ -14,12 +15,14 @@ import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.network.ItunesSearchApi
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.settings.impl.ThemeLocalStorage
+import com.example.playlistmaker.data.sharing.AlbumExternalNavigator
 import com.example.playlistmaker.data.sharing.ExternalNavigator
+import com.example.playlistmaker.data.sharing.impl.AlbumExternalNavigatorImpl
 import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
-import com.example.playlistmaker.data.storage.DeleteTrack
+import com.example.playlistmaker.data.storage.DeleteItem
 import com.example.playlistmaker.data.storage.DeleteTracks
+import com.example.playlistmaker.data.storage.GetItemById
 import com.example.playlistmaker.data.storage.GetItems
-import com.example.playlistmaker.data.storage.GetTrackById
 import com.example.playlistmaker.data.storage.SetItem
 import com.example.playlistmaker.data.storage.SetTracks
 import com.example.playlistmaker.data.storage.db.AppDatabase
@@ -103,6 +106,14 @@ val dataModule = module {
         )
     }
 
+    factory<AlbumExternalNavigator> {
+        AlbumExternalNavigatorImpl(
+            context = androidContext(),
+            intent = get(),
+            formatUtils = get()
+        )
+    }
+
     // Инициализация базы данных
     single {
         AppDatabase.getInstance(androidContext())
@@ -114,7 +125,7 @@ val dataModule = module {
     } binds (arrayOf(
         GetItems::class,
         SetTracks::class,
-        GetTrackById::class,
+        GetItemById::class,
         DeleteTracks::class
     ))
 
@@ -127,7 +138,7 @@ val dataModule = module {
     } binds (arrayOf(
         GetItems::class,
         SetItem::class,
-        GetTrackById::class,
+        GetItemById::class,
         DeleteTracks::class
     ))
 
@@ -139,17 +150,19 @@ val dataModule = module {
     } binds (arrayOf(
         GetItems::class,
         SetItem::class,
-        GetTrackById::class,
-        DeleteTrack::class
+        GetItemById::class,
+        DeleteItem::class
     ))
 
-    factory {
+    factory(named(TYPE_ALBUM)) {
         DataOfAlbum(
             appDatabase = get(),
             albumModelConverter = get(),
             trackDbConverter = get()
         )
-    }
+    } binds (arrayOf(
+        GetItemById::class
+    ))
 
     factory {
         DataOfFile(
@@ -164,7 +177,7 @@ val dataModule = module {
 
     single(named("")) {
         DataOfEmpty()
-    } binds (arrayOf(GetTrackById::class))
+    } binds (arrayOf(GetItemById::class))
 
     single<LocalStorage> {
         LocalStoreImpl(

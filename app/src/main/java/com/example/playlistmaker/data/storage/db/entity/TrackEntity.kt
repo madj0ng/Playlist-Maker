@@ -14,7 +14,7 @@ data class TrackEntity(
     val trackTimeMillis: Long,      // Продолжительность трека в миллисекундах
     val artworkUrl100: String?,     // Ссылка на изображение обложки
     val collectionName: String?,    // Название альбома
-    val releaseDate: String,        // Год релиза трека
+    val releaseDate: String?,       // Год релиза трека
     val primaryGenreName: String,   // Жанр трека
     val country: String,            // Страна исполнителя
     val previewUrl: String?,        // Ссылка на отрывок трека

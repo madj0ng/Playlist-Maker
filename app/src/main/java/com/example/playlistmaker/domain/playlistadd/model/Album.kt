@@ -7,6 +7,6 @@ data class Album(
     val name: String,
     val description: String,
     val uri: Uri?,
-    val tracksId: Array<Int>,
-    val tracksCount: Int
+    val tracksCount: Int,
+    val tracksMillis: Long,
 )

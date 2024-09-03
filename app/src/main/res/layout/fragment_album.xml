@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.album.fragment.AlbumFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_album">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/left_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/margin_16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/right_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/margin_16dp" />
+
+        <ImageView
+            android:id="@+id/ivAlbumPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_24dp"
+            android:src="@drawable/ic_placeholder"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivAlbumImage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ibBack"
+            style="@style/TitleIconBackAlbum"
+            android:layout_width="@dimen/title_image_height"
+            android:layout_height="@dimen/title_image_height"
+            android:padding="@dimen/margin_24dp"
+            android:src="@drawable/icon_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvAlbumName"
+            style="@style/AlbumName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/ivAlbumImage"
+            tools:text="@tools:sample/full_names" />
+
+        <TextView
+            android:id="@+id/tvAlbumDescription"
+            style="@style/AlbumText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8dp"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvAlbumName"
+            tools:text="@tools:sample/full_names" />
+
+        <TextView
+            android:id="@+id/tvTracksTime"
+            style="@style/AlbumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintStart_toEndOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvAlbumDescription"
+            tools:text="@tools:sample/us_zipcodes" />
+
+        <TextView
+            android:id="@+id/tvTracksTimeUnit"
+            style="@style/AlbumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_4dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="@string/album_time_unit"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTracksTime"
+            app:layout_constraintStart_toEndOf="@+id/tvTracksTime"
+            app:layout_constraintTop_toTopOf="@+id/tvTracksTime"
+            tools:text="@tools:sample/full_names" />
+
+        <ImageView
+            android:id="@+id/ivSeparator"
+            style="@style/AlbumIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/search_track_separator_size"
+            android:src="@drawable/ic_circle_separator"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTracksTime"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintStart_toEndOf="@+id/tvTracksTimeUnit"
+            app:layout_constraintTop_toTopOf="@+id/tvTracksTime" />
+
+        <TextView
+            android:id="@+id/tvTracksCount"
+            style="@style/AlbumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTracksTime"
+            app:layout_constraintStart_toEndOf="@+id/ivSeparator"
+            app:layout_constraintTop_toTopOf="@+id/tvTracksTime"
+            tools:text="@tools:sample/us_zipcodes" />
+
+        <TextView
+            android:id="@+id/tvTracksCountUnit"
+            style="@style/AlbumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_4dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="@string/album_count_unit"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTracksTime"
+            app:layout_constraintStart_toEndOf="@+id/tvTracksCount"
+            app:layout_constraintTop_toTopOf="@+id/tvTracksTime"
+            tools:text="@tools:sample/full_names" />
+
+        <ImageView
+            android:id="@+id/ibShare"
+            style="@style/AlbumIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:paddingBottom="@dimen/margin_24dp"
+            android:src="@drawable/icon_output"
+            app:colorControlActivated="@color/text_color"
+            app:layout_constraintStart_toEndOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvTracksTime" />
+
+        <ImageView
+            android:id="@+id/ibMenu"
+            style="@style/AlbumIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:paddingBottom="@dimen/margin_24dp"
+            android:src="@drawable/ic_ellipsis"
+            app:layout_constraintBottom_toBottomOf="@+id/ibShare"
+            app:layout_constraintStart_toEndOf="@+id/ibShare"
+            app:layout_constraintTop_toTopOf="@+id/ibShare" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- подключение всплывающего меню экрана -->
+        <include android:id="@+id/incPlaylistBootomSheet"
+            layout="@layout/playlist_bottom_sheet" />
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone" />
+
+    <!-- подключение всплывающего меню экрана -->
+    <include
+        android:id="@+id/incMenuBootomSheet"
+        layout="@layout/menu_bottom_sheet" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

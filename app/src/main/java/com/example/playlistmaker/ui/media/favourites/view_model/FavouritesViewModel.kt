@@ -37,7 +37,7 @@ class FavouritesViewModel(
     fun startActiviryPlayer(track: Track, fromType: String) {
         val state = when (fromType) {
             TYPE_FAVOURITES -> startPlayerFromFavourite(track)
-            else -> startPlayerFromFavourite()
+            else -> startPlayerFromEmpty()
         }
         render(state)
     }
@@ -46,7 +46,7 @@ class FavouritesViewModel(
         return TrackTriggerState.Favourites(track.trackId)
     }
 
-    private fun startPlayerFromFavourite(): TrackTriggerState {
+    private fun startPlayerFromEmpty(): TrackTriggerState {
         return TrackTriggerState.Empty()
     }
 

@@ -1,10 +1,10 @@
 package com.example.playlistmaker.data.storage.empty
 
 import com.example.playlistmaker.data.search.model.TrackDto
-import com.example.playlistmaker.data.storage.GetTrackById
+import com.example.playlistmaker.data.storage.GetItemById
 
-class DataOfEmpty : GetTrackById<TrackDto> {
-    override suspend fun get(trackId: Int): TrackDto? {
+class DataOfEmpty : GetItemById<Int, TrackDto> {
+    override suspend fun get(id: Int): TrackDto? {
         return null
     }
 }

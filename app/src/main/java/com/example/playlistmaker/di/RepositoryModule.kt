@@ -1,6 +1,8 @@
+import com.example.playlistmaker.creator.TYPE_ALBUM
 import com.example.playlistmaker.creator.TYPE_FAVOURITES
 import com.example.playlistmaker.creator.TYPE_HISTORY
 import com.example.playlistmaker.creator.TYPE_SEARCH
+import com.example.playlistmaker.data.album.AlbumRepositoryImpl
 import com.example.playlistmaker.data.media.favourites.FavouritesRepositoryImpl
 import com.example.playlistmaker.data.media.playlist.PlaylistRepositoryImpl
 import com.example.playlistmaker.data.player.impl.GetTrackFromStringImpl
@@ -13,6 +15,7 @@ import com.example.playlistmaker.data.search.impl.SearchRepositoryImpl
 import com.example.playlistmaker.data.search.impl.SetTrackToStringImpl
 import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
+import com.example.playlistmaker.domain.album.AlbumRepository
 import com.example.playlistmaker.domain.media.favourites.FavouritesRepository
 import com.example.playlistmaker.domain.media.playlist.PlaylistRepository
 import com.example.playlistmaker.domain.player.GetTrackFromString
@@ -22,6 +25,7 @@ import com.example.playlistmaker.domain.search.HistoryRepository
 import com.example.playlistmaker.domain.search.SearchRepository
 import com.example.playlistmaker.domain.search.SetTrackToString
 import com.example.playlistmaker.domain.settings.SettingsRepository
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -95,15 +99,23 @@ val repositoryModule = module {
     // Playlist
     single<PlaylistRepository> {
         PlaylistRepositoryImpl(
-            dataOfAlbum = get(),
+            dataOfAlbum = get(named(TYPE_ALBUM)),
         )
     }
 
     // PlaylistAdd
     factory<PlaylistAddRepository> {
         PlaylistAddRepositoryImpl(
-            dataOfAlbum = get(),
+            dataOfAlbum = get(named(TYPE_ALBUM)),
             dataOfFile = get()
+        )
+    }
+
+    factory<AlbumRepository>{
+        AlbumRepositoryImpl(
+            context = androidContext(),
+            dataOfAlbum = get(named(TYPE_ALBUM)),
+            albumExternalNavigator = get()
         )
     }
 }

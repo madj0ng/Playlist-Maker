@@ -2,7 +2,7 @@ package com.example.playlistmaker.data.storage.sharedpref
 
 import com.example.playlistmaker.data.search.model.TrackDto
 import com.example.playlistmaker.data.storage.DeleteTracks
-import com.example.playlistmaker.data.storage.GetTrackById
+import com.example.playlistmaker.data.storage.GetItemById
 import com.example.playlistmaker.data.storage.GetItems
 import com.example.playlistmaker.data.storage.SetItem
 import com.example.playlistmaker.data.storage.sharedpref.dao.LocalStorage
@@ -18,7 +18,7 @@ class DataOfHistory(
     private val getTrackFromString: GetTrackFromString<TrackDto>,
 ) : GetItems<TrackDto>,
     SetItem<TrackDto, Unit>,
-    GetTrackById<TrackDto>,
+    GetItemById<Int, TrackDto>,
     DeleteTracks {
 
     override suspend fun get(): List<TrackDto> {
@@ -34,9 +34,9 @@ class DataOfHistory(
         }
     }
 
-    override suspend fun get(trackId: Int): TrackDto? {
+    override suspend fun get(id: Int): TrackDto? {
         val trackList = this.get()
-        return trackList.find { it.trackId == trackId }
+        return trackList.find { it.trackId == id }
     }
 
     override suspend fun set(item: TrackDto) {

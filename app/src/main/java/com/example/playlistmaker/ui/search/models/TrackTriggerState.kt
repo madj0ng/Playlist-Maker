@@ -1,5 +1,6 @@
 package com.example.playlistmaker.ui.search.models
 
+import com.example.playlistmaker.creator.TYPE_ALBUM
 import com.example.playlistmaker.creator.TYPE_FAVOURITES
 import com.example.playlistmaker.creator.TYPE_HISTORY
 import com.example.playlistmaker.creator.TYPE_SEARCH
@@ -18,6 +19,11 @@ sealed interface TrackTriggerState {
     data class Favourites(
         val trackId: Int,
         val dataType: String = TYPE_FAVOURITES
+    ) : TrackTriggerState
+
+    data class Album(
+        val trackId: Int,
+        val dataType: String = TYPE_ALBUM
     ) : TrackTriggerState
 
     data class Empty(

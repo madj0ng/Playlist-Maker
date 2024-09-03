@@ -34,7 +34,6 @@ class PlayerViewModel(
     private val favouriteLiveData = MutableLiveData(false)
     private val toastLiveData = MutableLiveData<String>()
     private val albumsLiveData = MutableLiveData<PlaylistState>(PlaylistState.Loading)
-    private val dialogLiveData = MutableLiveData<String>()
     private val bottomSheetLiveData = MutableLiveData<Int>()
 
     private var timerJob: Job? = null
@@ -58,7 +57,6 @@ class PlayerViewModel(
     fun observeFavourite(): LiveData<Boolean> = favouriteLiveData
     fun observeAlbums(): LiveData<PlaylistState> = albumsLiveData
     fun observeBottomSheet(): LiveData<Int> = bottomSheetLiveData
-    fun observeDialog(): LiveData<String> = dialogLiveData
 
     private fun loadResult(track: Track?, errorMessage: String?) {
         if (track != null) {
@@ -76,18 +74,14 @@ class PlayerViewModel(
         }
     }
 
-    fun setBottomSheetState(message: String) {
-        dialogLiveData.postValue(message)
-    }
-
-    fun setDialogState(state: Int) {
+    private fun setDialogState(state: Int) {
         bottomSheetLiveData.postValue(state)
     }
 
     fun addTrackToAlbum(album: Album) {
         viewModelScope.launch {
             playlistInteractor
-                .addTrackToAlbum(track, album)
+                .addTrackToAlbum(album.id, this@PlayerViewModel.track)
                 .collect { result ->
                     when (result) {
                         true -> successAddResultShow(album.name)
@@ -102,7 +96,7 @@ class PlayerViewModel(
         stringReplace(application, R.string.playlistadd_add_track, replaceString)
             ?.let {
                 setDialogState(BottomSheetBehavior.STATE_HIDDEN)
-                setBottomSheetState(it)
+                showToast(it)
             }
     }
 
@@ -110,7 +104,7 @@ class PlayerViewModel(
         stringReplace(application, R.string.playlistadd_also_add_track, replaceString)
             ?.let {
                 setDialogState(BottomSheetBehavior.STATE_COLLAPSED)
-                setBottomSheetState(it)
+                showToast(it)
             }
     }
 

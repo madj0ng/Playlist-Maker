@@ -7,8 +7,8 @@ import com.example.playlistmaker.data.player.mapper.PlayerTimeMapper
 import com.example.playlistmaker.data.search.model.PlayerRequest
 import com.example.playlistmaker.data.search.model.PlayerResponse
 import com.example.playlistmaker.data.search.model.TrackDto
-import com.example.playlistmaker.data.storage.DeleteTrack
-import com.example.playlistmaker.data.storage.GetTrackById
+import com.example.playlistmaker.data.storage.DeleteItem
+import com.example.playlistmaker.data.storage.GetItemById
 import com.example.playlistmaker.data.storage.SetItem
 import com.example.playlistmaker.domain.player.PlayerRepository
 import com.example.playlistmaker.domain.player.model.PlayerStatus
@@ -21,9 +21,9 @@ class PlayerRepositoryImpl(
     private val playerClient: PlayerClient,
     private val playerTimeMapper: PlayerTimeMapper,
     private val playerStatusMapper: PlayerStatusMapper,
-    private val getTrackById: GetTrackById<TrackDto>,
-    private val getFavouriteTrackById: GetTrackById<TrackDto>,
-    private val deleteFavouriteTracks: DeleteTrack<TrackDto>,
+    private val getTrackById: GetItemById<Int, TrackDto?>,
+    private val getFavouriteTrackById: GetItemById<Int, TrackDto?>,
+    private val deleteFavouriteTracks: DeleteItem<TrackDto, Unit>,
     private val setFavouriteTrack: SetItem<TrackDto, Unit>,
     private val trackMapper: TrackSharedConvertor,
 ) : PlayerRepository {

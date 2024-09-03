@@ -4,24 +4,23 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.Update
 import com.example.playlistmaker.data.storage.db.entity.AlbumEntity
-import com.example.playlistmaker.data.storage.db.entity.TrackEntity
 
 @Dao
 interface AlbumDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAlbum(albumEntity: AlbumEntity)
+    suspend fun insertAlbum(albumEntity: AlbumEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTrack(trackEntity: TrackEntity)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateAlbum(albumEntity: AlbumEntity): Int
+
+    @Query("DELETE FROM album WHERE id = :albumId")
+    suspend fun deleteAlbumById(albumId: Long): Int
 
     @Query("SELECT * FROM album")
     suspend fun readAlbums(): List<AlbumEntity>
 
-    @Transaction
-    suspend fun insertTrackToAlbum(trackEntity: TrackEntity, albumEntity: AlbumEntity){
-        insertAlbum(albumEntity)
-        insertTrack(trackEntity)
-    }
+    @Query("SELECT * FROM album WHERE id = :albumId")
+    suspend fun readAlbumById(albumId: Long): AlbumEntity?
 }
